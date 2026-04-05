@@ -1,12 +1,12 @@
 import { Outlet } from "react-router-dom";
 
-const RootLayout = () => {
+const DashboardLayout = () => {
   return (
     <div>
-      <h1>App Header</h1>
+      <h2>Dashboard Sidebar</h2>
       <Outlet />
     </div>
   );
 };
 
-export default RootLayout;
+export default DashboardLayout;
