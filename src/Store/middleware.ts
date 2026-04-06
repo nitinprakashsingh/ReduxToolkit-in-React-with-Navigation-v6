@@ -1,6 +1,9 @@
+import createSagaMiddleware from 'redux-saga';
 import { Middleware } from '@reduxjs/toolkit';
 
-export const loggerMiddleware: Middleware = (store) => (next) => (action) => {
+export const sagaMiddleware = createSagaMiddleware();
+
+export const loggerMiddleware: Middleware = () => (next) => (action) => {
   if (process.env.NODE_ENV === 'development') {
     console.log('Dispatching:', action);
   }
