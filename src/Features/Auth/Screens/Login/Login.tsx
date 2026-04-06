@@ -11,7 +11,7 @@ const LoginPage = ()=>{
     }, [password])
 
     const submitButtonHandler =()=>{
-        console.log("Submit Button Clicked")
+        console.log("Submit Button Clicked",userName,password)
     }
 
     return(
@@ -20,11 +20,13 @@ const LoginPage = ()=>{
             <InputFiled
                 type="text"
                 placeholder="Username"
+                onChange={(e) => setUserName(e.target.value)}
             >
             </InputFiled>
             <InputFiled
                 type="password"
                 placeholder="Password"
+                onChange={(e) => setPassword(e.target.value)}   
             >
             </InputFiled>
             <ForgetButton>Forgot Password?</ForgetButton>
