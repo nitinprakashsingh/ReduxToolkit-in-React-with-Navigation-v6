@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom"
-import AuthLayout from "./Routes/layouts/AuthLayout"
-import LoginPage from "./Features/Auth/Screens/Login/Login"
-import SignupPage from "./Features/Auth/Screens/SignUp/Signup"
+import AuthLayout from "../Routes/layouts/AuthLayout"
+import LoginPage from "../Features/Auth/Screens/Login/Login"
+import SignupPage from "../Features/Auth/Screens/SignUp/Signup"
 
 const App = () => {
   return (
