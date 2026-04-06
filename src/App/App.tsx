@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom"
 import AuthLayout from "../Routes/layouts/AuthLayout"
 import LoginPage from "../Features/Auth/Screens/Login/Login"
 import SignupPage from "../Features/Auth/Screens/SignUp/Signup"
+import Dashboard from "../Features/Home/screens/Dashboard"
 
 const App = () => {
   return (
@@ -11,6 +12,7 @@ const App = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
       </Route>
+      <Route path="/dashboard" element={<Dashboard />} />
     </Routes>
   );
 }

@@ -1,7 +1,14 @@
-import React,{useState,useEffect, use} from "react"
+import React,{useState,useEffect} from "react"
+import { useNavigate } from "react-router-dom"
 import { Button, Container, InputFiled,ForgetButton } from "./Login.style"
+import { useAppDispatch} from "../../../../Store/types"
+import { loginRequest } from "../../authSlice"
+
 
 const LoginPage = ()=>{
+    const dispatch = useAppDispatch()
+    const navigate = useNavigate()
+
     const [userName, setUserName] = useState("")
     const [password, setPassword] = useState("")
     
@@ -11,7 +18,8 @@ const LoginPage = ()=>{
     }, [password])
 
     const submitButtonHandler =()=>{
-        console.log("Submit Button Clicked",userName,password)
+       dispatch((loginRequest({email: userName ,password: password})))
+       navigate("/dashboard")
     }
 
     return(

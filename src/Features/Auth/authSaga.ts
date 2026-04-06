@@ -5,10 +5,30 @@ import type { LoginPayload } from './auth.types';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
 // Worker saga — runs on each loginRequest
+// function* handleLogin(action: PayloadAction<LoginPayload>) {
+//   try {
+//     const data: { user: any; token: string } = yield call(loginApi, action.payload);
+//     yield put(loginSuccess(data));
+//   } catch (error: any) {
+//     yield put(loginFailure(error.message));
+//   }
+// }
+
 function* handleLogin(action: PayloadAction<LoginPayload>) {
   try {
-    const data: { user: any; token: string } = yield call(loginApi, action.payload);
-    yield put(loginSuccess(data));
+    // No API call — just store the credentials directly
+    yield put(
+      loginSuccess({
+        user: {
+          id: '0',
+          name: action.payload.email,
+          role: 'user',
+          email: action.payload.email,
+          password: action.payload.password
+        },
+        token: '',
+      }),
+    );
   } catch (error: any) {
     yield put(loginFailure(error.message));
   }
