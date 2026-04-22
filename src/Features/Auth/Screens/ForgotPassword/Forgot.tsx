@@ -1,4 +1,5 @@
 import {useState, useEffect} from "react"
+import { Container } from "./Forgot.style"
 
 
 
@@ -10,9 +11,9 @@ const ForgotPasswordPage =()=>{
     }, [email])
 
     return(
-        <div>
+        <Container>
             <h2>Forgot Password Page</h2>
-        </div>
+        </Container>
     )
 
 }
