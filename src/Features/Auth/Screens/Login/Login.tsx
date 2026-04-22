@@ -29,19 +29,7 @@ const LoginPage = ()=>{
     return(
         <Container>
             <h2>Login Page</h2>
-            <InputFiled
-                type="text"
-                placeholder="Username"
-                onChange={(e) => setUserName(e.target.value)}
-            >
-            </InputFiled>
-            <InputFiled
-                type="password"
-                placeholder="Password"
-                onChange={(e) => setPassword(e.target.value)}   
-            >
-            </InputFiled>
-            <ForgetButton onClick={forgetButtonHandler}>Forgot Password?</ForgetButton>
+             <ForgetButton onClick={forgetButtonHandler}>Forgot Password?</ForgetButton>
             <Button onClick={submitButtonHandler}>Submit</Button>
         </Container>
     )
