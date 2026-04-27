@@ -1,13 +1,13 @@
 import styled from "styled-components";
 
-export const InputFiled = styled.input`
-  width: ${(props) => props.width || "200px"};
-  height: ${(props) => props.height || "40px"};
+export const InputField = styled.input`
+  width:  "200px";
+  height:  "50px";
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 6px;
   outline: none;
-
+  margin-bottom: 16px;
   &:focus {
     border-color: #007bff;
   }
