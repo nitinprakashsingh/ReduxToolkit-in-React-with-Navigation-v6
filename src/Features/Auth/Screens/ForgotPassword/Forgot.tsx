@@ -16,6 +16,7 @@ const ForgotPasswordPage = () => {
     }, [email])
 
     const redirectToLoginPage = () => {
+        console.log("Email: ", email)
         if (isEmailConfirmed) {
             if (newPassword === confirmPassword) {
                 alert("Password reset successful! Please login with your new password.")
