@@ -23,6 +23,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test:login": "react-scripts test --watchAll=false --runInBand LoginPage.test.tsx",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
