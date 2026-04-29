@@ -10,13 +10,16 @@ const ForgotPasswordPage = () => {
     const [confirmPassword, setConfirmPassword] = useState('')
     const [isEmailConfirmed, setEmailConfirmed] = useState(false)
     const navigate = useNavigate()
+    
+    useEffect(() => {
+        console.log("Email: ", email)
+    }, [email])
 
     useEffect(() => {
         console.log("Email: ", email)
     }, [email])
 
     const redirectToLoginPage = () => {
-        console.log("Email: ", email)
         if (isEmailConfirmed) {
             if (newPassword === confirmPassword) {
                 alert("Password reset successful! Please login with your new password.")
