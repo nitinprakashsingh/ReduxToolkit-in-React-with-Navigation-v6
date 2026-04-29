@@ -10,6 +10,10 @@ const ForgotPasswordPage = () => {
     const [confirmPassword, setConfirmPassword] = useState('')
     const [isEmailConfirmed, setEmailConfirmed] = useState(false)
     const navigate = useNavigate()
+    
+    useEffect(() => {
+        console.log("Email: ", email)
+    }, [email])
 
     useEffect(() => {
         console.log("Email: ", email)
