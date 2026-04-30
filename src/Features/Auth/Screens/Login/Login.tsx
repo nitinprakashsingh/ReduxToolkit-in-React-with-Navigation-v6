@@ -26,6 +26,9 @@ const LoginPage = () => {
     const forgetButtonHandler = () => {
         navigate("/forgot-password")
     }
+    const signUpButtonHandler = () => {
+        navigate("/signup")
+    }
 
     return (
         <Container>
@@ -48,7 +51,7 @@ const LoginPage = () => {
                     setPassword(e.target.value)
                 }
             />
-            
+            <ForgetButton onClick={signUpButtonHandler}>Don't have an account? Sign up</ForgetButton>
             <ForgetButton onClick={forgetButtonHandler}>Forgot Password?</ForgetButton>
             <Button onClick={submitButtonHandler}>Submit</Button>
         </Container>
