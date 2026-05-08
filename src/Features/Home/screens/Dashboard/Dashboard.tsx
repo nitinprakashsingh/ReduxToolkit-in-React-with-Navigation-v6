@@ -1,32 +1,55 @@
-import React,{useEffect, useState} from "react"
-import { Container,Card,CardWrapper, Sidebar, Content } from "../Dashboard/Dashboard.style"
-import { useAppSelector,useAppDispatch } from "../../../../Store/types"
-import { fetchPostsRequest } from "../dashboardSlice"
+import {
+  Building2,
+  CalendarCheck,
+  Home,
+  Package,
+  Stethoscope,
+  Users,
+} from "lucide-react";
+import HoriOmLogo from "../../../../Assets/HoriOmLogo.png";
+import SideBarItem from "../../components/SideBarItem/SideBar";
+import {
+  Card,
+  CardWrapper,
+  Container,
+  Content,
+  Logo,
+  Sidebar,
+  Subtitle,
+  Text,
+  Title,
+} from "../Dashboard/Dashboard.style";
 
-const HomePage =()=>{
-    const user = useAppSelector((state) => state.auth.user)
-    const dispatch = useAppDispatch()
-    const {data, isLoading, error} = useAppSelector((state) => state.dashboard)
-    useEffect(()=>{
-        dispatch(fetchPostsRequest())
-    }, [dispatch])
-    
-    if(isLoading) return <h2>Loading...</h2>
-    if(error) return <h2>Error: {error}</h2>
-    
+const sidebarItems = [
+  { title: "Home", icon: Home },
+  { title: "User Management", icon: Users },
+  { title: "Doctors Management", icon: Stethoscope },
+  { title: "Booking List", icon: CalendarCheck },
+  { title: "Package Management", icon: Package },
+  { title: "Department List", icon: Building2 },
+];
 
-      return(
+
+const HomePage = () => {
+    
+    return (
         <Container>
             <Sidebar>
-                <h2>Email: {user ? user.email : "Hello Brother"}</h2>
-                <h2>Password: {user ? user.password : "Test"} </h2>
+                <Text>
+                    <Logo src={HoriOmLogo} alt="Hari Om Seva Sansta logo" />
+                    <Title>Hari Om Seva Sansta</Title>
+                    <Subtitle>Profile</Subtitle>
+                </Text>
+                {sidebarItems.map((item) => (
+                    <SideBarItem key={item.title} title={item.title} icon={item.icon} />
+                ))}
             </Sidebar>
             <Content>
                 <CardWrapper>
-                    {data.map((item) => <Card key={item.id}>{item.title}</Card>)}
+                    {sidebarItems.map((item) => <Card key={item.id}>{item.title}</Card>)}
                 </CardWrapper>
             </Content>
         </Container>
-      )
+    )
 }
 export default HomePage

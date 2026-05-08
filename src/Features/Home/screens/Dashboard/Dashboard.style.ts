@@ -3,19 +3,32 @@ import styled from "styled-components";
 export const Container = styled.div`
   display: flex;
   width: 100%;
+  min-height: 100vh;
 `;
 
 /* Sidebar */
 export const Sidebar = styled.div`
-  width: 200px;
-  background-color: #7258BC;
-  min-height: 100vh;
+  background-color: #5D44A2;
+  padding: 16px;
+  margin-top: -10px;
+  margin-left: -10px;
+  width: 260px;
+  box-sizing: border-box;
+  flex-shrink: 0;
+`;
+
+export const Logo = styled.img`
+  width: 90px;
+  height: 90px;
+  object-fit: contain;
+  margin-bottom: 12px;
 `;
 
 /* Main Content Area */
 export const Content = styled.div`
   flex: 1; /* take remaining space */
   padding: 16px;
+  min-width: 0;
 `;
 
 /* Card Wrapper */
@@ -37,4 +50,23 @@ export const Card = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+`;
+
+export const Text = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: white;
+  text-align: center;
+  padding: 15px; 
+`;
+
+export const Title = styled.div`
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 5px;
+`;
+
+export const Subtitle = styled.div`
+  font-size: 14px;
 `;
