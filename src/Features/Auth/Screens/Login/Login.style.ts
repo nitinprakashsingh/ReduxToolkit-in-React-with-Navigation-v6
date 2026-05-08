@@ -31,8 +31,8 @@ export const Button = styled.button`
 export const ForgetButton = styled.button`
     padding: 10px 20px;
     margin: 10px;
-    width: 200px;
     border: none;
+    border-radius: 4px;
     &:hover{
     background-color: #b3004b;
     color: white;}
