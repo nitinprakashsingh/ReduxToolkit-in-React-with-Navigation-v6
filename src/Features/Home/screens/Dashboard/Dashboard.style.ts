@@ -8,7 +8,7 @@ export const Container = styled.div`
 
 /* Sidebar */
 export const Sidebar = styled.div`
-  background-color: #5D44A2;
+  background-color: #5d44a2;
   padding: 16px;
   margin-top: -10px;
   margin-left: -10px;
@@ -26,7 +26,7 @@ export const Logo = styled.img`
 
 /* Main Content Area */
 export const Content = styled.div`
-  flex: 1; /* take remaining space */
+  flex: 1;
   padding: 16px;
   min-width: 0;
 `;
@@ -38,27 +38,24 @@ export const CardWrapper = styled.div`
   gap: 16px;
 `;
 
-/* Card */
+/* Generic Card */
 export const Card = styled.div`
-  flex: 1 1 calc(33.33% - 16px); /* 3 per row but flexible */
-  min-width: 250px; /* prevents shrinking too much */
-  max-width: calc(33.33% - 16px);
-
-  background-color: #E0E0E0;
-  border-radius: 8px;
-  height: 150px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  flex: 1 1 100%;
+  min-width: 250px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 `;
 
+/* Header Text */
 export const Text = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   color: white;
   text-align: center;
-  padding: 15px; 
+  padding: 15px;
 `;
 
 export const Title = styled.div`
@@ -69,4 +66,92 @@ export const Title = styled.div`
 
 export const Subtitle = styled.div`
   font-size: 14px;
+`;
+
+/* ==========================================
+   Sub Menu Buttons (Staff List / Add Staff)
+========================================== */
+export const SubMenuContainer = styled.div`
+  margin-left: 40px;
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
+export const SubMenuButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #1e3a8a;
+  color: #ffffff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background: #1d4ed8;
+  }
+`;
+
+
+export const StyledTable = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+`;
+
+export const TableHeadCell = styled.th`
+  text-align: left;
+  padding: 12px;
+  border-bottom: 2px solid #e5e7eb;
+  background-color: #f9fafb;
+  font-weight: 600;
+  color: #374151;
+`;
+
+export const TableDataCell = styled.td`
+  padding: 12px;
+  border-bottom: 1px solid #e5e7eb;
+  color: #4b5563;
+`;
+
+/* Optional row hover effect */
+export const TableRow = styled.tr`
+  &:hover {
+    background-color: #f9fafb;
+  }
+`;
+
+/* ==========================================
+   Section Title
+========================================== */
+export const SectionTitle = styled.h2`
+  margin: 0 0 20px 0;
+  font-size: 24px;
+  font-weight: 600;
+  color: #111827;
+`;
+
+/* ==========================================
+   Edit Button
+========================================== */
+export const EditButton = styled.button`
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 6px;
+  background: #2563eb;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background: #1d4ed8;
+  }
 `;
