@@ -6,6 +6,7 @@ import {
   Building2,
   CalendarCheck,
   Home,
+  ListChecks,
   Package,
   Stethoscope,
   Users,
@@ -14,6 +15,8 @@ import {
 } from "lucide-react";
 
 import HoriOmLogo from "../../../../Assets/HoriOmLogo.png";
+import DoctorForm from "../../components/DoctorForm/DoctorForm";
+import DoctorList from "../../components/DoctorList/DoctorList";
 import SideBarItem from "../../components/SideBarItem/SideBar";
 
 import {
@@ -32,7 +35,7 @@ import {
   TableHeadCell,
   TableDataCell,
   TableRow,
-  SubMenuButton
+  SubMenuButton,
 } from "../Dashboard/Dashboard.style";
 
 // ==========================================
@@ -59,6 +62,29 @@ const staffData = [
     email: "amit@example.com",
     phone: "9988776655",
     relationship: "Nurse",
+  },
+];
+
+const doctorsData = [
+  {
+    id: 1,
+    name: "Dr. Anil Mehta",
+    speciality: "Cardiologist",
+    phone: "9876543211",
+    email: "anil.mehta@example.com",
+    startCareerDate: "2014-06-10",
+    registrationNumber: "MCI-47291",
+    consultancyFees: "800",
+  },
+  {
+    id: 2,
+    name: "Dr. Neha Sharma",
+    speciality: "Dermatologist",
+    phone: "9123456781",
+    email: "neha.sharma@example.com",
+    startCareerDate: "2017-03-22",
+    registrationNumber: "MCI-58326",
+    consultancyFees: "650",
   },
 ];
 
@@ -101,6 +127,7 @@ const sidebarItems = [
 const HomePage = () => {
   const [selectedItem, setSelectedItem] = useState(sidebarItems[0]);
   const [staffView, setStaffView] = useState<"list" | "add">("list");
+  const [doctorView, setDoctorView] = useState<"list" | "add">("list");
 
   // ==========================================
   // Render Content Based on Sidebar Selection
@@ -168,7 +195,22 @@ const HomePage = () => {
     // Doctors Management
     // ------------------------------
     if (selectedItem.title === "Doctors Management") {
-      return <Card>Doctors Management Content</Card>;
+      if (doctorView === "add") {
+        return (
+          <Card>
+            <DoctorForm onDoctorList={() => setDoctorView("list")} />
+          </Card>
+        );
+      }
+
+      return (
+        <Card>
+          <DoctorList
+            doctors={doctorsData}
+            onAddSchedule={() => setDoctorView("add")}
+          />
+        </Card>
+      );
     }
 
     // ------------------------------
@@ -221,6 +263,10 @@ const HomePage = () => {
                 if (item.title === "Staff Management") {
                   setStaffView("list");
                 }
+
+                if (item.title === "Doctors Management") {
+                  setDoctorView("list");
+                }
               }}
             />
 
@@ -248,6 +294,30 @@ const HomePage = () => {
                   >
                     <UserPlus size={14} />
                     Add New Staff
+                  </SubMenuButton>
+                </div>
+              )}
+
+            {/* Sub Menu for Doctors Management */}
+            {selectedItem.title === "Doctors Management" &&
+              item.title === "Doctors Management" && (
+                <div
+                  style={{
+                    marginLeft: "40px",
+                    marginTop: "8px",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "8px",
+                  }}
+                >
+                  <SubMenuButton onClick={() => setDoctorView("list")}>
+                    <ListChecks size={14} />
+                    Doctor List
+                  </SubMenuButton>
+
+                  <SubMenuButton onClick={() => setDoctorView("add")}>
+                    <CalendarCheck size={14} />
+                    Add Schedule
                   </SubMenuButton>
                 </div>
               )}
