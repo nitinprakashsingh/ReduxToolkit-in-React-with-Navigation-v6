@@ -68,9 +68,6 @@ export const Subtitle = styled.div`
   font-size: 14px;
 `;
 
-/* ==========================================
-   Sub Menu Buttons (Staff List / Add Staff)
-========================================== */
 export const SubMenuContainer = styled.div`
   margin-left: 40px;
   margin-top: 8px;
@@ -97,7 +94,6 @@ export const SubMenuButton = styled.button`
   }
 `;
 
-
 export const StyledTable = styled.table`
   width: 100%;
   border-collapse: collapse;
@@ -118,16 +114,12 @@ export const TableDataCell = styled.td`
   color: #4b5563;
 `;
 
-/* Optional row hover effect */
 export const TableRow = styled.tr`
   &:hover {
     background-color: #f9fafb;
   }
 `;
 
-/* ==========================================
-   Section Title
-========================================== */
 export const SectionTitle = styled.h2`
   margin: 0 0 20px 0;
   font-size: 24px;
