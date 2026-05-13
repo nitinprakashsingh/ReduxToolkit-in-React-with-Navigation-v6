@@ -1,0 +1,315 @@
+import { Eye, ListChecks, Pencil, Plus, Users } from "lucide-react";
+import { useState } from "react";
+
+import {
+  SectionTitle,
+  StyledTable,
+  TableDataCell,
+  TableHeadCell,
+  TableRow,
+} from "../../screens/Dashboard/Dashboard.style";
+import {
+  ActionBar,
+  ActionButton,
+  HelperText,
+  IconButton,
+  PackageHeader,
+  PrimaryButton,
+  StatusBadge,
+  TableScroll,
+  TierButton,
+  TierGrid,
+} from "./PackageManagement.Style";
+
+type PackagePlan = {
+  id: number;
+  name: string;
+  price: string;
+  duration: string;
+  department: string;
+  testsIncluded: number;
+  consultancyFree: number;
+  description: string;
+};
+
+type PackageTier = "Silver" | "Gold" | "Platinum";
+
+export type PackageView = "list" | "subscribed";
+
+type SubscribedUser = {
+  id: number;
+  name: string;
+  phone: string;
+  packageName: PackageTier;
+  startDate: string;
+  endDate: string;
+  status: "Active" | "Expired";
+};
+
+type PackageManagementProps = {
+  view: PackageView;
+  onViewChange: (view: PackageView) => void;
+};
+
+const packagePlans: PackagePlan[] = [
+  {
+    id: 1,
+    name: "Silver Health Check",
+    price: "999",
+    duration: "1 Month",
+    department: "General Medicine",
+    testsIncluded: 4,
+    consultancyFree: 1,
+    description: "Basic health check with one free doctor consultation.",
+  },
+  {
+    id: 2,
+    name: "Gold Family Care",
+    price: "2499",
+    duration: "3 Months",
+    department: "General Medicine",
+    testsIncluded: 8,
+    consultancyFree: 3,
+    description: "Routine tests and consultations for regular family care.",
+  },
+  {
+    id: 3,
+    name: "Platinum Complete Care",
+    price: "4999",
+    duration: "6 Months",
+    department: "Multi Department",
+    testsIncluded: 15,
+    consultancyFree: 6,
+    description: "Complete package for preventive health and follow-up visits.",
+  },
+];
+
+const subscribedUsers: SubscribedUser[] = [
+  {
+    id: 1,
+    name: "Ramesh Tiwari",
+    phone: "9876543101",
+    packageName: "Silver",
+    startDate: "2026-05-01",
+    endDate: "2026-06-01",
+    status: "Active",
+  },
+  {
+    id: 2,
+    name: "Kavita Joshi",
+    phone: "9123456102",
+    packageName: "Silver",
+    startDate: "2026-03-10",
+    endDate: "2026-04-10",
+    status: "Expired",
+  },
+  {
+    id: 3,
+    name: "Manoj Sinha",
+    phone: "9988776103",
+    packageName: "Gold",
+    startDate: "2026-04-20",
+    endDate: "2026-07-20",
+    status: "Active",
+  },
+  {
+    id: 4,
+    name: "Nisha Kapoor",
+    phone: "9012346104",
+    packageName: "Gold",
+    startDate: "2026-01-05",
+    endDate: "2026-04-05",
+    status: "Expired",
+  },
+  {
+    id: 5,
+    name: "Devendra Singh",
+    phone: "9876506105",
+    packageName: "Platinum",
+    startDate: "2026-05-05",
+    endDate: "2026-11-05",
+    status: "Active",
+  },
+  {
+    id: 6,
+    name: "Anita Sharma",
+    phone: "9123406106",
+    packageName: "Platinum",
+    startDate: "2025-10-01",
+    endDate: "2026-04-01",
+    status: "Expired",
+  },
+];
+
+const formatDate = (date: string) =>
+  new Intl.DateTimeFormat("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  }).format(new Date(date));
+
+const PackageManagement = ({ view, onViewChange }: PackageManagementProps) => {
+  const [selectedPackageTier, setSelectedPackageTier] =
+    useState<PackageTier>("Silver");
+
+  const subscribedUsersByTier = subscribedUsers.filter(
+    (user) => user.packageName === selectedPackageTier
+  );
+
+  if (view === "subscribed") {
+    return (
+      <>
+        <PackageHeader>
+          <div>
+            <SectionTitle>Subscribed Packages</SectionTitle>
+            <HelperText>
+              Select a package type to view active and expired users.
+            </HelperText>
+          </div>
+        </PackageHeader>
+
+        <ActionBar>
+          <ActionButton onClick={() => onViewChange("list")}>
+            <ListChecks size={16} />
+            Package List
+          </ActionButton>
+          <ActionButton $active>
+            <Users size={16} />
+            Subscribed
+          </ActionButton>
+        </ActionBar>
+
+        <TierGrid>
+          {(["Silver", "Gold", "Platinum"] as PackageTier[]).map((tier) => (
+            <TierButton
+              key={tier}
+              $active={selectedPackageTier === tier}
+              onClick={() => setSelectedPackageTier(tier)}
+            >
+              {tier}
+            </TierButton>
+          ))}
+        </TierGrid>
+
+        <TableScroll>
+          <StyledTable>
+            <thead>
+              <tr>
+                <TableHeadCell>User Name</TableHeadCell>
+                <TableHeadCell>Phone No</TableHeadCell>
+                <TableHeadCell>Package</TableHeadCell>
+                <TableHeadCell>Start Date</TableHeadCell>
+                <TableHeadCell>End Date</TableHeadCell>
+                <TableHeadCell>Status</TableHeadCell>
+                <TableHeadCell>Action</TableHeadCell>
+              </tr>
+            </thead>
+
+            <tbody>
+              {subscribedUsersByTier.map((user) => (
+                <TableRow key={user.id}>
+                  <TableDataCell>{user.name}</TableDataCell>
+                  <TableDataCell>{user.phone}</TableDataCell>
+                  <TableDataCell>{user.packageName}</TableDataCell>
+                  <TableDataCell>{formatDate(user.startDate)}</TableDataCell>
+                  <TableDataCell>{formatDate(user.endDate)}</TableDataCell>
+                  <TableDataCell>
+                    <StatusBadge $variant={user.status === "Active" ? "active" : "expired"}>
+                      {user.status}
+                    </StatusBadge>
+                  </TableDataCell>
+                  <TableDataCell>
+                    <IconButton
+                      title="View package details"
+                      onClick={() => alert(`View package details for ${user.name}`)}
+                    >
+                      <Eye size={16} />
+                    </IconButton>
+                  </TableDataCell>
+                </TableRow>
+              ))}
+            </tbody>
+          </StyledTable>
+        </TableScroll>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <PackageHeader>
+        <div>
+          <SectionTitle>Package List</SectionTitle>
+          <HelperText>
+            Manage package price, duration, department, tests, and consultancy.
+          </HelperText>
+        </div>
+      </PackageHeader>
+
+      <ActionBar>
+        <ActionButton $active>
+          <ListChecks size={16} />
+          Package List
+        </ActionButton>
+        <ActionButton onClick={() => onViewChange("subscribed")}>
+          <Users size={16} />
+          Subscribed
+        </ActionButton>
+      </ActionBar>
+
+      <TableScroll>
+        <StyledTable>
+          <thead>
+            <tr>
+              <TableHeadCell>Package Name</TableHeadCell>
+              <TableHeadCell>Price</TableHeadCell>
+              <TableHeadCell>Duration</TableHeadCell>
+              <TableHeadCell>Department</TableHeadCell>
+              <TableHeadCell>Test Include No.</TableHeadCell>
+              <TableHeadCell>Consultancy Free</TableHeadCell>
+              <TableHeadCell>Description</TableHeadCell>
+              <TableHeadCell>Action</TableHeadCell>
+            </tr>
+          </thead>
+
+          <tbody>
+            {packagePlans.map((plan) => (
+              <TableRow key={plan.id}>
+                <TableDataCell>{plan.name}</TableDataCell>
+                <TableDataCell>Rs. {plan.price}</TableDataCell>
+                <TableDataCell>{plan.duration}</TableDataCell>
+                <TableDataCell>{plan.department}</TableDataCell>
+                <TableDataCell>{plan.testsIncluded}</TableDataCell>
+                <TableDataCell>{plan.consultancyFree}</TableDataCell>
+                <TableDataCell>{plan.description}</TableDataCell>
+                <TableDataCell>
+                  <IconButton
+                    title="View package"
+                    onClick={() => alert(`View ${plan.name}`)}
+                  >
+                    <Eye size={16} />
+                  </IconButton>
+                  <IconButton
+                    title="Edit package"
+                    onClick={() => alert(`Edit ${plan.name}`)}
+                  >
+                    <Pencil size={16} />
+                  </IconButton>
+                </TableDataCell>
+              </TableRow>
+            ))}
+          </tbody>
+        </StyledTable>
+      </TableScroll>
+
+      <ActionBar style={{ marginTop: "18px", marginBottom: 0 }}>
+        <PrimaryButton onClick={() => alert("Add New Package")}>
+          <Plus size={16} />
+          Add New Package
+        </PrimaryButton>
+      </ActionBar>
+    </>
+  );
+};
+
+export default PackageManagement;

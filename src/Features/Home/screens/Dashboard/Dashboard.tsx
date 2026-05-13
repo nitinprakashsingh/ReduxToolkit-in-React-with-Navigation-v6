@@ -15,8 +15,12 @@ import {
 } from "lucide-react";
 
 import HoriOmLogo from "../../../../Assets/HoriOmLogo.png";
+import BookingList from "../../components/BookingList";
 import DoctorForm from "../../components/DoctorForm/DoctorForm";
 import DoctorList from "../../components/DoctorList/DoctorList";
+import PackageManagement, {
+  PackageView,
+} from "../../components/PackageManagement";
 import SideBarItem from "../../components/SideBarItem/SideBar";
 
 import {
@@ -88,9 +92,6 @@ const doctorsData = [
   },
 ];
 
-// ==========================================
-// Sidebar Items
-// ==========================================
 const sidebarItems = [
   {
     id: 1,
@@ -128,6 +129,7 @@ const HomePage = () => {
   const [selectedItem, setSelectedItem] = useState(sidebarItems[0]);
   const [staffView, setStaffView] = useState<"list" | "add">("list");
   const [doctorView, setDoctorView] = useState<"list" | "add">("list");
+  const [packageView, setPackageView] = useState<PackageView>("list");
 
   // ==========================================
   // Render Content Based on Sidebar Selection
@@ -217,14 +219,22 @@ const HomePage = () => {
     // Booking List
     // ------------------------------
     if (selectedItem.title === "Booking List") {
-      return <Card>Booking List Content</Card>;
+      return (
+        <Card>
+          <BookingList />
+        </Card>
+      );
     }
 
     // ------------------------------
     // Package Management
     // ------------------------------
     if (selectedItem.title === "Package Management") {
-      return <Card>Package Management Content</Card>;
+      return (
+        <Card>
+          <PackageManagement view={packageView} onViewChange={setPackageView} />
+        </Card>
+      );
     }
 
     // ------------------------------
@@ -266,6 +276,10 @@ const HomePage = () => {
 
                 if (item.title === "Doctors Management") {
                   setDoctorView("list");
+                }
+
+                if (item.title === "Package Management") {
+                  setPackageView("list");
                 }
               }}
             />
@@ -318,6 +332,30 @@ const HomePage = () => {
                   <SubMenuButton onClick={() => setDoctorView("add")}>
                     <CalendarCheck size={14} />
                     Add Schedule
+                  </SubMenuButton>
+                </div>
+              )}
+
+            {/* Sub Menu for Package Management */}
+            {selectedItem.title === "Package Management" &&
+              item.title === "Package Management" && (
+                <div
+                  style={{
+                    marginLeft: "40px",
+                    marginTop: "8px",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "8px",
+                  }}
+                >
+                  <SubMenuButton onClick={() => setPackageView("list")}>
+                    <ListChecks size={14} />
+                    Package List
+                  </SubMenuButton>
+
+                  <SubMenuButton onClick={() => setPackageView("subscribed")}>
+                    <Users size={14} />
+                    Subscribed
                   </SubMenuButton>
                 </div>
               )}
