@@ -16,6 +16,7 @@ import {
 
 import HoriOmLogo from "../../../../Assets/HoriOmLogo.png";
 import BookingList from "../../components/BookingList";
+import DepartmentList from "../../components/DepartmentList";
 import DoctorForm from "../../components/DoctorForm/DoctorForm";
 import DoctorList from "../../components/DoctorList/DoctorList";
 import PackageManagement, {
@@ -241,7 +242,11 @@ const HomePage = () => {
     // Department List
     // ------------------------------
     if (selectedItem.title === "Department List") {
-      return <Card>Department List Content</Card>;
+      return (
+        <Card>
+          <DepartmentList />
+        </Card>
+      );
     }
 
     return <Card>No Content Available</Card>;
