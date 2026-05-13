@@ -3,9 +3,11 @@
 // ==========================================
 import { useState } from "react";
 import {
+  Activity,
   Building2,
   CalendarCheck,
   Home,
+  Hospital,
   ListChecks,
   Package,
   Stethoscope,
@@ -17,12 +19,15 @@ import {
 import HoriOmLogo from "../../../../Assets/HoriOmLogo.png";
 import BookingList from "../../components/BookingList";
 import DepartmentList from "../../components/DepartmentList";
+import DiseaseManagement from "../../components/DiseaseManagement";
 import DoctorForm from "../../components/DoctorForm/DoctorForm";
 import DoctorList from "../../components/DoctorList/DoctorList";
 import HomeOverview from "../../components/HomeOverview";
+import HospitalProfile from "../../components/HospitalProfile";
 import PackageManagement, {
   PackageView,
 } from "../../components/PackageManagement";
+import PatientManagement from "../../components/PatientManagement";
 import SideBarItem from "../../components/SideBarItem/SideBar";
 
 import {
@@ -112,18 +117,33 @@ const sidebarItems = [
   },
   {
     id: 4,
+    title: "Hospital Profile",
+    icon: Hospital,
+  },
+  {
+    id: 5,
+    title: "Patient Management",
+    icon: UserPlus,
+  },
+  {
+    id: 6,
     title: "Booking List",
     icon: CalendarCheck,
   },
   {
-    id: 5,
+    id: 7,
     title: "Package Management",
     icon: Package,
   },
   {
-    id: 6,
-    title: "Department List",
+    id: 8,
+    title: "Department Management",
     icon: Building2,
+  },
+  {
+    id: 9,
+    title: "Disease Management",
+    icon: Activity,
   },
 ];
 
@@ -195,10 +215,10 @@ const HomePage = () => {
       return (
         <Card>
           <HomeOverview
-            onBookingClick={() => setSelectedItem(sidebarItems[3])}
+            onBookingClick={() => setSelectedItem(sidebarItems[5])}
             onPackageClick={() => {
               setPackageView("list");
-              setSelectedItem(sidebarItems[4]);
+              setSelectedItem(sidebarItems[6]);
             }}
           />
         </Card>
@@ -228,6 +248,28 @@ const HomePage = () => {
     }
 
     // ------------------------------
+    // Hospital Profile
+    // ------------------------------
+    if (selectedItem.title === "Hospital Profile") {
+      return (
+        <Card>
+          <HospitalProfile />
+        </Card>
+      );
+    }
+
+    // ------------------------------
+    // Patient Management
+    // ------------------------------
+    if (selectedItem.title === "Patient Management") {
+      return (
+        <Card>
+          <PatientManagement />
+        </Card>
+      );
+    }
+
+    // ------------------------------
     // Booking List
     // ------------------------------
     if (selectedItem.title === "Booking List") {
@@ -250,12 +292,23 @@ const HomePage = () => {
     }
 
     // ------------------------------
-    // Department List
+    // Department Management
     // ------------------------------
-    if (selectedItem.title === "Department List") {
+    if (selectedItem.title === "Department Management") {
       return (
         <Card>
           <DepartmentList />
+        </Card>
+      );
+    }
+
+    // ------------------------------
+    // Disease Management
+    // ------------------------------
+    if (selectedItem.title === "Disease Management") {
+      return (
+        <Card>
+          <DiseaseManagement />
         </Card>
       );
     }

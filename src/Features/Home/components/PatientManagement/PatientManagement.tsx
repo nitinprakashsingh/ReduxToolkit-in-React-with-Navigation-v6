@@ -33,74 +33,82 @@ import {
   TableScroll,
   TextInput,
   Toolbar,
-} from "./DepartmentList.Style";
+} from "../DepartmentList/DepartmentList.Style";
 
-type DepartmentStatus = "Active" | "Inactive";
+type PatientStatus = "Active" | "Follow-up" | "Discharged";
 
-type Department = {
+type Patient = {
   id: number;
   name: string;
-  headDoctor: string;
   phone: string;
-  roomNo: string;
-  status: DepartmentStatus;
+  age: number;
+  gender: "Male" | "Female" | "Other";
+  lastVisit: string;
+  assignedDoctor: string;
+  status: PatientStatus;
 };
 
-const departments: Department[] = [
+const patients: Patient[] = [
   {
     id: 1,
-    name: "General Medicine",
-    headDoctor: "Dr. Anil Mehta",
-    phone: "9876543211",
-    roomNo: "OPD-101",
+    name: "Suresh Yadav",
+    phone: "9876543201",
+    age: 42,
+    gender: "Male",
+    lastVisit: "2026-05-13",
+    assignedDoctor: "Dr. Anil Mehta",
     status: "Active",
   },
   {
     id: 2,
-    name: "Cardiology",
-    headDoctor: "Dr. Rakesh Sinha",
-    phone: "9123456781",
-    roomNo: "OPD-204",
-    status: "Active",
+    name: "Meena Verma",
+    phone: "9123456702",
+    age: 35,
+    gender: "Female",
+    lastVisit: "2026-05-13",
+    assignedDoctor: "Dr. Neha Sharma",
+    status: "Follow-up",
   },
   {
     id: 3,
-    name: "Dermatology",
-    headDoctor: "Dr. Neha Sharma",
-    phone: "9988776655",
-    roomNo: "OPD-112",
-    status: "Active",
+    name: "Ravi Patel",
+    phone: "9012345678",
+    age: 51,
+    gender: "Male",
+    lastVisit: "2026-05-10",
+    assignedDoctor: "Dr. Anil Mehta",
+    status: "Discharged",
   },
   {
     id: 4,
-    name: "Orthopedic",
-    headDoctor: "Dr. Amit Verma",
-    phone: "9012345678",
-    roomNo: "OPD-305",
-    status: "Inactive",
-  },
-  {
-    id: 5,
-    name: "Pediatrics",
-    headDoctor: "Dr. Kavita Rao",
+    name: "Pooja Mishra",
     phone: "9876501234",
-    roomNo: "OPD-118",
+    age: 29,
+    gender: "Female",
+    lastVisit: "2026-05-12",
+    assignedDoctor: "Dr. Neha Sharma",
     status: "Active",
   },
 ];
 
-const departmentStatuses: DepartmentStatus[] = ["Active", "Inactive"];
+const patientStatuses: PatientStatus[] = ["Active", "Follow-up", "Discharged"];
 
-const DepartmentList = () => {
+const formatDate = (date: string) =>
+  new Intl.DateTimeFormat("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  }).format(new Date(date));
+
+const PatientManagement = () => {
   const [view, setView] = useState<"list" | "add">("list");
-  const [selectedStatus, setSelectedStatus] =
-    useState<DepartmentStatus>("Active");
+  const [selectedStatus, setSelectedStatus] = useState<PatientStatus>("Active");
   const [searchText, setSearchText] = useState("");
 
-  const filteredDepartments = departments.filter(
-    (department) =>
-      department.status === selectedStatus &&
-      department.name.toLowerCase().includes(searchText.toLowerCase())
+  const filteredPatients = patients.filter(
+    (patient) =>
+      patient.status === selectedStatus &&
+      patient.name.toLowerCase().includes(searchText.toLowerCase())
   );
 
   if (view === "add") {
@@ -111,39 +119,54 @@ const DepartmentList = () => {
             <BackButton onClick={() => setView("list")} title="Back">
               <ArrowLeft size={16} />
             </BackButton>
-            <SectionTitle>Add Department</SectionTitle>
+            <SectionTitle>Add Patient</SectionTitle>
           </HeaderLeft>
         </DepartmentHeader>
 
         <FormGrid onSubmit={(event) => event.preventDefault()}>
           <FormFields>
             <FieldGroup>
-              <FieldLabel>Department Name</FieldLabel>
-              <TextInput placeholder="Department name" />
+              <FieldLabel>Patient Name</FieldLabel>
+              <TextInput placeholder="Patient name" />
             </FieldGroup>
 
             <FieldGroup>
-              <FieldLabel>Head Doctor</FieldLabel>
-              <TextInput placeholder="Doctor name" />
-            </FieldGroup>
-
-            <FieldGroup>
-              <FieldLabel>Contact Number</FieldLabel>
+              <FieldLabel>Phone Number</FieldLabel>
               <TextInput placeholder="Phone number" />
             </FieldGroup>
 
             <FieldGroup>
-              <FieldLabel>Room / OPD No</FieldLabel>
-              <TextInput placeholder="OPD-101" />
+              <FieldLabel>Age</FieldLabel>
+              <TextInput type="number" placeholder="Age" />
+            </FieldGroup>
+
+            <FieldGroup>
+              <FieldLabel>Gender</FieldLabel>
+              <SelectInput defaultValue="">
+                <option value="" disabled>
+                  Select gender
+                </option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </SelectInput>
+            </FieldGroup>
+
+            <FieldGroup>
+              <FieldLabel>Assigned Doctor</FieldLabel>
+              <SelectInput defaultValue="">
+                <option value="" disabled>
+                  Select doctor
+                </option>
+                <option value="Dr. Anil Mehta">Dr. Anil Mehta</option>
+                <option value="Dr. Neha Sharma">Dr. Neha Sharma</option>
+              </SelectInput>
             </FieldGroup>
 
             <FieldGroup>
               <FieldLabel>Status</FieldLabel>
               <SelectInput defaultValue="Active">
-                <option value="" disabled>
-                  Select status
-                </option>
-                {departmentStatuses.map((status) => (
+                {patientStatuses.map((status) => (
                   <option key={status} value={status}>
                     {status}
                   </option>
@@ -169,7 +192,7 @@ const DepartmentList = () => {
   return (
     <>
       <DepartmentHeader>
-        <SectionTitle>Department Management</SectionTitle>
+        <SectionTitle>Patient Management</SectionTitle>
       </DepartmentHeader>
 
       <Toolbar>
@@ -193,7 +216,7 @@ const DepartmentList = () => {
       </Toolbar>
 
       <TabBar>
-        {departmentStatuses.map((status) => (
+        {patientStatuses.map((status) => (
           <TabButton
             key={status}
             $active={selectedStatus === status}
@@ -204,7 +227,7 @@ const DepartmentList = () => {
         ))}
         <AddButton onClick={() => setView("add")} style={{ marginLeft: "auto" }}>
           <Plus size={14} />
-          Add Department
+          Add Patient
         </AddButton>
       </TabBar>
 
@@ -212,42 +235,46 @@ const DepartmentList = () => {
         <StyledTable>
           <thead>
             <tr>
-              <TableHeadCell>Department Name</TableHeadCell>
-              <TableHeadCell>Head Doctor</TableHeadCell>
+              <TableHeadCell>Patient Name</TableHeadCell>
               <TableHeadCell>Phone No</TableHeadCell>
-              <TableHeadCell>Room / OPD</TableHeadCell>
+              <TableHeadCell>Age / Gender</TableHeadCell>
+              <TableHeadCell>Last Visit</TableHeadCell>
+              <TableHeadCell>Assigned Doctor</TableHeadCell>
               <TableHeadCell>Status</TableHeadCell>
               <TableHeadCell>Action</TableHeadCell>
             </tr>
           </thead>
 
           <tbody>
-            {filteredDepartments.map((department) => (
-              <TableRow key={department.id}>
-                <TableDataCell>{department.name}</TableDataCell>
-                <TableDataCell>{department.headDoctor}</TableDataCell>
-                <TableDataCell>{department.phone}</TableDataCell>
-                <TableDataCell>{department.roomNo}</TableDataCell>
-                <TableDataCell>{department.status}</TableDataCell>
+            {filteredPatients.map((patient) => (
+              <TableRow key={patient.id}>
+                <TableDataCell>{patient.name}</TableDataCell>
+                <TableDataCell>{patient.phone}</TableDataCell>
+                <TableDataCell>
+                  {patient.age} / {patient.gender}
+                </TableDataCell>
+                <TableDataCell>{formatDate(patient.lastVisit)}</TableDataCell>
+                <TableDataCell>{patient.assignedDoctor}</TableDataCell>
+                <TableDataCell>{patient.status}</TableDataCell>
                 <TableDataCell>
                   <ActionIconButton
-                    title="View department"
-                    onClick={() => alert(`View ${department.name}`)}
+                    title="View patient"
+                    onClick={() => alert(`View ${patient.name}`)}
                   >
                     <Eye size={16} />
                   </ActionIconButton>
                   <ActionIconButton
-                    title="Edit department"
-                    onClick={() => alert(`Edit ${department.name}`)}
+                    title="Edit patient"
+                    onClick={() => alert(`Edit ${patient.name}`)}
                   >
                     <Pencil size={16} />
                   </ActionIconButton>
                 </TableDataCell>
               </TableRow>
             ))}
-            {filteredDepartments.length === 0 && (
+            {filteredPatients.length === 0 && (
               <TableRow>
-                <TableDataCell colSpan={6}>No departments found.</TableDataCell>
+                <TableDataCell colSpan={7}>No patients found.</TableDataCell>
               </TableRow>
             )}
           </tbody>
@@ -258,13 +285,10 @@ const DepartmentList = () => {
         <PageButton>Previous</PageButton>
         <PageButton $active>1</PageButton>
         <PageButton>2</PageButton>
-        <PageButton>3</PageButton>
-        <PageButton>4</PageButton>
-        <PageButton>5</PageButton>
         <PageButton>Next</PageButton>
       </Pagination>
     </>
   );
 };
 
-export default DepartmentList;
+export default PatientManagement;
