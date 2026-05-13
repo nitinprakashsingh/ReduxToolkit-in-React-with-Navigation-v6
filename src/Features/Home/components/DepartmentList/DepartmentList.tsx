@@ -93,6 +93,7 @@ const DepartmentList = () => {
       disease.type === selectedType &&
       disease.name.toLowerCase().includes(searchText.toLowerCase())
   );
+  //testing
 
   if (view === "add") {
     return (
