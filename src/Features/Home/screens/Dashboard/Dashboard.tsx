@@ -19,6 +19,7 @@ import BookingList from "../../components/BookingList";
 import DepartmentList from "../../components/DepartmentList";
 import DoctorForm from "../../components/DoctorForm/DoctorForm";
 import DoctorList from "../../components/DoctorList/DoctorList";
+import HomeOverview from "../../components/HomeOverview";
 import PackageManagement, {
   PackageView,
 } from "../../components/PackageManagement";
@@ -191,7 +192,17 @@ const HomePage = () => {
     // Home
     // ------------------------------
     if (selectedItem.title === "Home") {
-      return <Card>Dashboard Home Content</Card>;
+      return (
+        <Card>
+          <HomeOverview
+            onBookingClick={() => setSelectedItem(sidebarItems[3])}
+            onPackageClick={() => {
+              setPackageView("list");
+              setSelectedItem(sidebarItems[4]);
+            }}
+          />
+        </Card>
+      );
     }
 
     // ------------------------------
