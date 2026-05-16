@@ -59,6 +59,24 @@ export const PrimaryButton = styled.button`
   }
 `;
 
+export const SecondaryButton = styled.button`
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  border-radius: 8px;
+  background: #f3f4f6;
+  color: #4b5563;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 10px 14px;
+
+  &:hover {
+    background: #e5e7eb;
+  }
+`;
+
 export const IconButton = styled.button`
   display: inline-flex;
   align-items: center;
@@ -81,6 +99,78 @@ export const IconButton = styled.button`
 export const TableScroll = styled.div`
   width: 100%;
   overflow-x: auto;
+`;
+
+export const SubscribePanel = styled.div`
+  max-width: 760px;
+`;
+
+export const SubscribeForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+`;
+
+export const SubscribeFormGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, minmax(220px, 1fr));
+  gap: 16px;
+
+  @media (max-width: 720px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+export const FieldGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+`;
+
+export const FieldLabel = styled.label`
+  color: #6b7280;
+  font-size: 13px;
+  font-weight: 600;
+`;
+
+export const TextInput = styled.input`
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  color: #111827;
+  font-size: 14px;
+  padding: 10px 12px;
+  outline: none;
+
+  &:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+  }
+`;
+
+export const SelectInput = styled.select`
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  color: #111827;
+  font-size: 14px;
+  padding: 10px 12px;
+  outline: none;
+  background: #ffffff;
+
+  &:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+  }
+`;
+
+export const SubscribeFormActions = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
 `;
 
 export const TierGrid = styled.div`

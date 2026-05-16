@@ -1,4 +1,5 @@
-import { Eye, ListChecks, Pencil, Plus, Users } from "lucide-react";
+import { Eye, ListChecks, Pencil, Plus, UserPlus, Users } from "lucide-react";
+import type { FormEvent } from "react";
 import { useState } from "react";
 
 import {
@@ -15,10 +16,19 @@ import {
   IconButton,
   PackageHeader,
   PrimaryButton,
+  SubscribeForm,
+  SubscribeFormActions,
+  SubscribeFormGrid,
+  SubscribePanel,
   StatusBadge,
   TableScroll,
+  TextInput,
   TierButton,
   TierGrid,
+  SelectInput,
+  FieldGroup,
+  FieldLabel,
+  SecondaryButton,
 } from "./PackageManagement.Style";
 
 type PackagePlan = {
@@ -30,11 +40,13 @@ type PackagePlan = {
   testsIncluded: number;
   consultancyFree: number;
   description: string;
+  tier: PackageTier;
+  durationMonths: number;
 };
 
 type PackageTier = "Silver" | "Gold" | "Platinum";
 
-export type PackageView = "list" | "subscribed";
+export type PackageView = "list" | "subscribed" | "subscribe";
 
 type SubscribedUser = {
   id: number;
@@ -44,6 +56,12 @@ type SubscribedUser = {
   startDate: string;
   endDate: string;
   status: "Active" | "Expired";
+};
+
+type SubscriptionFormValues = {
+  name: string;
+  phone: string;
+  packageName: PackageTier;
 };
 
 type PackageManagementProps = {
@@ -61,6 +79,8 @@ const packagePlans: PackagePlan[] = [
     testsIncluded: 4,
     consultancyFree: 1,
     description: "Basic health check with one free doctor consultation.",
+    tier: "Silver",
+    durationMonths: 1,
   },
   {
     id: 2,
@@ -71,6 +91,8 @@ const packagePlans: PackagePlan[] = [
     testsIncluded: 8,
     consultancyFree: 3,
     description: "Routine tests and consultations for regular family care.",
+    tier: "Gold",
+    durationMonths: 3,
   },
   {
     id: 3,
@@ -81,10 +103,12 @@ const packagePlans: PackagePlan[] = [
     testsIncluded: 15,
     consultancyFree: 6,
     description: "Complete package for preventive health and follow-up visits.",
+    tier: "Platinum",
+    durationMonths: 6,
   },
 ];
 
-const subscribedUsers: SubscribedUser[] = [
+const initialSubscribedUsers: SubscribedUser[] = [
   {
     id: 1,
     name: "Ramesh Tiwari",
@@ -141,6 +165,8 @@ const subscribedUsers: SubscribedUser[] = [
   },
 ];
 
+const packageTiers: PackageTier[] = ["Silver", "Gold", "Platinum"];
+
 const formatDate = (date: string) =>
   new Intl.DateTimeFormat("en-IN", {
     day: "2-digit",
@@ -148,13 +174,157 @@ const formatDate = (date: string) =>
     year: "numeric",
   }).format(new Date(date));
 
+const toInputDate = (date: Date) => date.toISOString().slice(0, 10);
+
+const getEndDate = (durationMonths: number) => {
+  const endDate = new Date();
+  endDate.setMonth(endDate.getMonth() + durationMonths);
+
+  return toInputDate(endDate);
+};
+
+const createInitialFormValues = (
+  packageName: PackageTier = "Silver"
+): SubscriptionFormValues => ({
+  name: "",
+  phone: "",
+  packageName,
+});
+
 const PackageManagement = ({ view, onViewChange }: PackageManagementProps) => {
   const [selectedPackageTier, setSelectedPackageTier] =
     useState<PackageTier>("Silver");
+  const [subscribedUsers, setSubscribedUsers] = useState<SubscribedUser[]>(
+    initialSubscribedUsers
+  );
+  const [subscriptionForm, setSubscriptionForm] =
+    useState<SubscriptionFormValues>(createInitialFormValues());
 
   const subscribedUsersByTier = subscribedUsers.filter(
     (user) => user.packageName === selectedPackageTier
   );
+
+  const selectedPlan = packagePlans.find(
+    (plan) => plan.tier === subscriptionForm.packageName
+  );
+
+  const handleSubscribeClick = (packageName: PackageTier) => {
+    setSubscriptionForm(createInitialFormValues(packageName));
+    onViewChange("subscribe");
+  };
+
+  const handleSubscriptionSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (!selectedPlan) {
+      return;
+    }
+
+    const trimmedName = subscriptionForm.name.trim();
+    const trimmedPhone = subscriptionForm.phone.trim();
+
+    if (!trimmedName || !trimmedPhone) {
+      return;
+    }
+
+    const newSubscription: SubscribedUser = {
+      id: Date.now(),
+      name: trimmedName,
+      phone: trimmedPhone,
+      packageName: selectedPlan.tier,
+      startDate: toInputDate(new Date()),
+      endDate: getEndDate(selectedPlan.durationMonths),
+      status: "Active",
+    };
+
+    setSubscribedUsers((users) => [newSubscription, ...users]);
+    setSelectedPackageTier(selectedPlan.tier);
+    setSubscriptionForm(createInitialFormValues(selectedPlan.tier));
+    onViewChange("subscribed");
+  };
+
+  if (view === "subscribe") {
+    return (
+      <>
+        <PackageHeader>
+          <div>
+            <SectionTitle>Subscribe Package</SectionTitle>
+            <HelperText>
+              Add a user subscription for Silver, Gold, or Platinum packages.
+            </HelperText>
+          </div>
+        </PackageHeader>
+
+        <SubscribePanel>
+          <SubscribeForm onSubmit={handleSubscriptionSubmit}>
+            <SubscribeFormGrid>
+              <FieldGroup>
+                <FieldLabel htmlFor="subscriber-name">User Name</FieldLabel>
+                <TextInput
+                  id="subscriber-name"
+                  value={subscriptionForm.name}
+                  onChange={(event) =>
+                    setSubscriptionForm((form) => ({
+                      ...form,
+                      name: event.target.value,
+                    }))
+                  }
+                  placeholder="Enter user name"
+                  required
+                />
+              </FieldGroup>
+
+              <FieldGroup>
+                <FieldLabel htmlFor="subscriber-phone">Phone No</FieldLabel>
+                <TextInput
+                  id="subscriber-phone"
+                  value={subscriptionForm.phone}
+                  onChange={(event) =>
+                    setSubscriptionForm((form) => ({
+                      ...form,
+                      phone: event.target.value,
+                    }))
+                  }
+                  placeholder="Enter phone number"
+                  required
+                />
+              </FieldGroup>
+
+              <FieldGroup>
+                <FieldLabel htmlFor="package-tier">Package</FieldLabel>
+                <SelectInput
+                  id="package-tier"
+                  value={subscriptionForm.packageName}
+                  onChange={(event) =>
+                    setSubscriptionForm((form) => ({
+                      ...form,
+                      packageName: event.target.value as PackageTier,
+                    }))
+                  }
+                >
+                  {packageTiers.map((tier) => (
+                    <option key={tier} value={tier}>
+                      {tier}
+                    </option>
+                  ))}
+                </SelectInput>
+              </FieldGroup>
+            </SubscribeFormGrid>
+
+            <SubscribeFormActions>
+              <SecondaryButton type="button" onClick={() => onViewChange("list")}>
+                Cancel
+              </SecondaryButton>
+              <PrimaryButton type="submit">
+                <UserPlus size={16} />
+                Subscribe
+              </PrimaryButton>
+            </SubscribeFormActions>
+          </SubscribeForm>
+        </SubscribePanel>
+      </>
+    );
+  }
 
   if (view === "subscribed") {
     return (
@@ -180,7 +350,7 @@ const PackageManagement = ({ view, onViewChange }: PackageManagementProps) => {
         </ActionBar>
 
         <TierGrid>
-          {(["Silver", "Gold", "Platinum"] as PackageTier[]).map((tier) => (
+          {packageTiers.map((tier) => (
             <TierButton
               key={tier}
               $active={selectedPackageTier === tier}
@@ -228,6 +398,11 @@ const PackageManagement = ({ view, onViewChange }: PackageManagementProps) => {
                   </TableDataCell>
                 </TableRow>
               ))}
+              {subscribedUsersByTier.length === 0 && (
+                <TableRow>
+                  <TableDataCell colSpan={7}>No subscribed users found.</TableDataCell>
+                </TableRow>
+              )}
             </tbody>
           </StyledTable>
         </TableScroll>
@@ -295,6 +470,12 @@ const PackageManagement = ({ view, onViewChange }: PackageManagementProps) => {
                   >
                     <Pencil size={16} />
                   </IconButton>
+                  <IconButton
+                    title={`Subscribe ${plan.tier} package`}
+                    onClick={() => handleSubscribeClick(plan.tier)}
+                  >
+                    <UserPlus size={16} />
+                  </IconButton>
                 </TableDataCell>
               </TableRow>
             ))}
@@ -303,6 +484,10 @@ const PackageManagement = ({ view, onViewChange }: PackageManagementProps) => {
       </TableScroll>
 
       <ActionBar style={{ marginTop: "18px", marginBottom: 0 }}>
+        <PrimaryButton onClick={() => handleSubscribeClick("Silver")}>
+          <UserPlus size={16} />
+          Subscribe User
+        </PrimaryButton>
         <PrimaryButton onClick={() => alert("Add New Package")}>
           <Plus size={16} />
           Add New Package

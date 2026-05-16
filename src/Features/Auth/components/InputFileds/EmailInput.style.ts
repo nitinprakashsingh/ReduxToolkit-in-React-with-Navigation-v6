@@ -11,5 +11,3 @@ export const InputField = styled.input`
     border-color: #007bff;
   }
 `;
-//doing this for the commit on screen
-// i don't know what to do next
