@@ -21,7 +21,7 @@ import {
     Button,
     LinkRow,
     ForgetButton,
-} from "./Signup.styles"
+} from "../Auth.styles"
 
 const SignUpPage = () => {
     const [name, setUserName] = useState("")

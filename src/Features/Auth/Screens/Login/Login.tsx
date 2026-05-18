@@ -14,23 +14,25 @@ import {
     BrandTop,
     Button,
     Container,
-    ErrorText,
     FieldGroup,
     ForgetButton,
     Form,
     HelperText,
-    IconButton,
-    InputFiled,
-    InputWrapper,
     LinkRow,
     LoginCard,
     LoginPanel,
     LogoMark,
+    Title,
+} from "../Auth.styles"
+import {
+    ErrorText,
+    IconButton,
+    InputFiled,
+    InputWrapper,
     StatGrid,
     StatItem,
     StatLabel,
     StatValue,
-    Title,
 } from "./Login.style"
 
 const LoginPage = () => {

@@ -21,7 +21,7 @@ import {
     Button,
     LinkRow,
     ForgetButton,
-} from "./Forgot.style"
+} from "../Auth.styles"
 
 const ForgotPasswordPage = () => {
     const [email, setEmail] = useState("")
