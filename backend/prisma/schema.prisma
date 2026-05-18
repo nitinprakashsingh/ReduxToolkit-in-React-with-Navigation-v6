@@ -17,3 +17,15 @@ model Department {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 }
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  mobile    String?
+  address   String?
+  role      String   @default("user")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

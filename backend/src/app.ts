@@ -10,6 +10,7 @@ import { doctorRouter } from "./modules/doctors/doctor.routes";
 import { healthRouter } from "./modules/health/health.routes";
 import { packageRouter } from "./modules/packages/package.routes";
 import { patientRouter } from "./modules/patients/patient.routes";
+import { authRouter } from "./modules/auth/auth.routes";
 
 export const app = express();
 
@@ -27,5 +28,5 @@ app.use("/api/patients", patientRouter);
 app.use("/api/appointments", appointmentRouter);
 app.use("/api/packages", packageRouter);
 app.use("/api/diseases", diseaseRouter);
-
+app.use("/api/auth", authRouter);
 app.use(errorHandler);
