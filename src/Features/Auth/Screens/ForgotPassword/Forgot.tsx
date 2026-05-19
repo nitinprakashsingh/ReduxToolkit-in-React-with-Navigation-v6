@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { useTranslation } from "react-i18next"
 import HoriOmLogo from "../../../../Assets/HoriOmLogo.png"
 import InputField from "../../components/InputFileds/EmailInput"
 import {
@@ -29,16 +30,17 @@ const ForgotPasswordPage = () => {
     const [confirmPassword, setConfirmPassword] = useState("")
     const [isEmailConfirmed, setEmailConfirmed] = useState(false)
     const navigate = useNavigate()
+    const { t } = useTranslation()
 
     const redirectToLoginPage = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
 
         if (isEmailConfirmed) {
             if (newPassword === confirmPassword) {
-                alert("Password reset successful! Please login with your new password.")
+                alert(t('auth.forgot.alertSuccess'))
                 navigate("/login")
             } else {
-                alert("Passwords do not match. Please try again.")
+                alert(t('auth.forgot.alertMismatch'))
             }
         } else {
             setEmailConfirmed(true)
@@ -52,34 +54,31 @@ const ForgotPasswordPage = () => {
                     <LogoMark src={HoriOmLogo} alt="Hari Om Seva Sansta logo" />
                     <div>
                         <BrandName>Hari Om Seva Sansta</BrandName>
-                        <BrandSubText>Hospital web panel</BrandSubText>
+                        <BrandSubText>{t('auth.brandSubText')}</BrandSubText>
                     </div>
                 </BrandTop>
 
                 <BrandContent>
-                    <BrandTitle>Reset your password</BrandTitle>
-                    <BrandDescription>
-                        Enter your registered email and set a new password to regain access to
-                        the hospital dashboard.
-                    </BrandDescription>
+                    <BrandTitle>{t('auth.forgot.title')}</BrandTitle>
+                    <BrandDescription>{t('auth.forgot.descriptionEmail')}</BrandDescription>
                 </BrandContent>
             </BrandPanel>
 
             <LoginPanel>
                 <LoginCard>
-                    <Title>Forgot password</Title>
+                    <Title>{t('auth.forgot.title')}</Title>
                     <HelperText>
                         {isEmailConfirmed
-                            ? "Set your new password below."
-                            : "Enter your email address to receive a password reset flow."}
+                            ? t('auth.forgot.descriptionReset')
+                            : t('auth.forgot.descriptionEmail')}
                     </HelperText>
 
                     <Form onSubmit={redirectToLoginPage}>
                         <FieldGroup>
-                            Email address
+                            {t('auth.forgot.emailLabel')}
                             <InputField
                                 type="email"
-                                placeholder="admin@hospital.com"
+                                placeholder={t('auth.forgot.emailPlaceholder')}
                                 value={email}
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                                     setEmail(e.target.value)
@@ -90,10 +89,10 @@ const ForgotPasswordPage = () => {
                         {isEmailConfirmed && (
                             <>
                                 <FieldGroup>
-                                    New password
+                                    {t('auth.forgot.newPasswordLabel')}
                                     <InputField
                                         type="password"
-                                        placeholder="New password"
+                                        placeholder={t('auth.forgot.newPasswordPlaceholder')}
                                         value={newPassword}
                                         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                                             setNewPassword(e.target.value)
@@ -102,10 +101,10 @@ const ForgotPasswordPage = () => {
                                 </FieldGroup>
 
                                 <FieldGroup>
-                                    Confirm password
+                                    {t('auth.forgot.confirmPasswordLabel')}
                                     <InputField
                                         type="password"
-                                        placeholder="Confirm new password"
+                                        placeholder={t('auth.forgot.confirmPasswordPlaceholder')}
                                         value={confirmPassword}
                                         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                                             setConfirmPassword(e.target.value)
@@ -116,12 +115,12 @@ const ForgotPasswordPage = () => {
                         )}
 
                         <Button type="submit">
-                            {isEmailConfirmed ? "Reset password" : "Send reset link"}
+                            {isEmailConfirmed ? t('auth.forgot.resetPassword') : t('auth.forgot.sendResetLink')}
                         </Button>
 
                         <LinkRow>
                             <ForgetButton type="button" onClick={() => navigate("/login")}> 
-                                Back to sign in
+                                {t('auth.forgot.backToSignIn')}
                             </ForgetButton>
                         </LinkRow>
                     </Form>

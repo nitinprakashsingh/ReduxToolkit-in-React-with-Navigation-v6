@@ -4,6 +4,7 @@ import { BrowserRouter } from "react-router-dom";
 import App from './App/App';
 import reportWebVitals from './reportWebVitals';
 import Providers from './App/Provider';
+import './i18n';
 
 const container = document.getElementById('root');
 
