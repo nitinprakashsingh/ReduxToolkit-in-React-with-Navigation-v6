@@ -1,8 +1,10 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import HoriOmLogo from "../../../../Assets/HoriOmLogo.png"
 import InputField from "../../components/InputFileds"
+import { useAppDispatch, useAppSelector } from "../../../../Store/types"
+import { signupRequest } from "../../authSlice"
 import {
     Container,
     BrandPanel,
@@ -19,6 +21,7 @@ import {
     HelperText,
     Form,
     FieldGroup,
+    ErrorText,
     Button,
     LinkRow,
     ForgetButton,
@@ -30,9 +33,18 @@ const SignUpPage = () => {
     const [password, setPassword] = useState("")
     const [mobile, setMobile] = useState("")
     const [address, setAddress] = useState("")
-    const [errors, setErrors] = useState({});
+    const [errors, setErrors] = useState<Record<string, string>>({});
+    const [hasSubmitted, setHasSubmitted] = useState(false)
     const navigate = useNavigate()
+    const dispatch = useAppDispatch()
     const { t } = useTranslation()
+    const { isLoading, error: serverError, user } = useAppSelector((state) => state.auth)
+
+    useEffect(() => {
+        if (hasSubmitted && !isLoading && !serverError && user) {
+            navigate('/login')
+        }
+    }, [hasSubmitted, isLoading, serverError, user, navigate])
 
     const submitHandler = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
@@ -61,13 +73,8 @@ const SignUpPage = () => {
         }
 
         setErrors({})
-        console.log("Name:", name)
-        console.log("Email:", email)
-        console.log("Password:", password)
-        console.log("Mobile:", mobile)
-        console.log("Address:", address)
-
-        // TODO: submit signup request or navigate after success
+        dispatch(signupRequest({ name, email, password, mobile, address }))
+        setHasSubmitted(true)
     }
 
     return (
@@ -99,10 +106,13 @@ const SignUpPage = () => {
                                 type="text"
                                 placeholder={t('auth.signup.namePlaceholder')}
                                 value={name}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>{
                                     setUserName(e.target.value)
+                                    setErrors((prev) => ({ ...prev, name: "" }));
+                                }
                                 }
                             />
+                            {errors.name && <ErrorText>{errors.name}</ErrorText>}
                         </FieldGroup>
 
                         <FieldGroup>
@@ -111,10 +121,13 @@ const SignUpPage = () => {
                                 type="email"
                                 placeholder={t('auth.signup.emailPlaceholder')}
                                 value={email}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>{
                                     setEmail(e.target.value)
+                                    setErrors((prev) => ({ ...prev, email: "" }));
+                                }
                                 }
                             />
+                            {errors.email && <ErrorText>{errors.email}</ErrorText>}
                         </FieldGroup>
 
                         <FieldGroup>
@@ -123,10 +136,13 @@ const SignUpPage = () => {
                                 type="password"
                                 placeholder={t('auth.signup.passwordPlaceholder')}
                                 value={password}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>{
                                     setPassword(e.target.value)
+                                    setErrors((prev) => ({ ...prev, password: "" })); 
+                                }
                                 }
                             />
+                            {errors.password && <ErrorText>{errors.password}</ErrorText>}
                         </FieldGroup>
 
                         <FieldGroup>
@@ -135,10 +151,13 @@ const SignUpPage = () => {
                                 type="tel"
                                 placeholder="9876543210"
                                 value={mobile}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>{     
+                                    setErrors((prev) => ({ ...prev, mobile: "" }));
                                     setMobile(e.target.value)
                                 }
+                                }
                             />
+                            {errors.mobile && <ErrorText>{errors.mobile}</ErrorText>}
                         </FieldGroup>
 
                         <FieldGroup>
@@ -147,15 +166,20 @@ const SignUpPage = () => {
                                 type="text"
                                 placeholder={t('auth.signup.addressPlaceholder')}
                                 value={address}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>{
+                                    setErrors((prev) => ({ ...prev, address: "" }));
                                     setAddress(e.target.value)
                                 }
+                                }
                             />
+                            {errors.address && <ErrorText>{errors.address}</ErrorText>}
                         </FieldGroup>
 
-                        <Button type="submit">
-                            {t('auth.signup.submitButton')}
+                        <Button type="submit" disabled={isLoading}>
+                            {isLoading ? 'Creating account...' : t('auth.signup.submitButton')}
                         </Button>
+
+                        {hasSubmitted && serverError ? <ErrorText>{serverError}</ErrorText> : null}
 
                         <LinkRow>
                             <ForgetButton type="button" onClick={() => navigate("/login")}>

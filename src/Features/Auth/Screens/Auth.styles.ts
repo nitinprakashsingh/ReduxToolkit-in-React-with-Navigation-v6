@@ -154,6 +154,13 @@ export const FieldGroup = styled.label`
   font-weight: 700;
 `
 
+export const ErrorText = styled.span`
+  color: #dc2626;
+  font-size: 12px;
+  margin-top: 4px;
+  font-weight: 500;
+`
+
 export const Button = styled.button`
   display: inline-flex;
   align-items: center;
