@@ -11,6 +11,7 @@ import { healthRouter } from "./modules/health/health.routes";
 import { packageRouter } from "./modules/packages/package.routes";
 import { patientRouter } from "./modules/patients/patient.routes";
 import { authRouter } from "./modules/auth/auth.routes";
+import { signInRouter } from "./modules/auth/login.route";
 
 export const app = express();
 
@@ -29,4 +30,5 @@ app.use("/api/appointments", appointmentRouter);
 app.use("/api/packages", packageRouter);
 app.use("/api/diseases", diseaseRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/auth/login", signInRouter);
 app.use(errorHandler);
