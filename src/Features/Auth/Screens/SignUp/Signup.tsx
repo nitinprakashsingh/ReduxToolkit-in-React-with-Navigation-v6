@@ -31,6 +31,14 @@ const SignUpPage = () => {
     const [address, setAddress] = useState("")
     const navigate = useNavigate()
 
+    const submitHandler=()=>{
+      console.log("Name:", name)
+      console.log("Email:", email)
+      console.log("Password:", password)
+      console.log("Mobile:", mobile)
+      console.log("Address:", address)
+    }
+
     const signUpButtonHandler = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         navigate("/login")
@@ -42,7 +50,7 @@ const SignUpPage = () => {
                 <BrandTop>
                     <LogoMark src={HoriOmLogo} alt="Hari Om Seva Sansta logo" />
                     <div>
-                        <BrandName>Hari Om Seva Sansta</BrandName>
+                        <BrandName>Shriyan Cares</BrandName>
                         <BrandSubText>Hospital web panel</BrandSubText>
                     </div>
                 </BrandTop>
@@ -124,7 +132,9 @@ const SignUpPage = () => {
                             />
                         </FieldGroup>
 
-                        <Button type="submit">Create account</Button>
+                        <Button type="submit"
+                        onClick={submitHandler}
+                        >Create account</Button>
 
                         <LinkRow>
                             <ForgetButton type="button" onClick={() => navigate("/login")}>

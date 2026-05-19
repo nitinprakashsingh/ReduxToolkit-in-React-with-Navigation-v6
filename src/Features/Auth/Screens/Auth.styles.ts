@@ -2,9 +2,11 @@ import styled from "styled-components"
 
 export const Container = styled.div`
   min-height: 100vh;
+  height: 100vh;
   display: grid;
   grid-template-columns: minmax(320px, 0.95fr) minmax(360px, 1.05fr);
   background: #f5f7fb;
+  overflow: hidden;
 
   @media (max-width: 840px) {
     grid-template-columns: 1fr;
@@ -14,11 +16,19 @@ export const Container = styled.div`
 export const BrandPanel = styled.aside`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 32px;
   padding: 44px;
   background: #5d44a2;
   color: #ffffff;
+
+  @media (min-width: 841px) {
+    position: sticky;
+    top: 0;
+    align-self: flex-start;
+    min-height: 100vh;
+    overflow: hidden;
+  }
 
   @media (max-width: 840px) {
     padding: 28px;
@@ -78,10 +88,17 @@ export const LoginPanel = styled.main`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 32px;
+  padding: 40px 20px;
+  min-height: 100vh;
+  overflow: hidden;
+
+  @media (max-width: 840px) {
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
 
   @media (max-width: 480px) {
-    padding: 20px;
+    padding: 24px 20px;
   }
 `
 
@@ -93,9 +110,18 @@ export const LoginCard = styled.section`
   border-radius: 12px;
   box-shadow: 0 16px 40px rgba(17, 24, 39, 0.08);
   padding: 30px;
+  box-sizing: border-box;
+  margin: 16px 0 24px;
+  max-height: calc(100vh - 96px);
+  overflow-y: auto;
+
+  @media (max-width: 840px) {
+    max-height: calc(100vh - 88px);
+  }
 
   @media (max-width: 480px) {
     padding: 22px;
+    margin: 14px 0;
   }
 `
 
