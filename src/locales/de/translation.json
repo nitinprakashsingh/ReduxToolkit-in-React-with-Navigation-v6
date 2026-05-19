@@ -1,0 +1,126 @@
+{
+  "language": {
+    "label": "Sprache",
+    "en": "English",
+    "de": "Deutsch",
+    "ja": "日本語"
+  },
+  "auth": {
+    "brandSubText": "Hospital-Webpanel",
+    "signup": {
+      "title": "Registrieren Sie Ihr Konto",
+      "description": "Erstellen Sie ein sicheres Konto, um Ärzte, Patienten, Termine, Abteilungen, Pakete und Krankheitsdaten an einem Ort zu verwalten.",
+      "cardHeader": "Konto erstellen",
+      "helperText": "Füllen Sie Ihre Daten aus, um mit dem Krankenhaus-Dashboard zu beginnen.",
+      "nameLabel": "Name",
+      "namePlaceholder": "John Doe",
+      "emailLabel": "E-Mail-Adresse",
+      "emailPlaceholder": "admin@hospital.com",
+      "passwordLabel": "Passwort",
+      "passwordPlaceholder": "Passwort eingeben",
+      "mobileLabel": "Telefonnummer",
+      "addressLabel": "Adresse",
+      "addressPlaceholder": "Krankenhaus- oder Klinikadresse",
+      "submitButton": "Konto erstellen",
+      "backToSignIn": "Zurück zur Anmeldung"
+    },
+    "login": {
+      "brandTitle": "Verwalten Sie Krankenhausabläufe von einem einfachen Panel aus.",
+      "description": "Verfolgen Sie Ärzte, Patienten, Termine, Pakete, Abteilungen und Krankheitsdaten mit einer klaren, pilotbereiten Arbeitsfläche.",
+      "welcomeBack": "Willkommen zurück",
+      "helperText": "Melden Sie sich an, um Ihr Krankenhaus-Dashboard zu öffnen und die tägliche Arbeit fortzusetzen.",
+      "emailLabel": "E-Mail-Adresse",
+      "emailPlaceholder": "admin@hospital.com",
+      "passwordLabel": "Passwort",
+      "passwordPlaceholder": "Passwort eingeben",
+      "showPassword": "Passwort anzeigen",
+      "hidePassword": "Passwort verbergen",
+      "submitButton": "Anmelden",
+      "createAccount": "Konto erstellen",
+      "forgotPassword": "Passwort vergessen?"
+    },
+    "forgot": {
+      "title": "Passwort vergessen",
+      "descriptionEmail": "Geben Sie Ihre E-Mail-Adresse ein, um einen Passwortzurücksetzungslink zu erhalten.",
+      "descriptionReset": "Legen Sie unten Ihr neues Passwort fest.",
+      "alertSuccess": "Passwort erfolgreich zurückgesetzt! Bitte melden Sie sich mit Ihrem neuen Passwort an.",
+      "alertMismatch": "Passwörter stimmen nicht überein. Bitte versuchen Sie es erneut.",
+      "emailLabel": "E-Mail-Adresse",
+      "emailPlaceholder": "admin@hospital.com",
+      "newPasswordLabel": "Neues Passwort",
+      "newPasswordPlaceholder": "Neues Passwort",
+      "confirmPasswordLabel": "Passwort bestätigen",
+      "confirmPasswordPlaceholder": "Neues Passwort bestätigen",
+      "sendResetLink": "Link zum Zurücksetzen senden",
+      "resetPassword": "Passwort zurücksetzen",
+      "backToSignIn": "Zurück zur Anmeldung"
+    }
+  },
+  "common": {
+    "back": "Zurück",
+    "cancel": "Abbrechen",
+    "save": "Speichern",
+    "edit": "Bearbeiten",
+    "select": "Auswählen",
+    "yes": "Ja",
+    "no": "Nein"
+  },
+  "dashboard": {
+    "sidebar": {
+      "home": "Startseite",
+      "staffManagement": "Mitarbeiterverwaltung",
+      "doctorsManagement": "Arztverwaltung",
+      "hospitalProfile": "Krankenhausprofil",
+      "patientManagement": "Patientenverwaltung",
+      "bookingList": "Buchungsliste",
+      "packageManagement": "Paketverwaltung",
+      "departmentManagement": "Abteilungsverwaltung",
+      "diseaseManagement": "Krankheitsverwaltung"
+    },
+    "section": {
+      "staffList": "Mitarbeiterliste",
+      "addNewStaff": "Neuen Mitarbeiter hinzufügen"
+    }
+  },
+  "hospitalProfile": {
+    "title": "Krankenhausprofil",
+    "editProfile": "Profil bearbeiten",
+    "changeImage": "Bild ändern",
+    "hospitalName": "Krankenhausname",
+    "licenseNumber": "Lizenznummer",
+    "yearOfCommencement": "Gründungsjahr",
+    "hospitalOwnership": "Krankenhausbesitz",
+    "noOfAmbulance": "Anzahl der Krankenwagen",
+    "organsOperated": "Operierte Organe",
+    "specialityOperations": "Spezialoperationen",
+    "facilityAvailable": "Vorhandene Einrichtungen",
+    "bedType": "Betttyp",
+    "semiElectric": "Halbelektrisch",
+    "fullyElectric": "Voll elektrisch",
+    "parkingArea": "Parkplatz",
+    "waitingHall": "Wartehalle",
+    "labs": "Labors",
+    "pharmacy": "Apotheke",
+    "totalAreaOfPremises": "Gesamtfläche des Geländes",
+    "emergencyServiceAvailability": "Verfügbarkeit des Notdienstes",
+    "ownership": {
+      "gov": "Öffentlich",
+      "pvt": "Privat"
+    },
+    "organs": {
+      "heart": "Herz",
+      "lung": "Lunge",
+      "kidney": "Niere",
+      "others": "Andere"
+    },
+    "facilities": {
+      "bedType": "Betttyp",
+      "semiElectric": "Halbelektrisch",
+      "fullyElectric": "Voll elektrisch",
+      "parkingArea": "Parkplatz",
+      "waitingHall": "Wartehalle",
+      "labs": "Labors",
+      "pharmacy": "Apotheke"
+    }
+  }
+}

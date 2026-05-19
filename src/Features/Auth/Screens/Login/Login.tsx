@@ -1,6 +1,7 @@
 import { Eye, EyeOff, LogIn } from "lucide-react"
 import React, { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { useTranslation } from "react-i18next"
 import HoriOmLogo from "../../../../Assets/HoriOmLogo.png"
 import { useAppDispatch } from "../../../../Store/types"
 import { loginRequest } from "../../authSlice"
@@ -38,6 +39,7 @@ import {
 const LoginPage = () => {
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
+    const { t } = useTranslation()
 
     const [userName, setUserName] = useState("")
     const [password, setPassword] = useState("")
@@ -71,16 +73,13 @@ const LoginPage = () => {
                     <LogoMark src={HoriOmLogo} alt="Hari Om Seva Sansta logo" />
                     <div>
                         <BrandName>Hari Om Seva Sansta</BrandName>
-                        <BrandSubText>Hospital web panel</BrandSubText>
+                        <BrandSubText>{t('auth.brandSubText')}</BrandSubText>
                     </div>
                 </BrandTop>
 
                 <BrandContent>
-                    <BrandTitle>Manage hospital operations from one simple panel.</BrandTitle>
-                    <BrandDescription>
-                        Track doctors, patients, appointments, packages, departments, and
-                        disease records with a clean pilot-ready workspace.
-                    </BrandDescription>
+                    <BrandTitle>{t('auth.login.brandTitle')}</BrandTitle>
+                    <BrandDescription>{t('auth.login.description')}</BrandDescription>
 
                     <StatGrid>
                         <StatItem>
@@ -101,18 +100,16 @@ const LoginPage = () => {
 
             <LoginPanel>
                 <LoginCard>
-                    <Title>Welcome back</Title>
-                    <HelperText>
-                        Sign in to open your hospital dashboard and continue daily work.
-                    </HelperText>
+                    <Title>{t('auth.login.welcomeBack')}</Title>
+                    <HelperText>{t('auth.login.helperText')}</HelperText>
 
                     <Form onSubmit={submitButtonHandler}>
                         <FieldGroup>
-                            Email address
+                            {t('auth.login.emailLabel')}
                             <InputWrapper>
                                 <InputFiled
                                     type="email"
-                                    placeholder="admin@hospital.com"
+                                    placeholder={t('auth.login.emailPlaceholder')}
                                     value={userName}
                                     onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                                         setUserName(e.target.value)
@@ -122,11 +119,11 @@ const LoginPage = () => {
                         </FieldGroup>
 
                         <FieldGroup>
-                            Password
+                            {t('auth.login.passwordLabel')}
                             <InputWrapper>
                                 <InputFiled
                                     type={showPassword ? "text" : "password"}
-                                    placeholder="Enter password"
+                                    placeholder={t('auth.login.passwordPlaceholder')}
                                     value={password}
                                     onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                                         setPassword(e.target.value)
@@ -134,7 +131,7 @@ const LoginPage = () => {
                                 />
                                 <IconButton
                                     type="button"
-                                    title={showPassword ? "Hide password" : "Show password"}
+                                    title={showPassword ? t('auth.login.hidePassword') : t('auth.login.showPassword')}
                                     onClick={() => setShowPassword((current) => !current)}
                                 >
                                     {showPassword ? <EyeOff size={17} /> : <Eye size={17} />}
@@ -146,15 +143,15 @@ const LoginPage = () => {
 
                         <Button type="submit">
                             <LogIn size={17} />
-                            Sign In
+                            {t('auth.login.submitButton')}
                         </Button>
 
                         <LinkRow>
                             <ForgetButton type="button" onClick={signUpButtonHandler}>
-                                Create account
+                                {t('auth.login.createAccount')}
                             </ForgetButton>
                             <ForgetButton type="button" onClick={forgetButtonHandler}>
-                                Forgot password?
+                                {t('auth.login.forgotPassword')}
                             </ForgetButton>
                         </LinkRow>
                     </Form>
