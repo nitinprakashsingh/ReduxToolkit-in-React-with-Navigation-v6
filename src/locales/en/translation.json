@@ -1,0 +1,126 @@
+{
+  "language": {
+    "label": "Language",
+    "en": "English",
+    "de": "Deutsch",
+    "ja": "日本語"
+  },
+  "auth": {
+    "brandSubText": "Hospital web panel",
+    "signup": {
+      "title": "Register your account",
+      "description": "Create a secure account to manage doctors, patients, appointments, departments, packages and disease records in one place.",
+      "cardHeader": "Create account",
+      "helperText": "Fill in your details to get started with the hospital dashboard.",
+      "nameLabel": "Name",
+      "namePlaceholder": "John Doe",
+      "emailLabel": "Email address",
+      "emailPlaceholder": "admin@hospital.com",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Enter password",
+      "mobileLabel": "Mobile number",
+      "addressLabel": "Address",
+      "addressPlaceholder": "Hospital or clinic address",
+      "submitButton": "Create account",
+      "backToSignIn": "Back to sign in"
+    },
+    "login": {
+      "brandTitle": "Manage hospital operations from one simple panel.",
+      "description": "Track doctors, patients, appointments, packages, departments, and disease records with a clean pilot-ready workspace.",
+      "welcomeBack": "Welcome back",
+      "helperText": "Sign in to open your hospital dashboard and continue daily work.",
+      "emailLabel": "Email address",
+      "emailPlaceholder": "admin@hospital.com",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Enter password",
+      "showPassword": "Show password",
+      "hidePassword": "Hide password",
+      "submitButton": "Sign In",
+      "createAccount": "Create account",
+      "forgotPassword": "Forgot password?"
+    },
+    "forgot": {
+      "title": "Forgot password",
+      "descriptionEmail": "Enter your email address to receive a password reset flow.",
+      "descriptionReset": "Set your new password below.",
+      "alertSuccess": "Password reset successful! Please login with your new password.",
+      "alertMismatch": "Passwords do not match. Please try again.",
+      "emailLabel": "Email address",
+      "emailPlaceholder": "admin@hospital.com",
+      "newPasswordLabel": "New password",
+      "newPasswordPlaceholder": "New password",
+      "confirmPasswordLabel": "Confirm password",
+      "confirmPasswordPlaceholder": "Confirm new password",
+      "sendResetLink": "Send reset link",
+      "resetPassword": "Reset password",
+      "backToSignIn": "Back to sign in"
+    }
+  },
+  "common": {
+    "back": "Back",
+    "cancel": "Cancel",
+    "save": "Save",
+    "edit": "Edit",
+    "select": "Select",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "dashboard": {
+    "sidebar": {
+      "home": "Home",
+      "staffManagement": "Staff Management",
+      "doctorsManagement": "Doctors Management",
+      "hospitalProfile": "Hospital Profile",
+      "patientManagement": "Patient Management",
+      "bookingList": "Booking List",
+      "packageManagement": "Package Management",
+      "departmentManagement": "Department Management",
+      "diseaseManagement": "Disease Management"
+    },
+    "section": {
+      "staffList": "Staff List",
+      "addNewStaff": "Add New Staff"
+    }
+  },
+  "hospitalProfile": {
+    "title": "Hospital Profile",
+    "editProfile": "Edit Profile",
+    "changeImage": "Change Image",
+    "hospitalName": "Hospital Name",
+    "licenseNumber": "License Number",
+    "yearOfCommencement": "Year of Commencement",
+    "hospitalOwnership": "Hospital Ownership",
+    "noOfAmbulance": "No. of Ambulance",
+    "organsOperated": "Organs Operated",
+    "specialityOperations": "Speciality Operations",
+    "facilityAvailable": "Facility Available",
+    "bedType": "Bed Type",
+    "semiElectric": "Semi Electric",
+    "fullyElectric": "Fully Electric",
+    "parkingArea": "Parking Area",
+    "waitingHall": "Waiting Hall",
+    "labs": "Labs",
+    "pharmacy": "Pharmacy",
+    "totalAreaOfPremises": "Total Area of Premises",
+    "emergencyServiceAvailability": "Emergency Service Availability",
+    "ownership": {
+      "gov": "Gov",
+      "pvt": "Pvt"
+    },
+    "organs": {
+      "heart": "Heart",
+      "lung": "Lung",
+      "kidney": "Kidney",
+      "others": "Others"
+    },
+    "facilities": {
+      "bedType": "Bed Type",
+      "semiElectric": "Semi Electric",
+      "fullyElectric": "Fully Electric",
+      "parkingArea": "Parking Area",
+      "waitingHall": "Waiting Hall",
+      "labs": "Labs",
+      "pharmacy": "Pharmacy"
+    }
+  }
+}

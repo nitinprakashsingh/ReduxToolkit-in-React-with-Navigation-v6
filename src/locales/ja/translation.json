@@ -1,0 +1,126 @@
+{
+  "language": {
+    "label": "言語",
+    "en": "English",
+    "de": "Deutsch",
+    "ja": "日本語"
+  },
+  "auth": {
+    "brandSubText": "病院のウェブパネル",
+    "signup": {
+      "title": "アカウントを登録",
+      "description": "医師、患者、予約、部門、パッケージ、病気の記録を1か所で管理するための安全なアカウントを作成します。",
+      "cardHeader": "アカウントを作成",
+      "helperText": "病院のダッシュボードを開始するために詳細を入力してください。",
+      "nameLabel": "名前",
+      "namePlaceholder": "John Doe",
+      "emailLabel": "メールアドレス",
+      "emailPlaceholder": "admin@hospital.com",
+      "passwordLabel": "パスワード",
+      "passwordPlaceholder": "パスワードを入力",
+      "mobileLabel": "電話番号",
+      "addressLabel": "住所",
+      "addressPlaceholder": "病院またはクリニックの住所",
+      "submitButton": "アカウントを作成",
+      "backToSignIn": "サインインに戻る"
+    },
+    "login": {
+      "brandTitle": "1つのシンプルなパネルで病院の運営を管理します。",
+      "description": "医師、患者、予約、パッケージ、部門、および病気の記録をクリーンなパイロット対応のワークスペースで追跡します。",
+      "welcomeBack": "お帰りなさい",
+      "helperText": "サインインして病院のダッシュボードを開き、日々の作業を続行します。",
+      "emailLabel": "メールアドレス",
+      "emailPlaceholder": "admin@hospital.com",
+      "passwordLabel": "パスワード",
+      "passwordPlaceholder": "パスワードを入力",
+      "showPassword": "パスワードを表示",
+      "hidePassword": "パスワードを非表示",
+      "submitButton": "サインイン",
+      "createAccount": "アカウントを作成",
+      "forgotPassword": "パスワードをお忘れですか？"
+    },
+    "forgot": {
+      "title": "パスワードを忘れた場合",
+      "descriptionEmail": "パスワードリセットのリンクを受け取るためにメールアドレスを入力してください。",
+      "descriptionReset": "以下に新しいパスワードを設定してください。",
+      "alertSuccess": "パスワードのリセットに成功しました！ 新しいパスワードでログインしてください。",
+      "alertMismatch": "パスワードが一致しません。もう一度お試しください。",
+      "emailLabel": "メールアドレス",
+      "emailPlaceholder": "admin@hospital.com",
+      "newPasswordLabel": "新しいパスワード",
+      "newPasswordPlaceholder": "新しいパスワード",
+      "confirmPasswordLabel": "パスワードを確認",
+      "confirmPasswordPlaceholder": "新しいパスワードを確認",
+      "sendResetLink": "リセットリンクを送信",
+      "resetPassword": "パスワードをリセット",
+      "backToSignIn": "サインインに戻る"
+    }
+  },
+  "common": {
+    "back": "戻る",
+    "cancel": "キャンセル",
+    "save": "保存",
+    "edit": "編集",
+    "select": "選択",
+    "yes": "はい",
+    "no": "いいえ"
+  },
+  "dashboard": {
+    "sidebar": {
+      "home": "ホーム",
+      "staffManagement": "スタッフ管理",
+      "doctorsManagement": "医師管理",
+      "hospitalProfile": "病院プロファイル",
+      "patientManagement": "患者管理",
+      "bookingList": "予約リスト",
+      "packageManagement": "パッケージ管理",
+      "departmentManagement": "部門管理",
+      "diseaseManagement": "疾患管理"
+    },
+    "section": {
+      "staffList": "スタッフ一覧",
+      "addNewStaff": "新しいスタッフを追加"
+    }
+  },
+  "hospitalProfile": {
+    "title": "病院プロファイル",
+    "editProfile": "プロファイルを編集",
+    "changeImage": "画像を変更",
+    "hospitalName": "病院名",
+    "licenseNumber": "ライセンス番号",
+    "yearOfCommencement": "開業年",
+    "hospitalOwnership": "病院の所有形態",
+    "noOfAmbulance": "救急車の台数",
+    "organsOperated": "手術対象の臓器",
+    "specialityOperations": "専門手術",
+    "facilityAvailable": "利用可能な施設",
+    "bedType": "ベッドタイプ",
+    "semiElectric": "セミ電動",
+    "fullyElectric": "全電動",
+    "parkingArea": "駐車場",
+    "waitingHall": "待合室",
+    "labs": "研究所",
+    "pharmacy": "薬局",
+    "totalAreaOfPremises": "敷地面積",
+    "emergencyServiceAvailability": "救急対応の可否",
+    "ownership": {
+      "gov": "公立",
+      "pvt": "私立"
+    },
+    "organs": {
+      "heart": "心臓",
+      "lung": "肺",
+      "kidney": "腎臓",
+      "others": "その他"
+    },
+    "facilities": {
+      "bedType": "ベッドタイプ",
+      "semiElectric": "セミ電動",
+      "fullyElectric": "全電動",
+      "parkingArea": "駐車場",
+      "waitingHall": "待合室",
+      "labs": "研究所",
+      "pharmacy": "薬局"
+    }
+  }
+}
