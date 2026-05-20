@@ -17,10 +17,10 @@ const authSlice = createSlice({
       state.isLoading = true;
       state.error = null;
     },
-    loginSuccess(state, action: PayloadAction<{ user: User; token: string }>) {
+    loginSuccess(state, action: PayloadAction<{ user: User }>) {
       state.isLoading = false;
       state.user = action.payload.user;
-      state.token = action.payload.token;
+      state.token = null;
     },
     loginFailure(state, action: PayloadAction<string>) {
       state.isLoading = false;

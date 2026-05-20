@@ -17,6 +17,15 @@ signInRouter.post("/", async (req, res, next) => {
 
     const user = await prisma.user.findUnique({
       where: { email: payload.email },
+      select: {
+        id: true,
+        email: true,
+        password: true,
+        name: true,
+        mobile: true,
+        role: true,
+        address: true,
+      },
     });
 
     if (!user) {
@@ -31,7 +40,14 @@ signInRouter.post("/", async (req, res, next) => {
     return res.status(200).json({
       success: true,
       message: "Login successful",
-      data: { name: user.name, mobile: user.mobile ?? null },
+      data: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        mobile: user.mobile ?? null,
+        role: user.role,
+        address: user.address ?? null,
+      },
     });
   } catch (error) {
     if (error instanceof z.ZodError) {

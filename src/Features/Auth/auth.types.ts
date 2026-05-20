@@ -20,6 +20,12 @@ export interface LoginPayload {
   password: string;
 }
 
+export interface LoginResponse {
+  success: boolean;
+  message: string;
+  data: User;
+}
+
 export interface SignUpPayload {
   name: string;
   email: string;

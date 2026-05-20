@@ -1,9 +1,9 @@
 import { Eye, EyeOff, LogIn } from "lucide-react"
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import HoriOmLogo from "../../../../Assets/HoriOmLogo.png"
-import { useAppDispatch } from "../../../../Store/types"
+import { useAppDispatch, useAppSelector } from "../../../../Store/types"
 import { loginRequest } from "../../authSlice"
 import {
     BrandContent,
@@ -40,11 +40,18 @@ const LoginPage = () => {
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
     const { t } = useTranslation()
-
     const [userName, setUserName] = useState("")
     const [password, setPassword] = useState("")
     const [showPassword, setShowPassword] = useState(false)
     const [errorMessage, setErrorMessage] = useState("")
+    const {isLoading, error: serverError, user } = useAppSelector((state) => state.auth)
+    const [hasSubmitted, setHasSubmitted] = useState(false)
+
+    useEffect(() => {
+        if (hasSubmitted && !isLoading && !serverError && user) {
+            navigate("/dashboard")
+        }
+    }, [hasSubmitted, isLoading, serverError, user, navigate])
 
     const submitButtonHandler = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
@@ -55,8 +62,8 @@ const LoginPage = () => {
         }
 
         setErrorMessage("")
-        dispatch(loginRequest({ email: userName, password }))
-        navigate("/dashboard")
+        dispatch(loginRequest({ email: userName, password: password }))
+        setHasSubmitted(true)
     }
 
     const forgetButtonHandler = () => {
@@ -145,7 +152,7 @@ const LoginPage = () => {
                             <LogIn size={17} />
                             {t('auth.login.submitButton')}
                         </Button>
-
+                        {hasSubmitted && serverError ? <ErrorText>{serverError}</ErrorText> : null}
                         <LinkRow>
                             <ForgetButton type="button" onClick={signUpButtonHandler}>
                                 {t('auth.login.createAccount')}
