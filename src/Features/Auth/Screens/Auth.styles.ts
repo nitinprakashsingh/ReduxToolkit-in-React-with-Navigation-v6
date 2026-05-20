@@ -112,12 +112,6 @@ export const LoginCard = styled.section`
   padding: 30px;
   box-sizing: border-box;
   margin: 16px 0 24px;
-  max-height: calc(100vh - 96px);
-  overflow-y: auto;
-
-  @media (max-width: 840px) {
-    max-height: calc(100vh - 88px);
-  }
 
   @media (max-width: 480px) {
     padding: 22px;

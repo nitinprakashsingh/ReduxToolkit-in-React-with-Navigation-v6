@@ -8,13 +8,13 @@ import {
   signupFailure,
 } from './authSlice';
 import { loginApi, signupApi } from './authApi';
-import type { LoginPayload, SignUpPayload } from './auth.types';
+import type { LoginPayload, LoginResponse, SignUpPayload } from './auth.types';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
 function* handleLogin(action: PayloadAction<LoginPayload>) {
   try {
-    const data: { user: any; token: string } = yield call(loginApi, action.payload);
-    yield put(loginSuccess(data));
+    const response: LoginResponse = yield call(loginApi, action.payload);
+    yield put(loginSuccess({ user: response.data }));
   } catch (error: any) {
     yield put(loginFailure(error.response?.data?.message ?? error.message ?? 'Login failed'));
   }
