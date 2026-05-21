@@ -53,6 +53,9 @@
       "confirmPasswordPlaceholder": "Confirm new password",
       "sendResetLink": "Send reset link",
       "resetPassword": "Reset password",
+      "resettingPassword": "Resetting password...",
+      "requiredError": "Please enter email, new password, and confirm password.",
+      "passwordLengthError": "Password must be at least 6 characters.",
       "backToSignIn": "Back to sign in"
     }
   },

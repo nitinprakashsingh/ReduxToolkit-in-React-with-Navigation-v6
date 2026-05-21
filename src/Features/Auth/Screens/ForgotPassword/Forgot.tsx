@@ -1,50 +1,75 @@
-import { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { ArrowLeft, KeyRound } from "lucide-react"
+import React, { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
+import { useNavigate } from "react-router-dom"
 import HoriOmLogo from "../../../../Assets/HoriOmLogo.png"
-import InputField from "../../components/InputFileds/EmailInput"
+import { useAppDispatch, useAppSelector } from "../../../../Store/types"
+import { clearAuthMessage, forgotPasswordRequest } from "../../authSlice"
 import {
-    Container,
-    BrandPanel,
-    BrandTop,
-    LogoMark,
-    BrandName,
-    BrandSubText,
     BrandContent,
-    BrandTitle,
     BrandDescription,
-    LoginPanel,
-    LoginCard,
-    Title,
-    HelperText,
-    Form,
-    FieldGroup,
+    BrandName,
+    BrandPanel,
+    BrandSubText,
+    BrandTitle,
+    BrandTop,
     Button,
-    LinkRow,
+    Container,
+    ErrorText,
+    FieldGroup,
     ForgetButton,
-} from "../Auth.styles"
+    Form,
+    HelperText,
+    InputFiled,
+    InputWrapper,
+    LinkRow,
+    LoginCard,
+    LoginPanel,
+    LogoMark,
+    SuccessText,
+    Title,
+} from "./Forgot.style"
 
 const ForgotPasswordPage = () => {
     const [email, setEmail] = useState("")
     const [newPassword, setNewPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
-    const [isEmailConfirmed, setEmailConfirmed] = useState(false)
+    const [formError, setFormError] = useState("")
     const navigate = useNavigate()
+    const dispatch = useAppDispatch()
     const { t } = useTranslation()
+    const { isLoading, error: serverError, resetMessage } = useAppSelector((state) => state.auth)
 
-    const redirectToLoginPage = (event: React.FormEvent<HTMLFormElement>) => {
+    useEffect(() => {
+        dispatch(clearAuthMessage())
+
+        return () => {
+            dispatch(clearAuthMessage())
+        }
+    }, [dispatch])
+
+    const resetPasswordHandler = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
 
-        if (isEmailConfirmed) {
-            if (newPassword === confirmPassword) {
-                alert(t('auth.forgot.alertSuccess'))
-                navigate("/login")
-            } else {
-                alert(t('auth.forgot.alertMismatch'))
-            }
-        } else {
-            setEmailConfirmed(true)
+        const trimmedEmail = email.trim()
+
+        if (!trimmedEmail || !newPassword.trim() || !confirmPassword.trim()) {
+            setFormError(t('auth.forgot.requiredError'))
+            return
         }
+
+        if (newPassword.length < 6) {
+            setFormError(t('auth.forgot.passwordLengthError'))
+            return
+        }
+
+        if (newPassword !== confirmPassword) {
+            setFormError(t('auth.forgot.alertMismatch'))
+            return
+        }
+
+        setFormError("")
+        dispatch(forgotPasswordRequest({ email: trimmedEmail, newPassword }))
     }
 
     return (
@@ -60,66 +85,70 @@ const ForgotPasswordPage = () => {
 
                 <BrandContent>
                     <BrandTitle>{t('auth.forgot.title')}</BrandTitle>
-                    <BrandDescription>{t('auth.forgot.descriptionEmail')}</BrandDescription>
+                    <BrandDescription>{t('auth.forgot.descriptionReset')}</BrandDescription>
                 </BrandContent>
             </BrandPanel>
 
             <LoginPanel>
                 <LoginCard>
                     <Title>{t('auth.forgot.title')}</Title>
-                    <HelperText>
-                        {isEmailConfirmed
-                            ? t('auth.forgot.descriptionReset')
-                            : t('auth.forgot.descriptionEmail')}
-                    </HelperText>
+                    <HelperText>{t('auth.forgot.descriptionReset')}</HelperText>
 
-                    <Form onSubmit={redirectToLoginPage}>
+                    <Form onSubmit={resetPasswordHandler}>
                         <FieldGroup>
                             {t('auth.forgot.emailLabel')}
-                            <InputField
-                                type="email"
-                                placeholder={t('auth.forgot.emailPlaceholder')}
-                                value={email}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                    setEmail(e.target.value)
-                                }
-                            />
+                            <InputWrapper>
+                                <InputFiled
+                                    type="email"
+                                    placeholder={t('auth.forgot.emailPlaceholder')}
+                                    value={email}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                        setEmail(e.target.value)
+                                    }
+                                />
+                            </InputWrapper>
                         </FieldGroup>
 
-                        {isEmailConfirmed && (
-                            <>
-                                <FieldGroup>
-                                    {t('auth.forgot.newPasswordLabel')}
-                                    <InputField
-                                        type="password"
-                                        placeholder={t('auth.forgot.newPasswordPlaceholder')}
-                                        value={newPassword}
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                            setNewPassword(e.target.value)
-                                        }
-                                    />
-                                </FieldGroup>
+                        <FieldGroup>
+                            {t('auth.forgot.newPasswordLabel')}
+                            <InputWrapper>
+                                <InputFiled
+                                    type="password"
+                                    placeholder={t('auth.forgot.newPasswordPlaceholder')}
+                                    value={newPassword}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                        setNewPassword(e.target.value)
+                                    }
+                                />
+                            </InputWrapper>
+                        </FieldGroup>
 
-                                <FieldGroup>
-                                    {t('auth.forgot.confirmPasswordLabel')}
-                                    <InputField
-                                        type="password"
-                                        placeholder={t('auth.forgot.confirmPasswordPlaceholder')}
-                                        value={confirmPassword}
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                            setConfirmPassword(e.target.value)
-                                        }
-                                    />
-                                </FieldGroup>
-                            </>
-                        )}
+                        <FieldGroup>
+                            {t('auth.forgot.confirmPasswordLabel')}
+                            <InputWrapper>
+                                <InputFiled
+                                    type="password"
+                                    placeholder={t('auth.forgot.confirmPasswordPlaceholder')}
+                                    value={confirmPassword}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                        setConfirmPassword(e.target.value)
+                                    }
+                                />
+                            </InputWrapper>
+                        </FieldGroup>
 
-                        <Button type="submit">
-                            {isEmailConfirmed ? t('auth.forgot.resetPassword') : t('auth.forgot.sendResetLink')}
+                        {formError && <ErrorText>{formError}</ErrorText>}
+                        {!formError && serverError && <ErrorText>{serverError}</ErrorText>}
+                        {resetMessage && <SuccessText>{resetMessage}</SuccessText>}
+
+                        <Button type="submit" disabled={isLoading}>
+                            <KeyRound size={17} />
+                            {isLoading ? t('auth.forgot.resettingPassword') : t('auth.forgot.resetPassword')}
                         </Button>
 
                         <LinkRow>
-                            <ForgetButton type="button" onClick={() => navigate("/login")}> 
+                            <ForgetButton type="button" onClick={() => navigate("/login")}>
+                                <ArrowLeft size={15} />
                                 {t('auth.forgot.backToSignIn')}
                             </ForgetButton>
                         </LinkRow>
