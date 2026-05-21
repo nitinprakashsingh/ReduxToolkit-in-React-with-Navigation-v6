@@ -53,6 +53,9 @@
       "confirmPasswordPlaceholder": "新しいパスワードを確認",
       "sendResetLink": "リセットリンクを送信",
       "resetPassword": "パスワードをリセット",
+      "resettingPassword": "パスワードをリセットしています...",
+      "requiredError": "メールアドレス、新しいパスワード、確認用パスワードを入力してください。",
+      "passwordLengthError": "パスワードは6文字以上で入力してください。",
       "backToSignIn": "サインインに戻る"
     }
   },

@@ -1,15 +1,24 @@
+import type { PayloadAction } from '@reduxjs/toolkit';
 import { call, put, takeLatest } from 'redux-saga/effects';
+import { forgotPasswordApi, loginApi, signupApi } from './authApi';
 import {
+  forgotPasswordFailure,
+  forgotPasswordRequest,
+  forgotPasswordSuccess,
+  loginFailure,
   loginRequest,
   loginSuccess,
-  loginFailure,
+  signupFailure,
   signupRequest,
   signupSuccess,
-  signupFailure,
 } from './authSlice';
-import { loginApi, signupApi } from './authApi';
-import type { LoginPayload, LoginResponse, SignUpPayload } from './auth.types';
-import type { PayloadAction } from '@reduxjs/toolkit';
+import type {
+  ForgotPasswordPayload,
+  ForgotPasswordResponse,
+  LoginPayload,
+  LoginResponse,
+  SignUpPayload,
+} from './auth.types';
 
 function* handleLogin(action: PayloadAction<LoginPayload>) {
   try {
@@ -29,8 +38,17 @@ function* handleSignup(action: PayloadAction<SignUpPayload>) {
   }
 }
 
-// Watcher saga — listens for loginRequest and signupRequest actions
+function* handleForgotPassword(action: PayloadAction<ForgotPasswordPayload>) {
+  try {
+    const data: ForgotPasswordResponse = yield call(forgotPasswordApi, action.payload);
+    yield put(forgotPasswordSuccess(data.message));
+  } catch (error: any) {
+    yield put(forgotPasswordFailure(error.response?.data?.message ?? error.message ?? 'Password reset failed'));
+  }
+}
+
 export function* authSaga() {
   yield takeLatest(loginRequest.type, handleLogin);
   yield takeLatest(signupRequest.type, handleSignup);
+  yield takeLatest(forgotPasswordRequest.type, handleForgotPassword);
 }

@@ -174,6 +174,11 @@ export const Button = styled.button`
   &:hover {
     background: #0f766e;
   }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.72;
+  }
 `
 
 export const LinkRow = styled.div`
@@ -184,6 +189,9 @@ export const LinkRow = styled.div`
 `
 
 export const ForgetButton = styled.button`
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   border: none;
   background: transparent;
   color: #5b21b6;

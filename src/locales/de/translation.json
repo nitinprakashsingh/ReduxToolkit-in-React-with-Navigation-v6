@@ -53,6 +53,9 @@
       "confirmPasswordPlaceholder": "Neues Passwort bestätigen",
       "sendResetLink": "Link zum Zurücksetzen senden",
       "resetPassword": "Passwort zurücksetzen",
+      "resettingPassword": "Passwort wird zurückgesetzt...",
+      "requiredError": "Bitte geben Sie E-Mail-Adresse, neues Passwort und Passwortbestätigung ein.",
+      "passwordLengthError": "Das Passwort muss mindestens 6 Zeichen lang sein.",
       "backToSignIn": "Zurück zur Anmeldung"
     }
   },

@@ -13,6 +13,7 @@ export interface AuthState {
   token: string | null;
   isLoading: boolean;
   error: string | null;
+  resetMessage: string | null;
 }
 
 export interface LoginPayload {
@@ -37,4 +38,13 @@ export interface SignUpPayload {
 export interface SignUpResponse {
   message: string;
   data: User;
+}
+
+export interface ForgotPasswordPayload {
+  email: string;
+  newPassword: string;
+}
+
+export interface ForgotPasswordResponse {
+  message: string;
 }
