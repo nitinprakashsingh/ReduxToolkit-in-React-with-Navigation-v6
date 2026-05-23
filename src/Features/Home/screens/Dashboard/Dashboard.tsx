@@ -13,7 +13,6 @@ import {
   Stethoscope,
   Users,
   UserPlus,
-  Pencil,
 } from "lucide-react";
 
 import HoriOmLogo from "../../../../Assets/HoriOmLogo.png";
@@ -29,6 +28,7 @@ import PackageManagement, {
 } from "../../components/PackageManagement";
 import PatientManagement from "../../components/PatientManagement";
 import SideBarItem from "../../components/SideBarItem/SideBar";
+import StaffManagement from "../../components/StaffManagement";
 
 import {
   Card,
@@ -40,42 +40,12 @@ import {
   Subtitle,
   Text,
   Title,
-  EditButton,
-  SectionTitle,
-  StyledTable,
-  TableHeadCell,
-  TableDataCell,
-  TableRow,
   SubMenuButton,
 } from "../Dashboard/Dashboard.style";
 
 // ==========================================
 // Sample Data
 // ==========================================
-const staffData = [
-  {
-    id: 1,
-    name: "Rahul Kumar",
-    email: "rahul@example.com",
-    phone: "9876543210",
-    relationship: "Manager",
-  },
-  {
-    id: 2,
-    name: "Priya Singh",
-    email: "priya@example.com",
-    phone: "9123456780",
-    relationship: "Receptionist",
-  },
-  {
-    id: 3,
-    name: "Amit Sharma",
-    email: "amit@example.com",
-    phone: "9988776655",
-    relationship: "Nurse",
-  },
-];
-
 const doctorsData = [
   {
     id: 1,
@@ -161,51 +131,11 @@ const HomePage = () => {
     // Staff Management
     // ------------------------------
     if (selectedItem.title === "Staff Management") {
-      // Show Add Staff Form
-      if (staffView === "add") {
-        return (
-          <Card>
-            <h2>Add New Staff</h2>
-            <p>Staff creation form will be displayed here.</p>
-          </Card>
-        );
-      }
-
-      // Show Staff List
-  return (
-  <Card>
-    <SectionTitle>Staff List</SectionTitle>
-
-    <StyledTable>
-      <thead>
-        <tr>
-          <TableHeadCell>Name</TableHeadCell>
-          <TableHeadCell>Email</TableHeadCell>
-          <TableHeadCell>Phone No</TableHeadCell>
-          <TableHeadCell>Relationship</TableHeadCell>
-          <TableHeadCell>Action</TableHeadCell>
-        </tr>
-      </thead>
-
-      <tbody>
-        {staffData.map((staff) => (
-          <TableRow key={staff.id}>
-            <TableDataCell>{staff.name}</TableDataCell>
-            <TableDataCell>{staff.email}</TableDataCell>
-            <TableDataCell>{staff.phone}</TableDataCell>
-            <TableDataCell>{staff.relationship}</TableDataCell>
-            <TableDataCell>
-              <EditButton onClick={() => alert(`Edit ${staff.name}`)}>
-                <Pencil size={16} />
-                Edit
-              </EditButton>
-            </TableDataCell>
-          </TableRow>
-        ))}
-      </tbody>
-    </StyledTable>
-  </Card>
-);
+      return (
+        <Card>
+          <StaffManagement view={staffView} onViewChange={setStaffView} />
+        </Card>
+      );
     }
 
     // ------------------------------
