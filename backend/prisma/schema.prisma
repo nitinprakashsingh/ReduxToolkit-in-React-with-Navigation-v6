@@ -29,3 +29,14 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model Staff {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  phone        String
+  relationship String
+  status       String   @default("Active")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
