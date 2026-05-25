@@ -68,7 +68,6 @@ const LoginPage = () => {
 
     const forgetButtonHandler = () => {
         navigate("/forgot-password")
-        //test
     }
     const signUpButtonHandler = () => {
         navigate("/signup")
