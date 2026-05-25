@@ -87,6 +87,10 @@ export const FormGrid = styled.form`
   }
 `;
 
+export const FullWidthField = styled.div`
+  grid-column: 1 / -1;
+`;
+
 export const FieldGroup = styled.div`
   display: flex;
   flex-direction: column;
@@ -129,5 +133,17 @@ export const SubmitButton = styled.button`
   &:hover {
     background: #15803d;
   }
+
+  &:disabled {
+    background: #86efac;
+    cursor: not-allowed;
+  }
 `;
 
+export const FeedbackText = styled.p<{ $type?: "success" | "error" }>`
+  grid-column: 1 / -1;
+  margin: 0;
+  color: ${({ $type }) => ($type === "success" ? "#15803d" : "#dc2626")};
+  font-size: 14px;
+  font-weight: 600;
+`;

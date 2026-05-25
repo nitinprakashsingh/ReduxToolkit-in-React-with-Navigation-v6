@@ -20,6 +20,7 @@ import BookingList from "../../components/BookingList";
 import DepartmentList from "../../components/DepartmentList";
 import DiseaseManagement from "../../components/DiseaseManagement";
 import DoctorForm from "../../components/DoctorForm/DoctorForm";
+import type { Doctor } from "../../components/DoctorForm/doctorApi";
 import DoctorList from "../../components/DoctorList/DoctorList";
 import HomeOverview from "../../components/HomeOverview";
 import HospitalProfile from "../../components/HospitalProfile";
@@ -42,32 +43,6 @@ import {
   Title,
   SubMenuButton,
 } from "../Dashboard/Dashboard.style";
-
-// ==========================================
-// Sample Data
-// ==========================================
-const doctorsData = [
-  {
-    id: 1,
-    name: "Dr. Anil Mehta",
-    speciality: "Cardiologist",
-    phone: "9876543211",
-    email: "anil.mehta@example.com",
-    startCareerDate: "2014-06-10",
-    registrationNumber: "MCI-47291",
-    consultancyFees: "800",
-  },
-  {
-    id: 2,
-    name: "Dr. Neha Sharma",
-    speciality: "Dermatologist",
-    phone: "9123456781",
-    email: "neha.sharma@example.com",
-    startCareerDate: "2017-03-22",
-    registrationNumber: "MCI-58326",
-    consultancyFees: "650",
-  },
-];
 
 const sidebarItems = [
   {
@@ -121,6 +96,7 @@ const HomePage = () => {
   const [selectedItem, setSelectedItem] = useState(sidebarItems[0]);
   const [staffView, setStaffView] = useState<"list" | "add">("list");
   const [doctorView, setDoctorView] = useState<"list" | "add">("list");
+  const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
   const [packageView, setPackageView] = useState<PackageView>("list");
 
   // ==========================================
@@ -162,7 +138,13 @@ const HomePage = () => {
       if (doctorView === "add") {
         return (
           <Card>
-            <DoctorForm onDoctorList={() => setDoctorView("list")} />
+            <DoctorForm
+              doctor={selectedDoctor}
+              onDoctorList={() => {
+                setSelectedDoctor(null);
+                setDoctorView("list");
+              }}
+            />
           </Card>
         );
       }
@@ -170,8 +152,14 @@ const HomePage = () => {
       return (
         <Card>
           <DoctorList
-            doctors={doctorsData}
-            onAddSchedule={() => setDoctorView("add")}
+            onAddSchedule={() => {
+              setSelectedDoctor(null);
+              setDoctorView("add");
+            }}
+            onEditDoctor={(doctor) => {
+              setSelectedDoctor(doctor);
+              setDoctorView("add");
+            }}
           />
         </Card>
       );
@@ -274,6 +262,7 @@ const HomePage = () => {
                 }
 
                 if (item.title === "Doctors Management") {
+                  setSelectedDoctor(null);
                   setDoctorView("list");
                 }
 
@@ -323,12 +312,22 @@ const HomePage = () => {
                     gap: "8px",
                   }}
                 >
-                  <SubMenuButton onClick={() => setDoctorView("list")}>
+                  <SubMenuButton
+                    onClick={() => {
+                      setSelectedDoctor(null);
+                      setDoctorView("list");
+                    }}
+                  >
                     <ListChecks size={14} />
                     Doctor List
                   </SubMenuButton>
 
-                  <SubMenuButton onClick={() => setDoctorView("add")}>
+                  <SubMenuButton
+                    onClick={() => {
+                      setSelectedDoctor(null);
+                      setDoctorView("add");
+                    }}
+                  >
                     <CalendarCheck size={14} />
                     Add Schedule
                   </SubMenuButton>
