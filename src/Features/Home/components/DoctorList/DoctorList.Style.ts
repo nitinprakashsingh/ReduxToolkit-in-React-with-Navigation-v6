@@ -41,3 +41,9 @@ export const ActionButton = styled.button<{ $active?: boolean }>`
   }
 `;
 
+export const StatusText = styled.p<{ $type?: "error" | "empty" }>`
+  margin: 16px 0 0;
+  color: ${({ $type }) => ($type === "error" ? "#dc2626" : "#6b7280")};
+  font-size: 14px;
+  font-weight: 600;
+`;
