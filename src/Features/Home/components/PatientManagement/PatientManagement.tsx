@@ -1,5 +1,5 @@
 import { ArrowLeft, Eye, Pencil, Plus } from "lucide-react";
-import { useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 
 import {
   SectionTitle,
@@ -34,11 +34,12 @@ import {
   TextInput,
   Toolbar,
 } from "../DepartmentList/DepartmentList.Style";
+import { createPatient, fetchPatients } from "../../../../api/patientApi";
 
 type PatientStatus = "Active" | "Follow-up" | "Discharged";
 
 type Patient = {
-  id: number;
+  id: string;
   name: string;
   phone: string;
   age: number;
@@ -46,11 +47,12 @@ type Patient = {
   lastVisit: string;
   assignedDoctor: string;
   status: PatientStatus;
+  dob?: string;
 };
 
-const patients: Patient[] = [
+const defaultPatients: Patient[] = [
   {
-    id: 1,
+    id: "1",
     name: "Suresh Yadav",
     phone: "9876543201",
     age: 42,
@@ -60,7 +62,7 @@ const patients: Patient[] = [
     status: "Active",
   },
   {
-    id: 2,
+    id: "2",
     name: "Meena Verma",
     phone: "9123456702",
     age: 35,
@@ -70,7 +72,7 @@ const patients: Patient[] = [
     status: "Follow-up",
   },
   {
-    id: 3,
+    id: "3",
     name: "Ravi Patel",
     phone: "9012345678",
     age: 51,
@@ -80,7 +82,7 @@ const patients: Patient[] = [
     status: "Discharged",
   },
   {
-    id: 4,
+    id: "4",
     name: "Pooja Mishra",
     phone: "9876501234",
     age: 29,
@@ -100,16 +102,98 @@ const formatDate = (date: string) =>
     year: "numeric",
   }).format(new Date(date));
 
+const getAgeFromDob = (dob?: string) => {
+  if (!dob) return 0;
+  const birthDate = new Date(dob);
+  if (Number.isNaN(birthDate.getTime())) return 0;
+  const diff = Date.now() - birthDate.getTime();
+  return Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
+};
+
+const mapApiPatient = (patient: any): Patient => ({
+  id: patient.id,
+  name: patient.name,
+  phone: patient.phone ?? "",
+  age: patient.age ?? getAgeFromDob(patient.dob),
+  gender: (patient.gender as Patient["gender"]) ?? "Other",
+  lastVisit: patient.lastVisit ?? patient.createdAt ?? new Date().toISOString(),
+  assignedDoctor: patient.assignedDoctor ?? "Not assigned",
+  status: (patient.status as PatientStatus) ?? "Active",
+  dob: patient.dob,
+});
+
 const PatientManagement = () => {
   const [view, setView] = useState<"list" | "add">("list");
   const [selectedStatus, setSelectedStatus] = useState<PatientStatus>("Active");
   const [searchText, setSearchText] = useState("");
+  const [patients, setPatients] = useState<Patient[]>(defaultPatients);
+  const [loading, setLoading] = useState(false);
+  const [formState, setFormState] = useState({
+    name: "",
+    phone: "",
+    age: "",
+    gender: "Male",
+    assignedDoctor: "Dr. Anil Mehta",
+    status: "Active" as PatientStatus,
+  });
+
+  useEffect(() => {
+    const loadPatients = async () => {
+      setLoading(true);
+      try {
+        const result = await fetchPatients();
+        const apiPatients = result.data.data.map(mapApiPatient);
+        setPatients(apiPatients);
+      } catch (error) {
+        console.error("Failed to load patients", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadPatients();
+  }, []);
 
   const filteredPatients = patients.filter(
     (patient) =>
       patient.status === selectedStatus &&
       patient.name.toLowerCase().includes(searchText.toLowerCase())
   );
+
+  const handleFormChange = (field: string, value: string) => {
+    setFormState((current) => ({ ...current, [field]: value }));
+  };
+
+  const handleSavePatient = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    try {
+      const payload = {
+        name: formState.name,
+        phone: formState.phone,
+        gender: formState.gender,
+        status: formState.status,
+        assignedDoctor: formState.assignedDoctor,
+        age: formState.age ? Number(formState.age) : undefined,
+        lastVisit: new Date().toISOString(),
+      };
+
+      const response = await createPatient(payload);
+      const newPatient = mapApiPatient(response.data.data);
+      setPatients((current) => [newPatient, ...current]);
+      setView("list");
+      setFormState({
+        name: "",
+        phone: "",
+        age: "",
+        gender: "Male",
+        assignedDoctor: "Dr. Anil Mehta",
+        status: "Active",
+      });
+    } catch (error) {
+      console.error("Failed to create patient", error);
+    }
+  };
 
   if (view === "add") {
     return (
@@ -123,29 +207,42 @@ const PatientManagement = () => {
           </HeaderLeft>
         </DepartmentHeader>
 
-        <FormGrid onSubmit={(event) => event.preventDefault()}>
+        <FormGrid onSubmit={handleSavePatient}>
           <FormFields>
             <FieldGroup>
               <FieldLabel>Patient Name</FieldLabel>
-              <TextInput placeholder="Patient name" />
+              <TextInput
+                value={formState.name}
+                onChange={(event) => handleFormChange("name", event.target.value)}
+                placeholder="Patient name"
+              />
             </FieldGroup>
 
             <FieldGroup>
               <FieldLabel>Phone Number</FieldLabel>
-              <TextInput placeholder="Phone number" />
+              <TextInput
+                value={formState.phone}
+                onChange={(event) => handleFormChange("phone", event.target.value)}
+                placeholder="Phone number"
+              />
             </FieldGroup>
 
             <FieldGroup>
               <FieldLabel>Age</FieldLabel>
-              <TextInput type="number" placeholder="Age" />
+              <TextInput
+                type="number"
+                value={formState.age}
+                onChange={(event) => handleFormChange("age", event.target.value)}
+                placeholder="Age"
+              />
             </FieldGroup>
 
             <FieldGroup>
               <FieldLabel>Gender</FieldLabel>
-              <SelectInput defaultValue="">
-                <option value="" disabled>
-                  Select gender
-                </option>
+              <SelectInput
+                value={formState.gender}
+                onChange={(event) => handleFormChange("gender", event.target.value)}
+              >
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
                 <option value="Other">Other</option>
@@ -154,10 +251,10 @@ const PatientManagement = () => {
 
             <FieldGroup>
               <FieldLabel>Assigned Doctor</FieldLabel>
-              <SelectInput defaultValue="">
-                <option value="" disabled>
-                  Select doctor
-                </option>
+              <SelectInput
+                value={formState.assignedDoctor}
+                onChange={(event) => handleFormChange("assignedDoctor", event.target.value)}
+              >
                 <option value="Dr. Anil Mehta">Dr. Anil Mehta</option>
                 <option value="Dr. Neha Sharma">Dr. Neha Sharma</option>
               </SelectInput>
@@ -165,7 +262,10 @@ const PatientManagement = () => {
 
             <FieldGroup>
               <FieldLabel>Status</FieldLabel>
-              <SelectInput defaultValue="Active">
+              <SelectInput
+                value={formState.status}
+                onChange={(event) => handleFormChange("status", event.target.value)}
+              >
                 {patientStatuses.map((status) => (
                   <option key={status} value={status}>
                     {status}

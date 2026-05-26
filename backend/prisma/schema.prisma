@@ -74,3 +74,20 @@ model Hospital {
   createdAt            DateTime @default(now())
   updatedAt            DateTime @updatedAt
 }
+
+model Patient {
+  id                  String   @id @default(cuid())
+  name                String
+  email               String?  @unique
+  phone               String?
+  address             String?
+  gender              String?
+  dob                 String?
+  age                 Int?
+  medicalRecordNumber String?  @unique
+  assignedDoctor      String?
+  lastVisit           String?
+  status              String   @default("Active")
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
