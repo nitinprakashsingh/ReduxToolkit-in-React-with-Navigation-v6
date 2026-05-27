@@ -35,6 +35,7 @@ import {
   Toolbar,
 } from "../DepartmentList/DepartmentList.Style";
 import { createPatient, fetchPatients } from "../../../../api/patientApi";
+import { fetchDoctorsApi, Doctor } from "../DoctorForm/doctorApi";
 
 type PatientStatus = "Active" | "Follow-up" | "Discharged";
 
@@ -127,15 +128,35 @@ const PatientManagement = () => {
   const [selectedStatus, setSelectedStatus] = useState<PatientStatus>("Active");
   const [searchText, setSearchText] = useState("");
   const [patients, setPatients] = useState<Patient[]>(defaultPatients);
+  const [doctors, setDoctors] = useState<Doctor[]>([]);
   const [loading, setLoading] = useState(false);
+  const [loadingDoctors, setLoadingDoctors] = useState(false);
   const [formState, setFormState] = useState({
     name: "",
     phone: "",
     age: "",
     gender: "Male",
-    assignedDoctor: "Dr. Anil Mehta",
+    assignedDoctor: "",
     status: "Active" as PatientStatus,
   });
+
+  const loadDoctors = async () => {
+    setLoadingDoctors(true);
+    try {
+      const doctorList = await fetchDoctorsApi();
+      setDoctors(doctorList);
+      if (doctorList.length > 0) {
+        setFormState((current) => ({
+          ...current,
+          assignedDoctor: current.assignedDoctor || doctorList[0].name,
+        }));
+      }
+    } catch (error) {
+      console.error("Failed to load doctors", error);
+    } finally {
+      setLoadingDoctors(false);
+    }
+  };
 
   useEffect(() => {
     const loadPatients = async () => {
@@ -152,7 +173,23 @@ const PatientManagement = () => {
     };
 
     loadPatients();
+    loadDoctors();
   }, []);
+
+  useEffect(() => {
+    if (view === "add" && doctors.length === 0 && !loadingDoctors) {
+      loadDoctors();
+    }
+  }, [view, doctors.length, loadingDoctors]);
+
+  useEffect(() => {
+    if (doctors.length > 0 && !formState.assignedDoctor) {
+      setFormState((current) => ({
+        ...current,
+        assignedDoctor: current.assignedDoctor || doctors[0].name,
+      }));
+    }
+  }, [doctors, formState.assignedDoctor]);
 
   const filteredPatients = patients.filter(
     (patient) =>
@@ -164,7 +201,7 @@ const PatientManagement = () => {
     setFormState((current) => ({ ...current, [field]: value }));
   };
 
-  const handleSavePatient = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSavePatient = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     try {
@@ -187,7 +224,7 @@ const PatientManagement = () => {
         phone: "",
         age: "",
         gender: "Male",
-        assignedDoctor: "Dr. Anil Mehta",
+        assignedDoctor: doctors[0]?.name ?? "",
         status: "Active",
       });
     } catch (error) {
@@ -254,9 +291,16 @@ const PatientManagement = () => {
               <SelectInput
                 value={formState.assignedDoctor}
                 onChange={(event) => handleFormChange("assignedDoctor", event.target.value)}
+                disabled={loadingDoctors || doctors.length === 0}
               >
-                <option value="Dr. Anil Mehta">Dr. Anil Mehta</option>
-                <option value="Dr. Neha Sharma">Dr. Neha Sharma</option>
+                <option value="" disabled>
+                  {loadingDoctors ? "Loading doctors..." : doctors.length > 0 ? "Select a doctor" : "No doctors available"}
+                </option>
+                {doctors.map((doctor) => (
+                  <option key={doctor.id} value={doctor.name}>
+                    {doctor.name}
+                  </option>
+                ))}
               </SelectInput>
             </FieldGroup>
 

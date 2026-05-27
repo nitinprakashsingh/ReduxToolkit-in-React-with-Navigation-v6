@@ -1,3 +1,6 @@
+import { Plus } from "lucide-react";
+import { useEffect, useState } from "react";
+
 import {
   SectionTitle,
   StyledTable,
@@ -13,18 +16,14 @@ import {
   StatusBadge,
   TableScroll,
 } from "./BookingList.Style";
+import { fetchBookings, Booking } from "../../../../api/bookingApi";
+import {
+  ActionIconButton,
+  AddButton,
+} from "../DepartmentList/DepartmentList.Style";
 
-type Booking = {
-  id: number;
-  bookingNo: string;
-  appointmentDate: string;
-  appointmentTime: string;
-  patientName: string;
-  doctorName: string;
-  department: string;
-  phone: string;
-  paymentReceived: boolean;
-  status: "Confirmed" | "Scheduled" | "Pending";
+type BookingListProps = {
+  onCreateClick?: () => void;
 };
 
 const formatDateInput = (date: Date) => {
@@ -35,93 +34,52 @@ const formatDateInput = (date: Date) => {
   return `${year}-${month}-${day}`;
 };
 
-const addDays = (days: number) => {
-  const date = new Date();
-  date.setDate(date.getDate() + days);
-  return formatDateInput(date);
-};
-
 const today = formatDateInput(new Date());
 
-const bookingsData: Booking[] = [
-  {
-    id: 1,
-    bookingNo: "BK-101",
-    appointmentDate: today,
-    appointmentTime: "09:30 AM",
-    patientName: "Suresh Yadav",
-    doctorName: "Dr. Anil Mehta",
-    department: "Cardiology",
-    phone: "9876543201",
-    paymentReceived: true,
-    status: "Confirmed",
-  },
-  {
-    id: 2,
-    bookingNo: "BK-102",
-    appointmentDate: today,
-    appointmentTime: "11:00 AM",
-    patientName: "Meena Verma",
-    doctorName: "Dr. Neha Sharma",
-    department: "Dermatology",
-    phone: "9123456702",
-    paymentReceived: false,
-    status: "Pending",
-  },
-  {
-    id: 3,
-    bookingNo: "BK-103",
-    appointmentDate: today,
-    appointmentTime: "02:15 PM",
-    patientName: "Aakash Gupta",
-    doctorName: "Dr. Anil Mehta",
-    department: "Cardiology",
-    phone: "9988776603",
-    paymentReceived: true,
-    status: "Confirmed",
-  },
-  {
-    id: 4,
-    bookingNo: "BK-104",
-    appointmentDate: addDays(1),
-    appointmentTime: "10:30 AM",
-    patientName: "Pooja Mishra",
-    doctorName: "Dr. Neha Sharma",
-    department: "Dermatology",
-    phone: "9876501234",
-    paymentReceived: false,
-    status: "Scheduled",
-  },
-  {
-    id: 5,
-    bookingNo: "BK-105",
-    appointmentDate: addDays(3),
-    appointmentTime: "04:00 PM",
-    patientName: "Ravi Patel",
-    doctorName: "Dr. Anil Mehta",
-    department: "Cardiology",
-    phone: "9012345678",
-    paymentReceived: true,
-    status: "Scheduled",
-  },
-];
+const formatAppointmentDate = (date: string) => {
+  try {
+    return new Intl.DateTimeFormat("en-IN", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    }).format(new Date(date));
+  } catch {
+    return date;
+  }
+};
 
-const formatAppointmentDate = (date: string) =>
-  new Intl.DateTimeFormat("en-IN", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  }).format(new Date(date));
+const BookingList = ({ onCreateClick }: BookingListProps) => {
+  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [loading, setLoading] = useState(false);
 
-const BookingList = () => {
-  const todayBookings = bookingsData.filter(
-    (booking) => booking.appointmentDate === today
-  );
-  const upcomingBookings = bookingsData.filter(
-    (booking) => booking.appointmentDate > today
-  );
+  useEffect(() => {
+    const loadBookings = async () => {
+      setLoading(true);
+      try {
+        const result = await fetchBookings();
+        setBookings(result.data || []);
+      } catch (error) {
+        console.error("Failed to load bookings", error);
+        setBookings([]);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const renderBookingTable = (bookings: Booking[], showDate = false) => (
+    loadBookings();
+  }, []);
+
+  const todayBookings = bookings.filter((booking) => {
+    const bookingDate = formatDateInput(new Date(booking.appointmentDate));
+    return bookingDate === today;
+  });
+
+  const upcomingBookings = bookings.filter((booking) => {
+    const bookingDate = formatDateInput(new Date(booking.appointmentDate));
+    return bookingDate > today;
+  });
+
+  const renderBookingTable = (bookingsToRender: Booking[], showDate = false) => (
     <TableScroll>
       <StyledTable>
         <thead>
@@ -139,39 +97,47 @@ const BookingList = () => {
         </thead>
 
         <tbody>
-          {bookings.map((booking) => (
-            <TableRow key={booking.id}>
-              <TableDataCell>{booking.bookingNo}</TableDataCell>
-              {showDate && (
+          {bookingsToRender.length > 0 ? (
+            bookingsToRender.map((booking) => (
+              <TableRow key={booking.id}>
+                <TableDataCell>{booking.bookingNo}</TableDataCell>
+                {showDate && (
+                  <TableDataCell>
+                    {formatAppointmentDate(booking.appointmentDate)}
+                  </TableDataCell>
+                )}
+                <TableDataCell>{booking.appointmentTime}</TableDataCell>
+                <TableDataCell>{booking.patientName}</TableDataCell>
+                <TableDataCell>{booking.doctorName}</TableDataCell>
+                <TableDataCell>{booking.department || "N/A"}</TableDataCell>
+                <TableDataCell>{booking.patientPhone}</TableDataCell>
                 <TableDataCell>
-                  {formatAppointmentDate(booking.appointmentDate)}
+                  <StatusBadge $variant={booking.paymentReceived ? "paid" : "pending"}>
+                    {booking.paymentReceived ? "Yes" : "No"}
+                  </StatusBadge>
                 </TableDataCell>
-              )}
-              <TableDataCell>{booking.appointmentTime}</TableDataCell>
-              <TableDataCell>{booking.patientName}</TableDataCell>
-              <TableDataCell>{booking.doctorName}</TableDataCell>
-              <TableDataCell>{booking.department}</TableDataCell>
-              <TableDataCell>{booking.phone}</TableDataCell>
-              <TableDataCell>
-                <StatusBadge $variant={booking.paymentReceived ? "paid" : "pending"}>
-                  {booking.paymentReceived ? "Yes" : "No"}
-                </StatusBadge>
-              </TableDataCell>
-              <TableDataCell>
-                <StatusBadge
-                  $variant={
-                    booking.status === "Confirmed"
-                      ? "confirmed"
-                      : booking.status === "Pending"
-                      ? "pending"
-                      : "scheduled"
-                  }
-                >
-                  {booking.status}
-                </StatusBadge>
+                <TableDataCell>
+                  <StatusBadge
+                    $variant={
+                      booking.status === "Confirmed"
+                        ? "confirmed"
+                        : booking.status === "Pending"
+                        ? "pending"
+                        : "scheduled"
+                    }
+                  >
+                    {booking.status}
+                  </StatusBadge>
+                </TableDataCell>
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableDataCell colSpan={showDate ? 9 : 8}>
+                No bookings found.
               </TableDataCell>
             </TableRow>
-          ))}
+          )}
         </tbody>
       </StyledTable>
     </TableScroll>
@@ -186,20 +152,25 @@ const BookingList = () => {
             View today appointment bookings and upcoming new bookings.
           </HelperText>
         </div>
+        {onCreateClick && (
+          <AddButton onClick={onCreateClick}>
+            <Plus size={14} />
+            Create Booking
+          </AddButton>
+        )}
       </BookingHeader>
 
       <BookingGroup>
         <BookingGroupTitle>Today Bookings</BookingGroupTitle>
-        {renderBookingTable(todayBookings)}
+        {loading ? <p>Loading bookings...</p> : renderBookingTable(todayBookings)}
       </BookingGroup>
 
       <BookingGroup>
         <BookingGroupTitle>Upcoming New Bookings</BookingGroupTitle>
-        {renderBookingTable(upcomingBookings, true)}
+        {loading ? <p>Loading bookings...</p> : renderBookingTable(upcomingBookings, true)}
       </BookingGroup>
     </>
   );
 };
 
 export default BookingList;
-
