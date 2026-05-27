@@ -17,6 +17,7 @@ import {
 
 import HoriOmLogo from "../../../../Assets/HoriOmLogo.png";
 import BookingList from "../../components/BookingList";
+import CreateBooking from "../../components/CreateBooking";
 import DepartmentList from "../../components/DepartmentList";
 import DiseaseManagement from "../../components/DiseaseManagement";
 import DoctorForm from "../../components/DoctorForm/DoctorForm";
@@ -98,6 +99,7 @@ const HomePage = () => {
   const [doctorView, setDoctorView] = useState<"list" | "add">("list");
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
   const [packageView, setPackageView] = useState<PackageView>("list");
+  const [bookingView, setBookingView] = useState<"list" | "create">("list");
 
   // ==========================================
   // Render Content Based on Sidebar Selection
@@ -191,9 +193,20 @@ const HomePage = () => {
     // Booking List
     // ------------------------------
     if (selectedItem.title === "Booking List") {
+      if (bookingView === "create") {
+        return (
+          <Card>
+            <CreateBooking
+              onBookingCreated={() => setBookingView("list")}
+              onBack={() => setBookingView("list")}
+            />
+          </Card>
+        );
+      }
+
       return (
         <Card>
-          <BookingList />
+          <BookingList onCreateClick={() => setBookingView("create")} />
         </Card>
       );
     }

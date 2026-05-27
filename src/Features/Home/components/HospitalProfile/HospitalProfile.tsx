@@ -110,6 +110,16 @@ const HospitalProfile = ({ onBack }: HospitalProfileProps) => {
                   </FieldGroup>
                 </FullWidth>
 
+                <FullWidth>
+                  <FieldGroup>
+                    <FieldLabel>Address</FieldLabel>
+                    <TextInput
+                      value={hospital?.address ?? ""}
+                      onChange={(e) => setHospital((h: any) => ({ ...(h || {}), address: e.target.value }))}
+                    />
+                  </FieldGroup>
+                </FullWidth>
+
               <FieldGroup>
                 <FieldLabel>License Number</FieldLabel>
                 <TextInput

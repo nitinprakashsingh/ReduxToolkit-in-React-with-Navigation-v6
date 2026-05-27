@@ -109,7 +109,6 @@ const LoginPage = () => {
                 <LoginCard>
                     <Title>{t('auth.login.welcomeBack')}</Title>
                     <HelperText>{t('auth.login.helperText')}</HelperText>
-
                     <Form onSubmit={submitButtonHandler}>
                         <FieldGroup>
                             {t('auth.login.emailLabel')}
