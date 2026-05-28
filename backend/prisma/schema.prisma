@@ -144,3 +144,13 @@ model PackageSubscription {
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
 }
+
+model Disease {
+  id                  String   @id @default(cuid())
+  name                String
+  organ               String
+  suggestedDepartment String
+  type                String
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
