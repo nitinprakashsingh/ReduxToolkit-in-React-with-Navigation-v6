@@ -113,3 +113,34 @@ model Booking {
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 }
+
+model PackagePlan {
+  id               String                @id @default(cuid())
+  name             String
+  price            Decimal               @db.Decimal(10, 2)
+  duration         String
+  department       String
+  testsIncluded    Int
+  consultancyFree  Int
+  description      String
+  tier             String                @unique
+  durationMonths   Int
+  status           String                @default("Active")
+  createdAt        DateTime              @default(now())
+  updatedAt        DateTime              @updatedAt
+  subscriptions    PackageSubscription[]
+}
+
+model PackageSubscription {
+  id             String       @id @default(cuid())
+  name           String
+  phone          String
+  packageName    String
+  packagePlanId  String?
+  packagePlan    PackagePlan? @relation(fields: [packagePlanId], references: [id])
+  startDate      DateTime     @default(now())
+  endDate        DateTime
+  status         String       @default("Active")
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+}

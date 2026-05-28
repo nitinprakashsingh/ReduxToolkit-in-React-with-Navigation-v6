@@ -5,7 +5,6 @@ import {
   SectionTitle,
 } from "../../screens/Dashboard/Dashboard.style";
 import {
-  ActionIconButton,
   AddButton,
   BackButton,
   CancelButton,
@@ -22,7 +21,7 @@ import {
 } from "../DepartmentList/DepartmentList.Style";
 import { createBooking, CreateBookingPayload } from "../../../../api/bookingApi";
 import { fetchDoctorsApi, Doctor } from "../DoctorForm/doctorApi";
-import { fetchPatients, PatientCreatePayload } from "../../../../api/patientApi";
+import { fetchPatients } from "../../../../api/patientApi";
 
 type Patient = {
   id: string;
@@ -131,20 +130,20 @@ const CreateBooking = ({ onBookingCreated, onBack }: CreateBookingProps) => {
       setLoading(true);
 
       const payload: CreateBookingPayload = {
-        patientName: formState.patientName,
-        patientEmail: formState.patientEmail,
-        patientPhone: formState.patientPhone,
+        patientName: formState.patientName.trim(),
+        patientEmail: formState.patientEmail.trim() || undefined,
+        patientPhone: formState.patientPhone.trim(),
         patientId: formState.patientId || undefined,
-        doctorName: formState.doctorName,
+        doctorName: formState.doctorName.trim(),
         doctorId: formState.doctorId || undefined,
-        department: formState.department,
+        department: formState.department.trim() || undefined,
         appointmentDate: formState.appointmentDate,
         appointmentTime: formState.appointmentTime,
         consultancyFees: formState.consultancyFees ? Number(formState.consultancyFees) : 0,
         paymentMethod: formState.paymentMethod,
         paymentReceived: formState.paymentReceived,
         paymentAmount: formState.paymentAmount ? Number(formState.paymentAmount) : 0,
-        notes: formState.notes,
+        notes: formState.notes.trim() || undefined,
       };
 
       await createBooking(payload);
@@ -154,7 +153,7 @@ const CreateBooking = ({ onBookingCreated, onBack }: CreateBookingProps) => {
         patientName: "",
         patientEmail: "",
         patientPhone: "",
-        doctorId: "",
+        doctorId: doctors[0]?.id || "",
         doctorName: doctors[0]?.name || "",
         department: "",
         appointmentDate: "",
