@@ -1,6 +1,6 @@
 import { Eye, ListChecks, Pencil, Plus, UserPlus, Users } from "lucide-react";
 import type { FormEvent } from "react";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import {
   SectionTitle,
@@ -30,33 +30,19 @@ import {
   FieldLabel,
   SecondaryButton,
 } from "./PackageManagement.Style";
+import {
+  PackagePlan,
+  PackageSubscription,
+  CreatePackagePlanPayload,
+  createPackagePlanApi,
+  createPackageSubscriptionApi,
+  fetchPackagePlansApi,
+  fetchPackageSubscriptionsApi,
+} from "./packageApi";
 
-type PackagePlan = {
-  id: number;
-  name: string;
-  price: string;
-  duration: string;
-  department: string;
-  testsIncluded: number;
-  consultancyFree: number;
-  description: string;
-  tier: PackageTier;
-  durationMonths: number;
-};
+type PackageTier = string;
 
-type PackageTier = "Silver" | "Gold" | "Platinum";
-
-export type PackageView = "list" | "subscribed" | "subscribe";
-
-type SubscribedUser = {
-  id: number;
-  name: string;
-  phone: string;
-  packageName: PackageTier;
-  startDate: string;
-  endDate: string;
-  status: "Active" | "Expired";
-};
+export type PackageView = "list" | "subscribed" | "subscribe" | "add";
 
 type SubscriptionFormValues = {
   name: string;
@@ -69,103 +55,7 @@ type PackageManagementProps = {
   onViewChange: (view: PackageView) => void;
 };
 
-const packagePlans: PackagePlan[] = [
-  {
-    id: 1,
-    name: "Silver Health Check",
-    price: "999",
-    duration: "1 Month",
-    department: "General Medicine",
-    testsIncluded: 4,
-    consultancyFree: 1,
-    description: "Basic health check with one free doctor consultation.",
-    tier: "Silver",
-    durationMonths: 1,
-  },
-  {
-    id: 2,
-    name: "Gold Family Care",
-    price: "2499",
-    duration: "3 Months",
-    department: "General Medicine",
-    testsIncluded: 8,
-    consultancyFree: 3,
-    description: "Routine tests and consultations for regular family care.",
-    tier: "Gold",
-    durationMonths: 3,
-  },
-  {
-    id: 3,
-    name: "Platinum Complete Care",
-    price: "4999",
-    duration: "6 Months",
-    department: "Multi Department",
-    testsIncluded: 15,
-    consultancyFree: 6,
-    description: "Complete package for preventive health and follow-up visits.",
-    tier: "Platinum",
-    durationMonths: 6,
-  },
-];
-
-const initialSubscribedUsers: SubscribedUser[] = [
-  {
-    id: 1,
-    name: "Ramesh Tiwari",
-    phone: "9876543101",
-    packageName: "Silver",
-    startDate: "2026-05-01",
-    endDate: "2026-06-01",
-    status: "Active",
-  },
-  {
-    id: 2,
-    name: "Kavita Joshi",
-    phone: "9123456102",
-    packageName: "Silver",
-    startDate: "2026-03-10",
-    endDate: "2026-04-10",
-    status: "Expired",
-  },
-  {
-    id: 3,
-    name: "Manoj Sinha",
-    phone: "9988776103",
-    packageName: "Gold",
-    startDate: "2026-04-20",
-    endDate: "2026-07-20",
-    status: "Active",
-  },
-  {
-    id: 4,
-    name: "Nisha Kapoor",
-    phone: "9012346104",
-    packageName: "Gold",
-    startDate: "2026-01-05",
-    endDate: "2026-04-05",
-    status: "Expired",
-  },
-  {
-    id: 5,
-    name: "Devendra Singh",
-    phone: "9876506105",
-    packageName: "Platinum",
-    startDate: "2026-05-05",
-    endDate: "2026-11-05",
-    status: "Active",
-  },
-  {
-    id: 6,
-    name: "Anita Sharma",
-    phone: "9123406106",
-    packageName: "Platinum",
-    startDate: "2025-10-01",
-    endDate: "2026-04-01",
-    status: "Expired",
-  },
-];
-
-const packageTiers: PackageTier[] = ["Silver", "Gold", "Platinum"];
+const defaultPackageTiers: PackageTier[] = ["Silver", "Gold", "Platinum"];
 
 const formatDate = (date: string) =>
   new Intl.DateTimeFormat("en-IN", {
@@ -173,15 +63,6 @@ const formatDate = (date: string) =>
     month: "short",
     year: "numeric",
   }).format(new Date(date));
-
-const toInputDate = (date: Date) => date.toISOString().slice(0, 10);
-
-const getEndDate = (durationMonths: number) => {
-  const endDate = new Date();
-  endDate.setMonth(endDate.getMonth() + durationMonths);
-
-  return toInputDate(endDate);
-};
 
 const createInitialFormValues = (
   packageName: PackageTier = "Silver"
@@ -191,14 +72,38 @@ const createInitialFormValues = (
   packageName,
 });
 
+const initialPackageForm: CreatePackagePlanPayload = {
+  name: "",
+  price: "",
+  duration: "",
+  department: "",
+  testsIncluded: "",
+  consultancyFree: "",
+  description: "",
+  tier: "",
+  durationMonths: "",
+};
+
+const getErrorMessage = (apiError: any, fallback: string) =>
+  apiError.response?.data?.message ?? apiError.message ?? fallback;
+
 const PackageManagement = ({ view, onViewChange }: PackageManagementProps) => {
   const [selectedPackageTier, setSelectedPackageTier] =
     useState<PackageTier>("Silver");
-  const [subscribedUsers, setSubscribedUsers] = useState<SubscribedUser[]>(
-    initialSubscribedUsers
-  );
+  const [packagePlans, setPackagePlans] = useState<PackagePlan[]>([]);
+  const [subscribedUsers, setSubscribedUsers] = useState<PackageSubscription[]>([]);
   const [subscriptionForm, setSubscriptionForm] =
     useState<SubscriptionFormValues>(createInitialFormValues());
+  const [packageForm, setPackageForm] =
+    useState<CreatePackagePlanPayload>(initialPackageForm);
+  const [isLoadingPackages, setIsLoadingPackages] = useState(false);
+  const [isLoadingSubscriptions, setIsLoadingSubscriptions] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const packageTiers = packagePlans.length
+    ? packagePlans.map((plan) => plan.tier)
+    : defaultPackageTiers;
 
   const subscribedUsersByTier = subscribedUsers.filter(
     (user) => user.packageName === selectedPackageTier
@@ -208,12 +113,55 @@ const PackageManagement = ({ view, onViewChange }: PackageManagementProps) => {
     (plan) => plan.tier === subscriptionForm.packageName
   );
 
+  const loadPackagePlans = useCallback(async () => {
+    try {
+      setIsLoadingPackages(true);
+      setError(null);
+      const plans = await fetchPackagePlansApi();
+      setPackagePlans(plans);
+
+      if (plans.length > 0) {
+        setSelectedPackageTier((current) =>
+          plans.some((plan) => plan.tier === current) ? current : plans[0].tier
+        );
+        setSubscriptionForm((form) => ({
+          ...form,
+          packageName: plans.some((plan) => plan.tier === form.packageName)
+            ? form.packageName
+            : plans[0].tier,
+        }));
+      }
+    } catch (apiError: any) {
+      setError(getErrorMessage(apiError, "Failed to load packages"));
+    } finally {
+      setIsLoadingPackages(false);
+    }
+  }, []);
+
+  const loadSubscriptions = useCallback(async () => {
+    try {
+      setIsLoadingSubscriptions(true);
+      setError(null);
+      const subscriptions = await fetchPackageSubscriptionsApi();
+      setSubscribedUsers(subscriptions);
+    } catch (apiError: any) {
+      setError(getErrorMessage(apiError, "Failed to load subscriptions"));
+    } finally {
+      setIsLoadingSubscriptions(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadPackagePlans();
+    loadSubscriptions();
+  }, [loadPackagePlans, loadSubscriptions]);
+
   const handleSubscribeClick = (packageName: PackageTier) => {
     setSubscriptionForm(createInitialFormValues(packageName));
     onViewChange("subscribe");
   };
 
-  const handleSubscriptionSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubscriptionSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (!selectedPlan) {
@@ -227,21 +175,199 @@ const PackageManagement = ({ view, onViewChange }: PackageManagementProps) => {
       return;
     }
 
-    const newSubscription: SubscribedUser = {
-      id: Date.now(),
-      name: trimmedName,
-      phone: trimmedPhone,
-      packageName: selectedPlan.tier,
-      startDate: toInputDate(new Date()),
-      endDate: getEndDate(selectedPlan.durationMonths),
-      status: "Active",
-    };
+    try {
+      setIsSubmitting(true);
+      setError(null);
+      const response = await createPackageSubscriptionApi({
+        name: trimmedName,
+        phone: trimmedPhone,
+        packageName: selectedPlan.tier,
+      });
 
-    setSubscribedUsers((users) => [newSubscription, ...users]);
-    setSelectedPackageTier(selectedPlan.tier);
-    setSubscriptionForm(createInitialFormValues(selectedPlan.tier));
-    onViewChange("subscribed");
+      setSubscribedUsers((users) => [response.data, ...users]);
+      setSelectedPackageTier(selectedPlan.tier);
+      setSubscriptionForm(createInitialFormValues(selectedPlan.tier));
+      onViewChange("subscribed");
+    } catch (apiError: any) {
+      setError(getErrorMessage(apiError, "Failed to subscribe package"));
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
+  const handlePackageFormChange = (
+    field: keyof CreatePackagePlanPayload,
+    value: string
+  ) => {
+    setPackageForm((form) => ({
+      ...form,
+      [field]: value,
+    }));
+  };
+
+  const handlePackageSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    try {
+      setIsSubmitting(true);
+      setError(null);
+      const response = await createPackagePlanApi(packageForm);
+      setPackagePlans((plans) => [...plans, response.data].sort((a, b) => Number(a.price) - Number(b.price)));
+      setSelectedPackageTier(response.data.tier);
+      setSubscriptionForm(createInitialFormValues(response.data.tier));
+      setPackageForm(initialPackageForm);
+      onViewChange("list");
+    } catch (apiError: any) {
+      setError(getErrorMessage(apiError, "Failed to create package"));
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  if (view === "add") {
+    return (
+      <>
+        <PackageHeader>
+          <div>
+            <SectionTitle>Add New Package</SectionTitle>
+            <HelperText>Create a package plan with price, duration, and benefits.</HelperText>
+            {error && <HelperText style={{ color: "#dc2626" }}>{error}</HelperText>}
+          </div>
+        </PackageHeader>
+
+        <SubscribePanel>
+          <SubscribeForm onSubmit={handlePackageSubmit}>
+            <SubscribeFormGrid>
+              <FieldGroup>
+                <FieldLabel htmlFor="package-name">Package Name</FieldLabel>
+                <TextInput
+                  id="package-name"
+                  value={packageForm.name}
+                  onChange={(event) => handlePackageFormChange("name", event.target.value)}
+                  placeholder="Package name"
+                  required
+                />
+              </FieldGroup>
+
+              <FieldGroup>
+                <FieldLabel htmlFor="package-tier-name">Tier</FieldLabel>
+                <TextInput
+                  id="package-tier-name"
+                  value={packageForm.tier}
+                  onChange={(event) => handlePackageFormChange("tier", event.target.value)}
+                  placeholder="Silver, Gold, Platinum"
+                  required
+                />
+              </FieldGroup>
+
+              <FieldGroup>
+                <FieldLabel htmlFor="package-price">Price</FieldLabel>
+                <TextInput
+                  id="package-price"
+                  type="number"
+                  min="0"
+                  value={packageForm.price}
+                  onChange={(event) => handlePackageFormChange("price", event.target.value)}
+                  placeholder="Price"
+                  required
+                />
+              </FieldGroup>
+
+              <FieldGroup>
+                <FieldLabel htmlFor="package-duration">Duration</FieldLabel>
+                <TextInput
+                  id="package-duration"
+                  value={packageForm.duration}
+                  onChange={(event) => handlePackageFormChange("duration", event.target.value)}
+                  placeholder="1 Month"
+                  required
+                />
+              </FieldGroup>
+
+              <FieldGroup>
+                <FieldLabel htmlFor="package-duration-months">Duration Months</FieldLabel>
+                <TextInput
+                  id="package-duration-months"
+                  type="number"
+                  min="1"
+                  value={packageForm.durationMonths}
+                  onChange={(event) =>
+                    handlePackageFormChange("durationMonths", event.target.value)
+                  }
+                  placeholder="1"
+                  required
+                />
+              </FieldGroup>
+
+              <FieldGroup>
+                <FieldLabel htmlFor="package-department">Department</FieldLabel>
+                <TextInput
+                  id="package-department"
+                  value={packageForm.department}
+                  onChange={(event) => handlePackageFormChange("department", event.target.value)}
+                  placeholder="General Medicine"
+                  required
+                />
+              </FieldGroup>
+
+              <FieldGroup>
+                <FieldLabel htmlFor="package-tests">Tests Included</FieldLabel>
+                <TextInput
+                  id="package-tests"
+                  type="number"
+                  min="0"
+                  value={packageForm.testsIncluded}
+                  onChange={(event) =>
+                    handlePackageFormChange("testsIncluded", event.target.value)
+                  }
+                  placeholder="4"
+                  required
+                />
+              </FieldGroup>
+
+              <FieldGroup>
+                <FieldLabel htmlFor="package-consultancy">Consultancy Free</FieldLabel>
+                <TextInput
+                  id="package-consultancy"
+                  type="number"
+                  min="0"
+                  value={packageForm.consultancyFree}
+                  onChange={(event) =>
+                    handlePackageFormChange("consultancyFree", event.target.value)
+                  }
+                  placeholder="1"
+                  required
+                />
+              </FieldGroup>
+
+              <FieldGroup>
+                <FieldLabel htmlFor="package-description">Description</FieldLabel>
+                <TextInput
+                  id="package-description"
+                  value={packageForm.description}
+                  onChange={(event) =>
+                    handlePackageFormChange("description", event.target.value)
+                  }
+                  placeholder="Package description"
+                  required
+                />
+              </FieldGroup>
+            </SubscribeFormGrid>
+
+            <SubscribeFormActions>
+              <SecondaryButton type="button" onClick={() => onViewChange("list")}>
+                Cancel
+              </SecondaryButton>
+              <PrimaryButton type="submit">
+                <Plus size={16} />
+                {isSubmitting ? "Saving..." : "Save Package"}
+              </PrimaryButton>
+            </SubscribeFormActions>
+          </SubscribeForm>
+        </SubscribePanel>
+      </>
+    );
+  }
 
   if (view === "subscribe") {
     return (
@@ -252,6 +378,7 @@ const PackageManagement = ({ view, onViewChange }: PackageManagementProps) => {
             <HelperText>
               Add a user subscription for Silver, Gold, or Platinum packages.
             </HelperText>
+            {error && <HelperText style={{ color: "#dc2626" }}>{error}</HelperText>}
           </div>
         </PackageHeader>
 
@@ -317,7 +444,7 @@ const PackageManagement = ({ view, onViewChange }: PackageManagementProps) => {
               </SecondaryButton>
               <PrimaryButton type="submit">
                 <UserPlus size={16} />
-                Subscribe
+                {isSubmitting ? "Subscribing..." : "Subscribe"}
               </PrimaryButton>
             </SubscribeFormActions>
           </SubscribeForm>
@@ -335,6 +462,7 @@ const PackageManagement = ({ view, onViewChange }: PackageManagementProps) => {
             <HelperText>
               Select a package type to view active and expired users.
             </HelperText>
+            {error && <HelperText style={{ color: "#dc2626" }}>{error}</HelperText>}
           </div>
         </PackageHeader>
 
@@ -398,7 +526,12 @@ const PackageManagement = ({ view, onViewChange }: PackageManagementProps) => {
                   </TableDataCell>
                 </TableRow>
               ))}
-              {subscribedUsersByTier.length === 0 && (
+              {isLoadingSubscriptions && (
+                <TableRow>
+                  <TableDataCell colSpan={7}>Loading subscribed users...</TableDataCell>
+                </TableRow>
+              )}
+              {!isLoadingSubscriptions && subscribedUsersByTier.length === 0 && (
                 <TableRow>
                   <TableDataCell colSpan={7}>No subscribed users found.</TableDataCell>
                 </TableRow>
@@ -418,6 +551,7 @@ const PackageManagement = ({ view, onViewChange }: PackageManagementProps) => {
           <HelperText>
             Manage package price, duration, department, tests, and consultancy.
           </HelperText>
+          {error && <HelperText style={{ color: "#dc2626" }}>{error}</HelperText>}
         </div>
       </PackageHeader>
 
@@ -479,6 +613,16 @@ const PackageManagement = ({ view, onViewChange }: PackageManagementProps) => {
                 </TableDataCell>
               </TableRow>
             ))}
+            {isLoadingPackages && (
+              <TableRow>
+                <TableDataCell colSpan={8}>Loading packages...</TableDataCell>
+              </TableRow>
+            )}
+            {!isLoadingPackages && packagePlans.length === 0 && (
+              <TableRow>
+                <TableDataCell colSpan={8}>No packages found.</TableDataCell>
+              </TableRow>
+            )}
           </tbody>
         </StyledTable>
       </TableScroll>
@@ -488,7 +632,7 @@ const PackageManagement = ({ view, onViewChange }: PackageManagementProps) => {
           <UserPlus size={16} />
           Subscribe User
         </PrimaryButton>
-        <PrimaryButton onClick={() => alert("Add New Package")}>
+        <PrimaryButton onClick={() => onViewChange("add")}>
           <Plus size={16} />
           Add New Package
         </PrimaryButton>
