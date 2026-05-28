@@ -1,5 +1,5 @@
 import { ArrowLeft, Eye, Pencil, Plus } from "lucide-react";
-import { useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 
 import {
   SectionTitle,
@@ -34,68 +34,40 @@ import {
   TextInput,
   Toolbar,
 } from "./DepartmentList.Style";
+import {
+  Department,
+  DepartmentPayload,
+  createDepartmentApi,
+  fetchDepartmentsApi,
+  updateDepartmentApi,
+} from "./departmentApi";
 
 type DepartmentStatus = "Active" | "Inactive";
 
-type Department = {
-  id: number;
-  name: string;
-  headDoctor: string;
-  phone: string;
-  roomNo: string;
-  status: DepartmentStatus;
-};
-
-const departments: Department[] = [
-  {
-    id: 1,
-    name: "General Medicine",
-    headDoctor: "Dr. Anil Mehta",
-    phone: "9876543211",
-    roomNo: "OPD-101",
-    status: "Active",
-  },
-  {
-    id: 2,
-    name: "Cardiology",
-    headDoctor: "Dr. Rakesh Sinha",
-    phone: "9123456781",
-    roomNo: "OPD-204",
-    status: "Active",
-  },
-  {
-    id: 3,
-    name: "Dermatology",
-    headDoctor: "Dr. Neha Sharma",
-    phone: "9988776655",
-    roomNo: "OPD-112",
-    status: "Active",
-  },
-  {
-    id: 4,
-    name: "Orthopedic",
-    headDoctor: "Dr. Amit Verma",
-    phone: "9012345678",
-    roomNo: "OPD-305",
-    status: "Inactive",
-  },
-  {
-    id: 5,
-    name: "Pediatrics",
-    headDoctor: "Dr. Kavita Rao",
-    phone: "9876501234",
-    roomNo: "OPD-118",
-    status: "Active",
-  },
-];
-
 const departmentStatuses: DepartmentStatus[] = ["Active", "Inactive"];
 
+const initialFormState: DepartmentPayload = {
+  name: "",
+  headDoctor: "",
+  phone: "",
+  roomNo: "",
+  status: "Active",
+};
+
+const getErrorMessage = (apiError: any, fallback: string) =>
+  apiError.response?.data?.message ?? apiError.message ?? fallback;
+
 const DepartmentList = () => {
-  const [view, setView] = useState<"list" | "add">("list");
+  const [view, setView] = useState<"list" | "form">("list");
   const [selectedStatus, setSelectedStatus] =
     useState<DepartmentStatus>("Active");
   const [searchText, setSearchText] = useState("");
+  const [departments, setDepartments] = useState<Department[]>([]);
+  const [formState, setFormState] = useState<DepartmentPayload>(initialFormState);
+  const [editingDepartmentId, setEditingDepartmentId] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const filteredDepartments = departments.filter(
     (department) =>
@@ -103,43 +75,156 @@ const DepartmentList = () => {
       department.name.toLowerCase().includes(searchText.toLowerCase())
   );
 
-  if (view === "add") {
+  const loadDepartments = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      const departmentList = await fetchDepartmentsApi();
+      setDepartments(departmentList);
+    } catch (apiError: any) {
+      setError(getErrorMessage(apiError, "Failed to load departments"));
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadDepartments();
+  }, []);
+
+  const resetForm = () => {
+    setFormState(initialFormState);
+    setEditingDepartmentId(null);
+    setError(null);
+  };
+
+  const handleAddClick = () => {
+    resetForm();
+    setView("form");
+  };
+
+  const handleEditClick = (department: Department) => {
+    setFormState({
+      name: department.name,
+      headDoctor: department.headDoctor ?? "",
+      phone: department.phone ?? "",
+      roomNo: department.roomNo ?? "",
+      status: department.status,
+    });
+    setEditingDepartmentId(department.id);
+    setView("form");
+  };
+
+  const handleFormChange = (field: keyof DepartmentPayload, value: string) => {
+    setFormState((current) => ({
+      ...current,
+      [field]: value,
+    }));
+  };
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    try {
+      setIsSubmitting(true);
+      setError(null);
+
+      if (editingDepartmentId) {
+        const response = await updateDepartmentApi(editingDepartmentId, formState);
+        setDepartments((current) =>
+          current.map((department) =>
+            department.id === editingDepartmentId ? response.data : department
+          )
+        );
+      } else {
+        const response = await createDepartmentApi(formState);
+        setDepartments((current) => [response.data, ...current]);
+      }
+
+      setSelectedStatus(formState.status as DepartmentStatus);
+      resetForm();
+      setView("list");
+    } catch (apiError: any) {
+      setError(getErrorMessage(apiError, "Failed to save department"));
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const isEditing = Boolean(editingDepartmentId);
+
+  if (view === "form") {
     return (
       <FormPanel>
         <DepartmentHeader>
           <HeaderLeft>
-            <BackButton onClick={() => setView("list")} title="Back">
+            <BackButton
+              onClick={() => {
+                resetForm();
+                setView("list");
+              }}
+              title="Back"
+            >
               <ArrowLeft size={16} />
             </BackButton>
-            <SectionTitle>Add Department</SectionTitle>
+            <SectionTitle>{isEditing ? "Edit Department" : "Add Department"}</SectionTitle>
           </HeaderLeft>
         </DepartmentHeader>
 
-        <FormGrid onSubmit={(event) => event.preventDefault()}>
+        {error && <p style={{ color: "#dc2626", marginTop: 0 }}>{error}</p>}
+
+        <FormGrid onSubmit={handleSubmit}>
           <FormFields>
             <FieldGroup>
-              <FieldLabel>Department Name</FieldLabel>
-              <TextInput placeholder="Department name" />
+              <FieldLabel htmlFor="department-name">Department Name</FieldLabel>
+              <TextInput
+                id="department-name"
+                value={formState.name}
+                onChange={(event) => handleFormChange("name", event.target.value)}
+                placeholder="Department name"
+                required
+              />
             </FieldGroup>
 
             <FieldGroup>
-              <FieldLabel>Head Doctor</FieldLabel>
-              <TextInput placeholder="Doctor name" />
+              <FieldLabel htmlFor="department-head-doctor">Head Doctor</FieldLabel>
+              <TextInput
+                id="department-head-doctor"
+                value={formState.headDoctor}
+                onChange={(event) =>
+                  handleFormChange("headDoctor", event.target.value)
+                }
+                placeholder="Doctor name"
+              />
             </FieldGroup>
 
             <FieldGroup>
-              <FieldLabel>Contact Number</FieldLabel>
-              <TextInput placeholder="Phone number" />
+              <FieldLabel htmlFor="department-phone">Contact Number</FieldLabel>
+              <TextInput
+                id="department-phone"
+                value={formState.phone}
+                onChange={(event) => handleFormChange("phone", event.target.value)}
+                placeholder="Phone number"
+              />
             </FieldGroup>
 
             <FieldGroup>
-              <FieldLabel>Room / OPD No</FieldLabel>
-              <TextInput placeholder="OPD-101" />
+              <FieldLabel htmlFor="department-room">Room / OPD No</FieldLabel>
+              <TextInput
+                id="department-room"
+                value={formState.roomNo}
+                onChange={(event) => handleFormChange("roomNo", event.target.value)}
+                placeholder="OPD-101"
+              />
             </FieldGroup>
 
             <FieldGroup>
-              <FieldLabel>Status</FieldLabel>
-              <SelectInput defaultValue="Active">
+              <FieldLabel htmlFor="department-status">Status</FieldLabel>
+              <SelectInput
+                id="department-status"
+                value={formState.status}
+                onChange={(event) => handleFormChange("status", event.target.value)}
+              >
                 <option value="" disabled>
                   Select status
                 </option>
@@ -152,12 +237,18 @@ const DepartmentList = () => {
             </FieldGroup>
 
             <FormActions>
-              <CancelButton type="button" onClick={() => setView("list")}>
+              <CancelButton
+                type="button"
+                onClick={() => {
+                  resetForm();
+                  setView("list");
+                }}
+              >
                 Cancel
               </CancelButton>
-              <AddButton type="submit">
+              <AddButton type="submit" disabled={isSubmitting}>
                 <Plus size={14} />
-                Save
+                {isSubmitting ? "Saving..." : "Save"}
               </AddButton>
             </FormActions>
           </FormFields>
@@ -171,6 +262,8 @@ const DepartmentList = () => {
       <DepartmentHeader>
         <SectionTitle>Department Management</SectionTitle>
       </DepartmentHeader>
+
+      {error && <p style={{ color: "#dc2626", marginTop: 0 }}>{error}</p>}
 
       <Toolbar>
         <EntriesControl>
@@ -202,7 +295,7 @@ const DepartmentList = () => {
             {status}
           </TabButton>
         ))}
-        <AddButton onClick={() => setView("add")} style={{ marginLeft: "auto" }}>
+        <AddButton onClick={handleAddClick} style={{ marginLeft: "auto" }}>
           <Plus size={14} />
           Add Department
         </AddButton>
@@ -238,14 +331,19 @@ const DepartmentList = () => {
                   </ActionIconButton>
                   <ActionIconButton
                     title="Edit department"
-                    onClick={() => alert(`Edit ${department.name}`)}
+                    onClick={() => handleEditClick(department)}
                   >
                     <Pencil size={16} />
                   </ActionIconButton>
                 </TableDataCell>
               </TableRow>
             ))}
-            {filteredDepartments.length === 0 && (
+            {isLoading && (
+              <TableRow>
+                <TableDataCell colSpan={6}>Loading departments...</TableDataCell>
+              </TableRow>
+            )}
+            {!isLoading && filteredDepartments.length === 0 && (
               <TableRow>
                 <TableDataCell colSpan={6}>No departments found.</TableDataCell>
               </TableRow>
