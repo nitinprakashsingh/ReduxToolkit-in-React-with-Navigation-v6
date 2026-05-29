@@ -4,6 +4,7 @@
 import { useState } from "react";
 import {
   Activity,
+  Bed,
   Building2,
   CalendarCheck,
   Home,
@@ -17,6 +18,7 @@ import {
 
 import HoriOmLogo from "../../../../Assets/HoriOmLogo.png";
 import BookingList from "../../components/BookingList";
+import BedManagement from "../../components/BedManagement";
 import CreateBooking from "../../components/CreateBooking";
 import DepartmentList from "../../components/DepartmentList";
 import DiseaseManagement from "../../components/DiseaseManagement";
@@ -91,6 +93,11 @@ const sidebarItems = [
     title: "Disease Management",
     icon: Activity,
   },
+  {
+    id: 10,
+    title: "Manage Bed",
+    icon: Bed,
+  },
 ];
 
 const HomePage = () => {
@@ -100,6 +107,7 @@ const HomePage = () => {
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
   const [packageView, setPackageView] = useState<PackageView>("list");
   const [bookingView, setBookingView] = useState<"list" | "create">("list");
+  const [bedView, setBedView] = useState<"list" | "add">("list");
 
   // ==========================================
   // Render Content Based on Sidebar Selection
@@ -244,6 +252,17 @@ const HomePage = () => {
       );
     }
 
+    // ------------------------------
+    // Manage Bed
+    // ------------------------------
+    if (selectedItem.title === "Manage Bed") {
+      return (
+        <Card>
+          <BedManagement view={bedView} onViewChange={setBedView} />
+        </Card>
+      );
+    }
+
     return <Card>No Content Available</Card>;
   };
 
@@ -281,6 +300,10 @@ const HomePage = () => {
 
                 if (item.title === "Package Management") {
                   setPackageView("list");
+                }
+
+                if (item.title === "Manage Bed") {
+                  setBedView("list");
                 }
               }}
             />
@@ -367,6 +390,30 @@ const HomePage = () => {
                   <SubMenuButton onClick={() => setPackageView("subscribed")}>
                     <Users size={14} />
                     Subscribed
+                  </SubMenuButton>
+                </div>
+              )}
+
+            {/* Sub Menu for Bed Management */}
+            {selectedItem.title === "Manage Bed" &&
+              item.title === "Manage Bed" && (
+                <div
+                  style={{
+                    marginLeft: "40px",
+                    marginTop: "8px",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "8px",
+                  }}
+                >
+                  <SubMenuButton onClick={() => setBedView("list")}>
+                    <ListChecks size={14} />
+                    Bed List
+                  </SubMenuButton>
+
+                  <SubMenuButton onClick={() => setBedView("add")}>
+                    <Bed size={14} />
+                    Add Bed
                   </SubMenuButton>
                 </div>
               )}
