@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
-import HoriOmLogo from "../../../../Assets/HoriOmLogo.png"
+import ShriyanLogo from "../../../../Assets/ShriyanLogo.png"
 import InputField from "../../components/InputFileds"
 import { useAppDispatch, useAppSelector } from "../../../../Store/types"
 import { signupRequest } from "../../authSlice"
@@ -81,9 +81,9 @@ const SignUpPage = () => {
         <Container>
             <BrandPanel>
                 <BrandTop>
-                    <LogoMark src={HoriOmLogo} alt="Hari Om Seva Sansta logo" />
+                    <LogoMark src={ShriyanLogo} alt="Shriyan Technology Pvt ltd" />
                     <div>
-                        <BrandName>Shriyan Cares</BrandName>
+                        <BrandName>Shriyan Technology</BrandName>
                         <BrandSubText>{t('auth.brandSubText')}</BrandSubText>
                     </div>
                 </BrandTop>

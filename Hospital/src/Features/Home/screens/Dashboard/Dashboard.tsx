@@ -16,7 +16,7 @@ import {
   UserPlus,
 } from "lucide-react";
 
-import HoriOmLogo from "../../../../Assets/HoriOmLogo.png";
+import ShriyanLogo from "../../../../Assets/ShriyanLogo.png";
 import BookingList from "../../components/BookingList";
 import BedManagement from "../../components/BedManagement";
 import CreateBooking from "../../components/CreateBooking";
@@ -273,8 +273,8 @@ const HomePage = () => {
       ========================================== */}
       <Sidebar>
         <Text>
-          <Logo src={HoriOmLogo} alt="Hari Om Seva Sansta logo" />
-          <Title>Hari Om Seva Sansta</Title>
+          <Logo src={ShriyanLogo} alt="Shriyan Technology Pvt ltd" />
+          <Title>Shriyan Technology</Title>
           <Subtitle>Profile</Subtitle>
         </Text>
 

@@ -2,7 +2,7 @@ import { ArrowLeft, KeyRound } from "lucide-react"
 import React, { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
-import HoriOmLogo from "../../../../Assets/HoriOmLogo.png"
+import ShriyanLogo from "../../../../Assets/ShriyanLogo.png"
 import { useAppDispatch, useAppSelector } from "../../../../Store/types"
 import { clearAuthMessage, forgotPasswordRequest } from "../../authSlice"
 import {
@@ -76,9 +76,9 @@ const ForgotPasswordPage = () => {
         <Container>
             <BrandPanel>
                 <BrandTop>
-                    <LogoMark src={HoriOmLogo} alt="Hari Om Seva Sansta logo" />
+                    <LogoMark src={ShriyanLogo} alt="Shriyan Technology Pvt ltd" />
                     <div>
-                        <BrandName>Hari Om Seva Sansta</BrandName>
+                        <BrandName>Shriyan Technology</BrandName>
                         <BrandSubText>{t('auth.brandSubText')}</BrandSubText>
                     </div>
                 </BrandTop>
