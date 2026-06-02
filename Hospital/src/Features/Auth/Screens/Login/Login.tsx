@@ -2,7 +2,7 @@ import { Eye, EyeOff, LogIn } from "lucide-react"
 import React, { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
-import HoriOmLogo from "../../../../Assets/HoriOmLogo.png"
+import ShriyanLogo from "../../../../Assets/ShriyanLogo.png"
 import { useAppDispatch, useAppSelector } from "../../../../Store/types"
 import { loginRequest } from "../../authSlice"
 import {
@@ -77,9 +77,9 @@ const LoginPage = () => {
         <Container>
             <BrandPanel>
                 <BrandTop>
-                    <LogoMark src={HoriOmLogo} alt="Hari Om Seva Sansta logo" />
+                    <LogoMark src={ShriyanLogo} alt="Shriyan Technology Pvt ltd" />
                     <div>
-                        <BrandName>Hari Om Seva Sansta</BrandName>
+                        <BrandName>Shriyan Technology</BrandName>
                         <BrandSubText>{t('auth.brandSubText')}</BrandSubText>
                     </div>
                 </BrandTop>
