@@ -1,4 +1,4 @@
-import LoginScreen from "../Features/Auth/LoginScreen";
+import LoginScreen from "../Features/Auth/Login";
 function App() {
   return (
     <LoginScreen/>

@@ -1,8 +1,10 @@
 import styled from "styled-components"
+import ShriyanLogo from "../../../Assests/ShriyanLogo.png"
 
 export const Page = styled.div`
   min-height: 100vh;
-  background: linear-gradient(135deg, #fff8f0 0%, #fff0d8 100%);
+  background: linear-gradient(135deg, rgba(255, 248, 240, 0.85) 0%, rgba(255, 240, 216, 0.85) 100%),
+    url(${ShriyanLogo}) center/cover no-repeat;
   display: flex;
   align-items: center;
   justify-content: center;
