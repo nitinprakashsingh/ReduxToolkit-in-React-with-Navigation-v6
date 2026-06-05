@@ -3,8 +3,7 @@ import ShriyanLogo from "../../../Assests/ShriyanLogo.png"
 
 export const Page = styled.div`
   min-height: 100vh;
-  background: linear-gradient(135deg, rgba(255, 248, 240, 0.85) 0%, rgba(255, 240, 216, 0.85) 100%),
-    url(${ShriyanLogo}) center/cover no-repeat;
+  background: linear-gradient(135deg, #5d44a2 0%, #7c5ac6 50%, #9f7bf6 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -17,7 +16,7 @@ export const Card = styled.div`
   border-radius: 28px;
   box-shadow: 0 24px 70px rgba(0, 0, 0, 0.08);
   overflow: hidden;
-  border: 1px solid rgba(255, 152, 0, 0.18);
+  border: 1px solid rgba(93, 68, 162, 0.12);
 `
 
 export const Header = styled.div`
@@ -27,7 +26,7 @@ export const Header = styled.div`
 
 export const BrandTitle = styled.h1`
   margin: 0;
-  color: #d35400;
+  color: #5d44a2;
   font-size: 28px;
   line-height: 1.1;
 `
@@ -35,7 +34,7 @@ export const BrandTitle = styled.h1`
 export const BrandSubtitle = styled.p`
   margin: 10px auto 0;
   max-width: 300px;
-  color: #6c4221;
+  color: #6b5aa0;
   font-size: 15px;
   line-height: 1.6;
 `
@@ -75,8 +74,8 @@ export const Input = styled.input`
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 
   &:focus {
-    border-color: #a67b3f;
-    box-shadow: 0 0 0 4px rgba(255, 152, 0, 0.12);
+    border-color: #5d44a2;
+    box-shadow: 0 0 0 4px rgba(93, 68, 162, 0.12);
   }
 `
 
@@ -88,19 +87,19 @@ export const Button = styled.button<{ disabled?: boolean }>`
   font-weight: 700;
   font-size: 15px;
   color: #ffffff;
-  background: ${props => (props.disabled ? "#d9e0a2" : "#6d7a1f")};
+  background: ${props => (props.disabled ? "#e6ddfb" : "#5d44a2")};
   cursor: ${props => (props.disabled ? "not-allowed" : "pointer")};
   transition: background 0.2s ease;
 
   &:hover {
-    background: ${props => (props.disabled ? "#d9e0a2" : "#55651a")};
+    background: ${props => (props.disabled ? "#e6ddfb" : "#4a3587")};
   }
 `
 
 export const TextButton = styled.button`
   border: none;
   background: transparent;
-  color: #8e6a1d;
+  color: #5d44a2;
   font-size: 14px;
   font-weight: 700;
   cursor: pointer;
@@ -115,9 +114,9 @@ export const TextButton = styled.button`
 export const Message = styled.div`
   padding: 14px 16px;
   border-radius: 14px;
-  background: #fff4e6;
-  color: #7f4b19;
-  border: 1px solid #ffd0a3;
+  background: #f3effb;
+  color: #4b326b;
+  border: 1px solid #e3d7fb;
   font-size: 14px;
 `
 
@@ -138,6 +137,6 @@ export const Footer = styled.div`
 
 export const SmallText = styled.p`
   margin: 0;
-  color: #5d4632;
+  color: #6b5aa0;
   font-size: 13px;
 `
