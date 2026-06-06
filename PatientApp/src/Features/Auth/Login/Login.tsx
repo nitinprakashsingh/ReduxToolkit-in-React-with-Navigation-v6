@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from "react"
-import { Page, Card, Header, BrandTitle, BrandSubtitle, Body, Form, InputGroup, Label, Input, Button, Message, Error, Footer, TextButton, SmallText } from "./LoginStyle"
+import ShriyanLogo from "../../../Assests/ShriyanLogo.png"
+import { Page, Card, BrandPanel, BrandTop, LogoMark, BrandName, BrandSubText, BrandContent, BrandTitle, BrandDescription, Header, Title, HelperText, Body, Form, InputGroup, Label, Input, Button, Message, Error, Footer, TextButton, SmallText } from "./LoginStyle"
 import OtpScreen from "./Otp"
 
 const Login = () => {
@@ -66,10 +67,27 @@ const Login = () => {
 
   return (
     <Page>
+      <BrandPanel>
+        <BrandTop>
+          <LogoMark src={ShriyanLogo} alt="Shriyan Technology Pvt ltd" />
+          <div>
+            <BrandName>Shriyan Technology</BrandName>
+            <BrandSubText>Healthcare Solutions</BrandSubText>
+          </div>
+        </BrandTop>
+
+        <BrandContent>
+          <BrandTitle>Patient Portal</BrandTitle>
+          <BrandDescription>
+            Welcome to our patient management system. Access your appointments, medical records, prescriptions, and health information all in one place.
+          </BrandDescription>
+        </BrandContent>
+      </BrandPanel>
+
       <Card>
         <Header>
-          <BrandTitle>Patient Login</BrandTitle>
-          <BrandSubtitle>Fast access to your appointments, prescriptions and health details.</BrandSubtitle>
+          <Title>Patient Login</Title>
+          <HelperText>Fast access to your appointments, prescriptions and health details.</HelperText>
         </Header>
         <Body>
           {screen === "login" ? (
