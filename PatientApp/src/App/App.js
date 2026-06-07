@@ -1,7 +1,7 @@
-import LoginScreen from "../Features/Auth/Login";
+import HomeScreen from "../Features/Home/Home";
 function App() {
   return (
-    <LoginScreen/>
+    <HomeScreen />
   );
 }
 

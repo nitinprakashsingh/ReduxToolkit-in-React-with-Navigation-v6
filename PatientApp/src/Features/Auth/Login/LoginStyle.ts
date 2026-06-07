@@ -16,9 +16,10 @@ export const Page = styled.div`
 export const BrandPanel = styled.aside`
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: space-between;
   gap: 32px;
   padding: 44px;
+  min-height: 100vh;
   background: #5d44a2;
   color: #ffffff;
 
@@ -26,7 +27,6 @@ export const BrandPanel = styled.aside`
     position: sticky;
     top: 0;
     align-self: flex-start;
-    min-height: 100vh;
     overflow: hidden;
   }
 
@@ -62,6 +62,10 @@ export const BrandSubText = styled.div`
 `
 
 export const BrandContent = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   max-width: 460px;
 `
 
@@ -103,13 +107,12 @@ export const Card = styled.main`
 `
 
 export const Header = styled.section`
-  width: 100%;
-  max-width: 440px;
+  width: min(100%, 520px);
   background: #ffffff;
   border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  box-shadow: 0 16px 40px rgba(17, 24, 39, 0.08);
-  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 20px 48px rgba(17, 24, 39, 0.08);
+  padding: 32px;
   box-sizing: border-box;
   margin: 16px 0 24px;
 

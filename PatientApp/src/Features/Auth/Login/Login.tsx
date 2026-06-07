@@ -88,9 +88,7 @@ const Login = () => {
         <Header>
           <Title>Patient Login</Title>
           <HelperText>Fast access to your appointments, prescriptions and health details.</HelperText>
-        </Header>
         <Body>
-          // testing comment
           {screen === "login" ? (
             <>
               <Form onSubmit={handleSendOtp}>
@@ -130,6 +128,7 @@ const Login = () => {
             />
           )}
         </Body>
+         </Header>
       </Card>
     </Page>
   )
