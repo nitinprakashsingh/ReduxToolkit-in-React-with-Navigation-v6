@@ -66,6 +66,17 @@ export const SearchSection = styled.section`
   }
 `
 
+export const SearchRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  @media (max-width: 780px) {
+    flex-direction: column;
+    align-items: stretch;
+  }
+`
+
 export const SearchCard = styled.div`
   display: flex;
   align-items: center;
@@ -220,6 +231,111 @@ export const FooterNote = styled.p`
   padding: 20px 0 0;
   color: #6b7280;
   font-size: 13px;
+`
+
+export const OverlayBackdrop = styled.div`
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  display: grid;
+  place-items: center;
+  padding: 32px;
+  z-index: 1000;
+`
+
+export const FilterModal = styled.div`
+  width: min(920px, 100%);
+  max-height: min(95vh, 1020px);
+  overflow-y: auto;
+  border-radius: 32px;
+  background: #ffffff;
+  padding: 32px;
+  box-shadow: 0 40px 80px rgba(15, 23, 42, 0.18);
+`
+
+export const FilterHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+`
+
+export const FilterTitle = styled.h3`
+  margin: 0;
+  font-size: 24px;
+  font-weight: 800;
+`
+
+export const FilterSearchCard = styled(SearchCard)`
+  margin-bottom: 24px;
+  cursor: text;
+`
+
+export const CloseButton = styled.button`
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 16px;
+  background: #f3f4f6;
+  color: #374151;
+  font-size: 22px;
+  cursor: pointer;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+`
+
+export const FilterSection = styled.section`
+  margin-bottom: 22px;
+`
+
+export const FilterSectionTitle = styled.h4`
+  margin: 0 0 16px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #111827;
+`
+
+export const FilterChipsRow = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+`
+
+export const FilterChip = styled.button<{ $active?: boolean }>`
+  border: 1px solid ${({ $active }) => ($active ? "#8b5cf6" : "#e5e7eb")};
+  background: ${({ $active }) => ($active ? "#f5f3ff" : "#ffffff")};
+  color: ${({ $active }) => ($active ? "#6d28d9" : "#374151")};
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-size: 14px;
+  cursor: pointer;
+`
+
+export const FilterSliderRow = styled.div`
+  display: grid;
+  gap: 14px;
+  margin-top: 16px;
+`
+
+export const FilterSliderLabel = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  color: #4b5563;
+`
+
+export const ApplyButton = styled.button`
+  width: 100%;
+  border: none;
+  border-radius: 18px;
+  padding: 16px 18px;
+  background: #10b981;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  margin-top: 16px;
 `
 
 export const ViewAllScreen = styled.div`

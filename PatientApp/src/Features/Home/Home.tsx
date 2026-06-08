@@ -8,6 +8,7 @@ import {
   LocationLabel,
   LocationValue,
   SearchSection,
+  SearchRow,
   SearchCard,
   SearchIcon,
   SearchInput,
@@ -37,6 +38,19 @@ import {
   ViewAllCardLabel,
   ViewAllCardSubtitle,
   ViewAllSearchCard,
+  OverlayBackdrop,
+  FilterModal,
+  FilterHeader,
+  FilterTitle,
+  CloseButton,
+  FilterSection,
+  FilterSectionTitle,
+  FilterChipsRow,
+  FilterChip,
+  FilterSearchCard,
+  FilterSliderRow,
+  FilterSliderLabel,
+  ApplyButton,
 } from "./HomeStyle"
 
 const sections = [
@@ -79,8 +93,18 @@ const categoryTabs = ["All", "Heart", "Liver", "Kidney", "Stomach", "Brain", "Lu
 
 const Home = () => {
   const [viewAllOpen, setViewAllOpen] = useState(false)
+  const [filterOpen, setFilterOpen] = useState(false)
   const [activeCategory, setActiveCategory] = useState("All")
   const [searchTerm, setSearchTerm] = useState("")
+  const [filterSearch, setFilterSearch] = useState("")
+  const [selectedConsultancy, setSelectedConsultancy] = useState("")
+  const [selectedBed, setSelectedBed] = useState("")
+  const [selectedPmjay, setSelectedPmjay] = useState("")
+  const [selectedRating, setSelectedRating] = useState<number | null>(null)
+  const [selectedServiceType, setSelectedServiceType] = useState("All")
+  const [wellnessCentre, setWellnessCentre] = useState(true)
+  const [yogaCentre, setYogaCentre] = useState(false)
+  const [distance, setDistance] = useState(15)
 
   const filteredTopCareItems = useMemo(
     () =>
@@ -100,6 +124,14 @@ const Home = () => {
 
   const closeViewAll = () => {
     setViewAllOpen(false)
+  }
+
+  const openFilter = () => {
+    setFilterOpen(true)
+  }
+
+  const closeFilter = () => {
+    setFilterOpen(false)
   }
 
   if (viewAllOpen) {
@@ -155,6 +187,149 @@ const Home = () => {
 
   return (
     <Page>
+      {filterOpen && (
+        <OverlayBackdrop onClick={closeFilter}>
+          <FilterModal onClick={(event) => event.stopPropagation()}>
+            <FilterHeader>
+              <FilterTitle>Filter hospitals</FilterTitle>
+              <CloseButton type="button" onClick={closeFilter} aria-label="Close filter">
+                ×
+              </CloseButton>
+            </FilterHeader>
+
+            <FilterSearchCard>
+              <SearchIcon>🔍</SearchIcon>
+              <SearchInput
+                placeholder="Search by hospital"
+                value={filterSearch}
+                onChange={(event) => setFilterSearch(event.target.value)}
+              />
+            </FilterSearchCard>
+
+            <FilterSection>
+              <FilterSectionTitle>Consultancy charges</FilterSectionTitle>
+              <FilterChipsRow>
+                {['₹50-₹200', '₹200-₹500', '₹500-Above'].map((option) => (
+                  <FilterChip
+                    key={option}
+                    type="button"
+                    $active={selectedConsultancy === option}
+                    onClick={() => setSelectedConsultancy(option)}
+                  >
+                    {option}
+                  </FilterChip>
+                ))}
+              </FilterChipsRow>
+            </FilterSection>
+
+            <FilterSection>
+              <FilterSectionTitle>Bed charges (per day)</FilterSectionTitle>
+              <FilterChipsRow>
+                {['₹500-₹1000', '₹1000-₹2000', '₹2000-Above'].map((option) => (
+                  <FilterChip
+                    key={option}
+                    type="button"
+                    $active={selectedBed === option}
+                    onClick={() => setSelectedBed(option)}
+                  >
+                    {option}
+                  </FilterChip>
+                ))}
+              </FilterChipsRow>
+            </FilterSection>
+
+            <FilterSection>
+              <FilterSectionTitle>PM-jay</FilterSectionTitle>
+              <FilterChipsRow>
+                {['Yes', 'No'].map((option) => (
+                  <FilterChip
+                    key={option}
+                    type="button"
+                    $active={selectedPmjay === option}
+                    onClick={() => setSelectedPmjay(option)}
+                  >
+                    {option}
+                  </FilterChip>
+                ))}
+              </FilterChipsRow>
+            </FilterSection>
+
+            <FilterSection>
+              <FilterSectionTitle>Ratings</FilterSectionTitle>
+              <FilterChipsRow>
+                {[1, 2, 3, 4, 5].map((rating) => (
+                  <FilterChip
+                    key={rating}
+                    type="button"
+                    $active={selectedRating === rating}
+                    onClick={() => setSelectedRating(rating)}
+                  >
+                    {rating} ★
+                  </FilterChip>
+                ))}
+              </FilterChipsRow>
+            </FilterSection>
+
+            <FilterSection>
+              <FilterSectionTitle>Service type</FilterSectionTitle>
+              <FilterChipsRow>
+                {['All', 'Hospital', 'Clinic'].map((option) => (
+                  <FilterChip
+                    key={option}
+                    type="button"
+                    $active={selectedServiceType === option}
+                    onClick={() => setSelectedServiceType(option)}
+                  >
+                    {option}
+                  </FilterChip>
+                ))}
+              </FilterChipsRow>
+            </FilterSection>
+
+            <FilterSection>
+              <FilterSectionTitle>Centres</FilterSectionTitle>
+              <FilterChipsRow>
+                <FilterChip
+                  type="button"
+                  $active={wellnessCentre}
+                  onClick={() => setWellnessCentre((value) => !value)}
+                >
+                  Wellness centre
+                </FilterChip>
+                <FilterChip
+                  type="button"
+                  $active={yogaCentre}
+                  onClick={() => setYogaCentre((value) => !value)}
+                >
+                  Yoga centre
+                </FilterChip>
+              </FilterChipsRow>
+            </FilterSection>
+
+            <FilterSection>
+              <FilterSectionTitle>Distance</FilterSectionTitle>
+              <FilterSliderRow>
+                <FilterSliderLabel>
+                  <span>0 KM</span>
+                  <span>{distance} KM</span>
+                  <span>50 KM</span>
+                </FilterSliderLabel>
+                <input
+                  type="range"
+                  min={0}
+                  max={50}
+                  value={distance}
+                  onChange={(event) => setDistance(Number(event.target.value))}
+                />
+              </FilterSliderRow>
+            </FilterSection>
+
+            <ApplyButton type="button" onClick={closeFilter}>
+              Apply
+            </ApplyButton>
+          </FilterModal>
+        </OverlayBackdrop>
+      )}
       <Container>
         <TopBar>
           <LocationInfo>
@@ -164,7 +339,6 @@ const Home = () => {
               <LocationValue>Sector 47, Gurgaon ▾</LocationValue>
             </div>
           </LocationInfo>
-          <SearchAction aria-label="Open filters">⛭</SearchAction>
         </TopBar>
 
         <SearchSection>
@@ -172,10 +346,20 @@ const Home = () => {
             <PageTitle>Find care near you</PageTitle>
             <PageSubtitle>Search hospitals, doctors, and health services in your area.</PageSubtitle>
           </div>
-          <SearchCard>
-            <SearchIcon>🔍</SearchIcon>
-            <SearchInput placeholder="Search by hospital" />
-          </SearchCard>
+          <SearchRow>
+            <SearchCard onClick={openFilter} role="button" tabIndex={0}>
+              <SearchIcon>🔍</SearchIcon>
+              <SearchInput
+                placeholder="Search by hospital"
+                value={filterSearch}
+                readOnly
+                onFocus={openFilter}
+              />
+            </SearchCard>
+            <SearchAction type="button" aria-label="Open filters" onClick={openFilter}>
+              Filter
+            </SearchAction>
+          </SearchRow>
         </SearchSection>
 
         {sections.map((section) => (
