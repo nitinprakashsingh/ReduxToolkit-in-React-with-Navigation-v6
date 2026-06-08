@@ -221,3 +221,122 @@ export const FooterNote = styled.p`
   color: #6b7280;
   font-size: 13px;
 `
+
+export const ViewAllScreen = styled.div`
+  min-height: 100vh;
+  background: linear-gradient(180deg, #7c3aed 0%, #6d28d9 100%);
+  padding: 40px 0 60px;
+`
+
+export const ViewAllHeader = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 24px;
+  color: #ffffff;
+`
+
+export const BackButton = styled.button`
+  width: 42px;
+  height: 42px;
+  border: none;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.16);
+  color: #ffffff;
+  font-size: 20px;
+  cursor: pointer;
+`
+
+export const ViewAllTitle = styled.h2`
+  margin: 0;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+`
+
+export const ViewAllSearchCard = styled(SearchCard)`
+  margin-bottom: 20px;
+  background: #ffffff;
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.12);
+`
+
+export const ViewAllTabs = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 26px;
+`
+
+export const ViewAllTab = styled.button<{ $active?: boolean }>`
+  border: none;
+  border-radius: 999px;
+  padding: 10px 18px;
+  min-height: 42px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  color: ${({ $active }) => ($active ? "#ffffff" : "#475569")};
+  background: ${({ $active }) => ($active ? "rgba(255, 255, 255, 0.22)" : "rgba(255, 255, 255, 0.12)")};
+  box-shadow: ${({ $active }) => ($active ? "0 12px 24px rgba(255, 255, 255, 0.18)" : "none")};
+`
+
+export const ViewAllContent = styled.section`
+  padding: 0 0 24px;
+`
+
+export const ViewAllCardGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+
+  @media (max-width: 1100px) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  @media (max-width: 780px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @media (max-width: 520px) {
+    grid-template-columns: 1fr;
+  }
+`
+
+export const ViewAllCard = styled.article`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-height: 190px;
+  padding: 24px;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 18px 32px rgba(15, 23, 42, 0.08);
+`
+
+export const ViewAllCardIcon = styled.div`
+  width: 60px;
+  height: 60px;
+  display: grid;
+  place-items: center;
+  border-radius: 18px;
+  background: #eef2ff;
+  color: #4f46e5;
+  font-size: 24px;
+`
+
+export const ViewAllCardLabel = styled.h4`
+  margin: 0;
+  font-size: 18px;
+  font-weight: 800;
+  color: #111827;
+`
+
+export const ViewAllCardSubtitle = styled.p`
+  margin: 0;
+  color: #475569;
+  font-size: 14px;
+  line-height: 1.7;
+`
+
