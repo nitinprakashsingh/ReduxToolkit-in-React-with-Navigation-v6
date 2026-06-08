@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useMemo, useState } from "react"
 import {
   Page,
   Container,
@@ -24,6 +24,19 @@ import {
   FeatureLabel,
   FeatureDescription,
   FooterNote,
+  ViewAllScreen,
+  ViewAllHeader,
+  BackButton,
+  ViewAllTitle,
+  ViewAllTabs,
+  ViewAllTab,
+  ViewAllContent,
+  ViewAllCardGrid,
+  ViewAllCard,
+  ViewAllCardIcon,
+  ViewAllCardLabel,
+  ViewAllCardSubtitle,
+  ViewAllSearchCard,
 } from "./HomeStyle"
 
 const sections = [
@@ -47,7 +60,99 @@ const sections = [
   },
 ]
 
+const topCareItems = [
+  { label: "Heart attack", category: "Heart", icon: "🩸", subtitle: "Emergency response" },
+  { label: "Heart Failure", category: "Heart", icon: "❤️‍🩹", subtitle: "Chronic support" },
+  { label: "Angina", category: "Heart", icon: "💓", subtitle: "Chest discomfort" },
+  { label: "High BP", category: "Heart", icon: "📈", subtitle: "Blood pressure care" },
+  { label: "Liver cleanse", category: "Liver", icon: "🧪", subtitle: "Detox plans" },
+  { label: "Kidney stones", category: "Kidney", icon: "🪨", subtitle: "Mineral management" },
+  { label: "Stomach pain", category: "Stomach", icon: "🤢", subtitle: "Digestive relief" },
+  { label: "Brain fog", category: "Brain", icon: "🧠", subtitle: "Cognitive wellness" },
+  { label: "Lung check", category: "Lung", icon: "🌬️", subtitle: "Respiratory screening" },
+  { label: "Eye care", category: "Eye", icon: "👁️", subtitle: "Vision diagnostics" },
+  { label: "Liver function", category: "Liver", icon: "🩸", subtitle: "Function testing" },
+  { label: "Kidney health", category: "Kidney", icon: "💧", subtitle: "Hydration care" },
+]
+
+const categoryTabs = ["All", "Heart", "Liver", "Kidney", "Stomach", "Brain", "Lung", "Eye"]
+
 const Home = () => {
+  const [viewAllOpen, setViewAllOpen] = useState(false)
+  const [activeCategory, setActiveCategory] = useState("All")
+  const [searchTerm, setSearchTerm] = useState("")
+
+  const filteredTopCareItems = useMemo(
+    () =>
+      topCareItems.filter((item) => {
+        const matchCategory = activeCategory === "All" || item.category === activeCategory
+        const matchSearch = item.label.toLowerCase().includes(searchTerm.toLowerCase())
+        return matchCategory && matchSearch
+      }),
+    [activeCategory, searchTerm]
+  )
+
+  const openViewAll = () => {
+    setActiveCategory("All")
+    setSearchTerm("")
+    setViewAllOpen(true)
+  }
+
+  const closeViewAll = () => {
+    setViewAllOpen(false)
+  }
+
+  if (viewAllOpen) {
+    return (
+      <Page>
+        <ViewAllScreen>
+          <Container>
+            <ViewAllHeader>
+              <BackButton type="button" onClick={closeViewAll} aria-label="Go back">
+                ←
+              </BackButton>
+              <ViewAllTitle>Top Care</ViewAllTitle>
+            </ViewAllHeader>
+
+            <ViewAllSearchCard>
+              <SearchIcon>🔍</SearchIcon>
+              <SearchInput
+                value={searchTerm}
+                onChange={(event) => setSearchTerm(event.target.value)}
+                placeholder="Search care categories"
+              />
+            </ViewAllSearchCard>
+
+            <ViewAllTabs>
+              {categoryTabs.map((tab) => (
+                <ViewAllTab
+                  key={tab}
+                  type="button"
+                  $active={activeCategory === tab}
+                  onClick={() => setActiveCategory(tab)}
+                >
+                  {tab}
+                </ViewAllTab>
+              ))}
+            </ViewAllTabs>
+
+            <ViewAllContent>
+              <ViewAllCardGrid>
+                {filteredTopCareItems.map((item) => (
+                  <ViewAllCard key={item.label}>
+                    <ViewAllCardIcon>{item.icon}</ViewAllCardIcon>
+                    <ViewAllCardLabel>{item.label}</ViewAllCardLabel>
+                    <ViewAllCardSubtitle>{item.subtitle}</ViewAllCardSubtitle>
+                  </ViewAllCard>
+                ))}
+              </ViewAllCardGrid>
+            </ViewAllContent>
+          </Container>
+        </ViewAllScreen>
+      </Page>
+    )
+  }
+
   return (
     <Page>
       <Container>
@@ -77,7 +182,9 @@ const Home = () => {
           <Section key={section.title}>
             <SectionHeader>
               <SectionTitle>{section.title}</SectionTitle>
-              <ViewAllButton>View all</ViewAllButton>
+              <ViewAllButton type="button" onClick={openViewAll}>
+                View all
+              </ViewAllButton>
             </SectionHeader>
             <CardGrid>
               {section.items.map((item) => (
