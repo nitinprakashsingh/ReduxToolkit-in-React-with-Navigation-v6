@@ -29,6 +29,7 @@ export const LocationInfo = styled.div`
   display: flex;
   align-items: center;
   gap: 18px;
+  cursor: pointer;
 `
 
 export const MenuButton = styled.button`
@@ -38,9 +39,128 @@ export const MenuButton = styled.button`
   border: none;
   background: #ffffff;
   color: #5b21b6;
-  font-size: 22px;
+  position: relative;
+  font-size: 0;
   cursor: pointer;
   box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: 14px;
+    top: 16px;
+    width: 20px;
+    height: 2px;
+    border-radius: 999px;
+    background: currentColor;
+    box-shadow: 0 7px 0 currentColor, 0 14px 0 currentColor;
+  }
+`
+
+export const DrawerOverlay = styled.div`
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: rgba(15, 23, 42, 0.42);
+  backdrop-filter: blur(2px);
+`
+
+export const SideDrawer = styled.aside`
+  display: flex;
+  flex-direction: column;
+  width: min(360px, 86vw);
+  height: 100dvh;
+  max-height: 100vh;
+  padding: 24px;
+  background: #ffffff;
+  box-sizing: border-box;
+  overflow: hidden;
+  box-shadow: 24px 0 60px rgba(15, 23, 42, 0.18);
+`
+
+export const DrawerHeader = styled.div`
+  flex: 0 0 auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+`
+
+export const DrawerTitle = styled.h2`
+  margin: 0;
+  color: #111827;
+  font-size: 22px;
+  font-weight: 800;
+`
+
+export const DrawerSubtitle = styled.p`
+  margin: 8px 0 0;
+  color: #6b7280;
+  font-size: 14px;
+  line-height: 1.5;
+`
+
+export const CloseDrawerButton = styled.button`
+  width: 38px;
+  height: 38px;
+  border: none;
+  border-radius: 12px;
+  background: #f3f4f6;
+  color: #374151;
+  font-size: 18px;
+  font-weight: 800;
+  cursor: pointer;
+`
+
+export const DrawerNav = styled.nav`
+  flex: 1 1 auto;
+  min-height: 0;
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  padding: 26px 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+`
+
+export const DrawerNavItem = styled.button`
+  width: 100%;
+  min-height: 46px;
+  border: none;
+  border-radius: 12px;
+  background: transparent;
+  color: #111827;
+  font-size: 15px;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+
+  &:hover {
+    background: #ecfdf5;
+    color: #047857;
+  }
+`
+
+export const DrawerFooter = styled.div`
+  flex: 0 0 auto;
+  margin-top: auto;
+  padding-top: 22px;
+  border-top: 1px solid rgba(148, 163, 184, 0.2);
+`
+
+export const SignOutButton = styled.button`
+  width: 100%;
+  min-height: 48px;
+  border: none;
+  border-radius: 14px;
+  background: #ef4444;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 14px 30px rgba(239, 68, 68, 0.22);
 `
 
 export const LocationLabel = styled.p`
