@@ -37,6 +37,16 @@ import {
   ViewAllCardLabel,
   ViewAllCardSubtitle,
   ViewAllSearchCard,
+  DrawerOverlay,
+  SideDrawer,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerSubtitle,
+  CloseDrawerButton,
+  DrawerNav,
+  DrawerNavItem,
+  DrawerFooter,
+  SignOutButton,
 } from "./HomeStyle"
 
 const sections = [
@@ -77,8 +87,13 @@ const topCareItems = [
 
 const categoryTabs = ["All", "Heart", "Liver", "Kidney", "Stomach", "Brain", "Lung", "Eye"]
 
-const Home = () => {
+type HomeProps = {
+  onSignOut?: () => void
+}
+
+const Home = ({ onSignOut }: HomeProps) => {
   const [viewAllOpen, setViewAllOpen] = useState(false)
+  const [drawerOpen, setDrawerOpen] = useState(false)
   const [activeCategory, setActiveCategory] = useState("All")
   const [searchTerm, setSearchTerm] = useState("")
 
@@ -100,6 +115,19 @@ const Home = () => {
 
   const closeViewAll = () => {
     setViewAllOpen(false)
+  }
+
+  const openDrawer = () => {
+    setDrawerOpen(true)
+  }
+
+  const closeDrawer = () => {
+    setDrawerOpen(false)
+  }
+
+  const handleSignOut = () => {
+    setDrawerOpen(false)
+    onSignOut?.()
   }
 
   if (viewAllOpen) {
@@ -155,9 +183,37 @@ const Home = () => {
 
   return (
     <Page>
+      {drawerOpen && (
+        <DrawerOverlay onClick={closeDrawer}>
+          <SideDrawer onClick={(event) => event.stopPropagation()} role="dialog" aria-modal="true" aria-label="Main menu">
+            <DrawerHeader>
+              <div>
+                <DrawerTitle>Patient App</DrawerTitle>
+                <DrawerSubtitle>Manage your care and appointments</DrawerSubtitle>
+              </div>
+              <CloseDrawerButton type="button" onClick={closeDrawer} aria-label="Close menu">
+                x
+              </CloseDrawerButton>
+            </DrawerHeader>
+
+            <DrawerNav>
+              <DrawerNavItem type="button">Home</DrawerNavItem>
+              <DrawerNavItem type="button">Appointments</DrawerNavItem>
+              <DrawerNavItem type="button">Medical Records</DrawerNavItem>
+              <DrawerNavItem type="button">Support</DrawerNavItem>
+            </DrawerNav>
+
+            <DrawerFooter>
+              <SignOutButton type="button" onClick={handleSignOut}>
+                Sign out
+              </SignOutButton>
+            </DrawerFooter>
+          </SideDrawer>
+        </DrawerOverlay>
+      )}
       <Container>
         <TopBar>
-          <LocationInfo>
+          <LocationInfo onClick={openDrawer}>
             <MenuButton aria-label="Open menu">☰</MenuButton>
             <div>
               <LocationLabel>Location</LocationLabel>

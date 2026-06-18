@@ -3,7 +3,11 @@ import ShriyanLogo from "../../../Assests/ShriyanLogo.png"
 import { Page, Card, BrandPanel, BrandTop, LogoMark, BrandName, BrandSubText, BrandContent, BrandTitle, BrandDescription, Header, Title, HelperText, Body, Form, InputGroup, Label, Input, Button, Message, Error, Footer, TextButton, SmallText } from "./LoginStyle"
 import OtpScreen from "./Otp"
 
-const Login = () => {
+type LoginProps = {
+  onLogin?: () => void
+}
+
+const Login = ({ onLogin }: LoginProps) => {
   const [screen, setScreen] = useState<"login" | "otp">("login")
   const [mobile, setMobile] = useState("")
   const [otp, setOtp] = useState("")
@@ -53,6 +57,7 @@ const Login = () => {
       if (otp === "1234") {
         setInfo("Login successful. Welcome to the patient dashboard.")
         setError("")
+        onLogin?.()
       } else {
         setError("OTP does not match. Please check and try again.")
       }

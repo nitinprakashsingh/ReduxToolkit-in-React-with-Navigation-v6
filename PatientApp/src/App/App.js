@@ -1,7 +1,16 @@
+import { useState } from "react";
+import LoginScreen from "../Features/Auth/Login";
 import HomeScreen from "../Features/Home/Home";
+
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
+
   return (
-    <HomeScreen />
+    isAuthenticated ? (
+      <HomeScreen onSignOut={() => setIsAuthenticated(false)} />
+    ) : (
+      <LoginScreen onLogin={() => setIsAuthenticated(true)} />
+    )
   );
 }
 
