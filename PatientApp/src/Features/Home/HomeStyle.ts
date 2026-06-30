@@ -10,6 +10,7 @@ export const Container = styled.div`
   width: min(1180px, 100%);
   margin: 0 auto;
   padding: 32px 28px 48px;
+  box-sizing: border-box;
 `
 
 export const TopBar = styled.header`
@@ -163,6 +164,181 @@ export const SignOutButton = styled.button`
   box-shadow: 0 14px 30px rgba(239, 68, 68, 0.22);
 `
 
+export const FilterOverlay = styled.div`
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(15, 23, 42, 0.34);
+  overflow-y: auto;
+`
+
+export const FilterModal = styled.div`
+  position: relative;
+  width: min(690px, 100%);
+  padding: 34px 42px 38px;
+  border-radius: 30px;
+  background: #ffffff;
+  color: #020617;
+  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.26);
+  box-sizing: border-box;
+
+  @media (max-width: 720px) {
+    padding: 30px 24px 28px;
+    border-radius: 24px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 28px 18px 22px;
+    border-radius: 20px;
+  }
+`
+
+export const FilterNotch = styled.span`
+  position: absolute;
+  top: -16px;
+  left: 50%;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: #ffffff;
+  transform: translateX(-50%) rotate(45deg);
+`
+
+export const FilterPanelSection = styled.section`
+  display: grid;
+  gap: 12px;
+  margin-bottom: 28px;
+
+  &:last-of-type {
+    margin-bottom: 22px;
+  }
+`
+
+export const FilterPanelTitle = styled.h3`
+  margin: 0;
+  color: #050505;
+  font-size: 24px;
+  line-height: 1.2;
+  font-weight: 800;
+
+  @media (max-width: 560px) {
+    font-size: 20px;
+  }
+`
+
+export const FilterOptions = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 16px;
+`
+
+export const FilterOptionButton = styled.button<{ $active?: boolean }>`
+  min-height: 46px;
+  padding: 8px 15px;
+  border: 2px solid ${({ $active }) => ($active ? "#7354bd" : "#dddddd")};
+  border-radius: 8px;
+  background: ${({ $active }) => ($active ? "#7354bd" : "#ffffff")};
+  color: ${({ $active }) => ($active ? "#ffffff" : "#26345a")};
+  font-size: 22px;
+  font-weight: 700;
+  cursor: pointer;
+
+  @media (max-width: 560px) {
+    min-height: 42px;
+    font-size: 16px;
+  }
+`
+
+export const FilterRadioOption = styled.button<{ $active?: boolean }>`
+  min-height: 46px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border: 2px solid #dddddd;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #26345a;
+  font-size: 22px;
+  font-weight: 700;
+  cursor: pointer;
+
+  ${({ $active }) =>
+    $active &&
+    `
+      border-color: #d6d6d6;
+    `}
+
+  @media (max-width: 560px) {
+    min-height: 42px;
+    font-size: 16px;
+  }
+`
+
+export const FilterRadioMark = styled.span<{ $active?: boolean; $square?: boolean }>`
+  width: 24px;
+  height: 24px;
+  flex: 0 0 auto;
+  display: inline-grid;
+  place-items: center;
+  border: 2px solid ${({ $active }) => ($active ? "#0db7a4" : "#d8d8d8")};
+  border-radius: ${({ $square }) => ($square ? "4px" : "999px")};
+  background: ${({ $active, $square }) => ($active && $square ? "#0db7a4" : "#ffffff")};
+
+  &::after {
+    content: "";
+    width: ${({ $square }) => ($square ? "11px" : "12px")};
+    height: ${({ $square }) => ($square ? "6px" : "12px")};
+    border-radius: ${({ $square }) => ($square ? "0" : "999px")};
+    background: ${({ $active, $square }) => ($active && !$square ? "#0db7a4" : "transparent")};
+    border-left: ${({ $active, $square }) => ($active && $square ? "3px solid #ffffff" : "0")};
+    border-bottom: ${({ $active, $square }) => ($active && $square ? "3px solid #ffffff" : "0")};
+    transform: ${({ $square }) => ($square ? "rotate(-45deg) translateY(-1px)" : "none")};
+  }
+`
+
+export const FilterDivider = styled.hr`
+  border: 0;
+  border-top: 2px dashed #dddddd;
+  margin: 2px 0 20px;
+`
+
+export const FilterDistanceLabels = styled.div`
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding-top: 42px;
+  color: #050505;
+  font-size: 24px;
+  font-weight: 500;
+
+  @media (max-width: 560px) {
+    font-size: 18px;
+  }
+`
+
+export const ApplyFilterButton = styled.button`
+  width: 100%;
+  min-height: 96px;
+  border: none;
+  border-radius: 22px;
+  background: #0db7a4;
+  color: #ffffff;
+  font-size: 34px;
+  font-weight: 800;
+  cursor: pointer;
+
+  @media (max-width: 560px) {
+    min-height: 62px;
+    border-radius: 16px;
+    font-size: 24px;
+  }
+`
+
 export const LocationLabel = styled.p`
   margin: 0 0 4px;
   color: #6b7280;
@@ -180,9 +356,22 @@ export const SearchSection = styled.section`
   display: grid;
   gap: 22px;
   margin-bottom: 32px;
+  
 
   @media (max-width: 780px) {
     gap: 18px;
+  }
+`
+
+export const SearchControls = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+
+  @media (max-width: 560px) {
+    align-items: stretch;
+    flex-direction: column;
   }
 `
 
@@ -190,8 +379,9 @@ export const SearchCard = styled.div`
   display: flex;
   align-items: center;
   gap: 14px;
-  padding: 16px 20px;
-  border-radius: 22px;
+  flex: 1 1 auto;
+  padding: 10px 16px;
+  border-radius: 18px;
   background: #ffffff;
   border: 1px solid rgba(148, 163, 184, 0.18);
   box-shadow: 0 18px 50px rgba(15, 23, 42, 0.04);
@@ -209,26 +399,61 @@ export const SearchInput = styled.input`
   font-size: 16px;
   color: #111827;
   background: transparent;
-  min-height: 44px;
+  min-height: 38px;
 
   &::placeholder {
     color: #9ca3af;
   }
 `
 
-export const SearchAction = styled.button`
-  width: 48px;
-  height: 48px;
+export const FilterButton = styled.button`
+  flex: 0 0 auto;
+  min-width: 118px;
+  min-height: 58px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
   border: none;
-  border-radius: 16px;
+  border-radius: 18px;
   background: #10b981;
   color: #ffffff;
-  font-size: 20px;
+  font-size: 15px;
+  font-weight: 800;
   cursor: pointer;
   box-shadow: 0 14px 32px rgba(16, 185, 129, 0.18);
 
-  @media (max-width: 780px) {
-    align-self: flex-start;
+  @media (max-width: 560px) {
+    width: 100%;
+    min-height: 52px;
+  }
+`
+
+export const FilterButtonIcon = styled.span`
+  width: 18px;
+  height: 18px;
+  position: relative;
+  display: inline-block;
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 18px;
+    height: 2px;
+    border-radius: 999px;
+    background: currentColor;
+    box-shadow: 0 7px 0 currentColor;
+  }
+
+  &::before {
+    top: 2px;
+  }
+
+  &::after {
+    top: 9px;
+    width: 13px;
   }
 `
 
@@ -459,4 +684,3 @@ export const ViewAllCardSubtitle = styled.p`
   font-size: 14px;
   line-height: 1.7;
 `
-
