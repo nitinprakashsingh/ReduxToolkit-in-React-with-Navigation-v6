@@ -1,6 +1,8 @@
 import React, { useState } from "react"
 import {
   ApplyFilterButton,
+  FilterDistanceOption,
+  FilterDistanceRange,
   FilterDistanceLabels,
   FilterDivider,
   FilterModal as FilterModalPanel,
@@ -21,14 +23,16 @@ const centreTypes = ["Wellness centre", "Yoga centre"]
 
 type FilterModalProps = {
   onClose: () => void
+  onApply: (distance: number) => void
 }
 
-const FilterModal = ({ onClose }: FilterModalProps) => {
+const FilterModal = ({ onClose, onApply }: FilterModalProps) => {
   const [selectedConsultancy, setSelectedConsultancy] = useState(consultancyCharges[1])
   const [selectedBedCharge, setSelectedBedCharge] = useState(bedCharges[1])
   const [pmjayEnabled, setPmjayEnabled] = useState(true)
   const [selectedServiceType, setSelectedServiceType] = useState("All")
   const [selectedCentres, setSelectedCentres] = useState<string[]>(["Wellness centre"])
+  const [distance, setDistance] = useState(15)
 
   const toggleCentre = (centre: string) => {
     setSelectedCentres((currentCentres) =>
@@ -131,15 +135,33 @@ const FilterModal = ({ onClose }: FilterModalProps) => {
         <FilterDivider />
 
         <FilterPanelSection>
-          <FilterPanelTitle>Distance</FilterPanelTitle>
+          <FilterPanelTitle>Distance: {distance} KM</FilterPanelTitle>
+          <FilterDistanceRange
+            type="range"
+            min="0"
+            max="50"
+            value={distance}
+            $value={distance}
+            onChange={(event) => setDistance(Number(event.target.value))}
+            onInput={(event) => setDistance(Number(event.currentTarget.value))}
+            aria-label="Maximum distance"
+            aria-valuetext={`${distance} KM`}
+          />
           <FilterDistanceLabels>
-            <span>0 KM</span>
-            <span>15 KM</span>
-            <span>50 KM</span>
+            {[0, 15, 50].map((distanceOption) => (
+              <FilterDistanceOption
+                key={distanceOption}
+                type="button"
+                $active={distance === distanceOption}
+                onClick={() => setDistance(distanceOption)}
+              >
+                {distanceOption} KM
+              </FilterDistanceOption>
+            ))}
           </FilterDistanceLabels>
         </FilterPanelSection>
 
-        <ApplyFilterButton type="button" onClick={onClose}>
+        <ApplyFilterButton type="button" onClick={() => onApply(distance)}>
           Apply
         </ApplyFilterButton>
       </FilterModalPanel>
