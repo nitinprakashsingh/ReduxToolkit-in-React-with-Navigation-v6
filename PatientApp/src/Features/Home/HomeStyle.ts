@@ -14,11 +14,16 @@ export const Container = styled.div`
 `
 
 export const TopBar = styled.header`
+  position: sticky;
+  top: 0;
+  z-index: 20;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
   margin-bottom: 28px;
+  padding: 14px 0;
+  background: #f4f7fb;
 
   @media (max-width: 780px) {
     flex-direction: column;
@@ -424,6 +429,7 @@ export const SearchControls = styled.div`
 `
 
 export const SearchCard = styled.div`
+  position: relative;
   display: flex;
   align-items: center;
   gap: 14px;
@@ -433,6 +439,40 @@ export const SearchCard = styled.div`
   background: #ffffff;
   border: 1px solid rgba(148, 163, 184, 0.18);
   box-shadow: 0 18px 50px rgba(15, 23, 42, 0.04);
+`
+
+export const SearchSuggestionList = styled.ul`
+  position: absolute;
+  z-index: 10;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 8px;
+  list-style: none;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 16px 30px rgba(15, 23, 42, 0.14);
+
+  li { padding: 8px 12px; color: #64748b; font-size: 14px; }
+`
+
+export const SearchSuggestionButton = styled.button`
+  display: grid;
+  width: 100%;
+  gap: 3px;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: #111827;
+  text-align: left;
+  cursor: pointer;
+
+  strong { font-size: 15px; }
+  span { color: #7354bd; font-size: 13px; font-weight: 700; }
+  &:hover { background: #f4effd; }
 `
 
 export const SearchIcon = styled.span`
@@ -900,4 +940,522 @@ export const ResultBookButton = styled.button`
   cursor: pointer;
 
   &:hover { background: #0b9788; }
+`
+
+export const DoctorList = styled.main`
+  min-height: 100vh;
+  background: #f6f8fc;
+  padding-bottom: 56px;
+`
+
+export const DoctorHeader = styled.header`
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  padding: 26px 28px 30px;
+  border-bottom: 1px solid #e5e7eb;
+  background: #ffffff;
+  color: #111827;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
+
+  ${ResultBackButton} {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: #f4effd;
+    color: #6541af;
+    font-size: 28px;
+  }
+`
+
+export const DoctorHeaderContent = styled.div`
+  width: min(1120px, 100%);
+  margin: 0 auto;
+`
+
+export const DoctorHeaderTitle = styled.h1`
+  display: inline-block;
+  margin: 0 0 24px 16px;
+  font-size: 34px;
+  letter-spacing: -0.03em;
+`
+
+export const DoctorSearchBox = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 68px;
+  padding: 0 22px;
+  border-radius: 18px;
+  background: #ffffff;
+  border: 1px solid #dbe1ea;
+  color: #707070;
+  font-size: 28px;
+`
+
+export const DoctorSearchInput = styled.input`
+  width: 100%;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #111827;
+  font-size: 20px;
+`
+
+export const DoctorSummary = styled.p`
+  width: min(1120px, 100%);
+  margin: 34px auto 20px;
+  padding: 0 28px;
+  box-sizing: border-box;
+  color: #64748b;
+  font-size: 18px;
+  font-weight: 700;
+`
+
+export const DoctorDetails = styled.section`
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  width: min(1180px, 100%);
+  margin: 0 auto;
+  padding: 0 28px;
+  box-sizing: border-box;
+
+  @media (max-width: 1000px) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  @media (max-width: 640px) { grid-template-columns: 1fr; }
+`
+
+export const DoctorCard = styled.article`
+  position: relative;
+  overflow: hidden;
+  padding: 10px 10px 12px;
+  border: 1px solid #e1e5eb;
+  border-radius: 20px;
+  background: #ffffff;
+  box-shadow: 0 14px 32px rgba(44, 32, 81, 0.08);
+
+  h2 { margin: 15px 8px 4px; color: #17101f; font-size: 21px; line-height: 1.2; }
+  p { margin: 0 8px; color: #7b8290; font-size: 16px; }
+`
+
+export const DoctorPhoto = styled.img`
+  width: 132px;
+  width: 100%;
+  height: 260px;
+  border-radius: 14px;
+  object-fit: cover;
+  background: #e6eef5;
+`
+
+export const DoctorRating = styled.span`
+  position: absolute;
+  top: 242px;
+  left: 20px;
+  padding: 5px 9px;
+  border: 2px solid #0db7a4;
+  border-radius: 7px;
+  background: #ffffff;
+  color: #111827;
+  font-size: 15px;
+  font-weight: 800;
+`
+
+export const DoctorMeta = styled.div`
+  display: grid;
+  gap: 5px;
+  margin-top: 18px;
+  color: #6b7280;
+  font-size: 14px;
+
+  strong { color: #111827; font-size: 15px; }
+`
+
+export const DoctorCardSpecialties = styled.div`
+  display: grid;
+  gap: 7px;
+  margin: 14px 8px 0;
+  padding-top: 14px;
+  border-top: 1px solid #e5e7eb;
+
+  strong { font-size: 14px; }
+  span { color: #707784; font-size: 13px; line-height: 1.45; }
+`
+
+export const DoctorBookButton = styled.button`
+  width: 100%;
+  height: 44px;
+  margin-top: 16px;
+  border: 0;
+  border-radius: 12px;
+  background: #0db7a4;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+
+  &:hover { background: #0a9d8d; }
+`
+
+export const DetailMain = styled.main`
+  min-height: 100vh;
+  background: #f6f8fc;
+  color: #111827;
+`
+
+export const DetailTopbar = styled.div`
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  width: min(1180px, 100%);
+  margin: 0 auto;
+  padding: 24px 28px;
+  box-sizing: border-box;
+  background: #f6f8fc;
+`
+
+export const DetailBackButton = styled.button`
+  border: 0;
+  background: transparent;
+  color: #6541af;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+`
+
+export const DetailHeader = styled.header`
+  background: #ffffff;
+  border-top: 1px solid #e9edf3;
+  border-bottom: 1px solid #e9edf3;
+`
+
+export const DetailContent = styled.div`
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 330px;
+  gap: 32px;
+  width: min(1120px, 100%);
+  margin: 0 auto;
+  padding: 32px 28px;
+  box-sizing: border-box;
+
+  ${DetailHeader} & { grid-template-columns: 190px 1fr; align-items: center; }
+
+  @media (max-width: 760px) { grid-template-columns: 1fr; }
+`
+
+export const DetailPhoto = styled.img`
+  width: 190px;
+  height: 220px;
+  border-radius: 20px;
+  object-fit: cover;
+  background: #e6eef5;
+`
+
+export const DetailIdentity = styled.div`
+  p { margin: 0 0 8px; color: #7354bd; font-size: 15px; font-weight: 800; }
+  > span { color: #64748b; font-size: 15px; }
+`
+
+export const DetailTitle = styled.h1`
+  margin: 0;
+  font-size: 38px;
+  letter-spacing: -0.04em;
+`
+
+export const DetailSubheading = styled.p`
+  margin: 7px 0 15px;
+  color: #64748b;
+  font-size: 21px;
+`
+
+export const DetailFacts = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  background: #ffffff;
+`
+
+export const DetailFact = styled.div`
+  display: grid;
+  gap: 7px;
+  padding: 20px;
+  border-right: 1px solid #e2e8f0;
+
+  &:last-child { border-right: 0; }
+  span { color: #64748b; font-size: 14px; }
+  strong { font-size: 16px; }
+`
+
+export const DetailSpeciality = styled.section`
+  margin-top: 26px;
+  padding: 28px;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  background: #ffffff;
+
+  h2 { margin: 0; font-size: 24px; }
+  p { margin: 12px 0 20px; color: #64748b; line-height: 1.7; }
+`
+
+export const DetailSpecialityTags = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+
+  span { padding: 8px 12px; border-radius: 999px; background: #f0ebfb; color: #6541af; font-size: 14px; font-weight: 700; }
+`
+
+export const DetailBookingCard = styled.aside`
+  align-self: start;
+  position: sticky;
+  top: 24px;
+  padding: 26px;
+  border: 1px solid #d8eee9;
+  border-radius: 20px;
+  background: #ffffff;
+  box-shadow: 0 16px 34px rgba(15, 23, 42, 0.08);
+`
+
+export const DetailBookingTitle = styled.h2`
+  margin: 0;
+  font-size: 22px;
+`
+
+export const DetailBookingHint = styled.p`
+  margin: 10px 0 22px;
+  color: #64748b;
+  font-size: 14px;
+  line-height: 1.6;
+`
+
+export const DetailBookingFee = styled.p`
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+  padding: 15px 0;
+  border-top: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
+  color: #64748b;
+
+  strong { color: #111827; font-size: 19px; }
+`
+
+export const RelatedDoctorSection = styled.section`
+  margin-top: 26px;
+
+  h2 { margin: 0 0 16px; font-size: 24px; }
+`
+
+export const RelatedDoctorGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+
+  @media (max-width: 600px) { grid-template-columns: 1fr; }
+`
+
+export const RelatedDoctorCard = styled.button`
+  display: grid;
+  grid-template-columns: 74px 1fr;
+  column-gap: 14px;
+  padding: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  background: #ffffff;
+  text-align: left;
+  cursor: pointer;
+
+  img { grid-row: span 4; width: 74px; height: 94px; border-radius: 12px; object-fit: cover; background: #e6eef5; }
+  span { align-self: end; color: #7354bd; font-size: 12px; font-weight: 800; }
+  strong { align-self: center; font-size: 15px; }
+  small { color: #64748b; font-size: 12px; }
+  em { align-self: start; color: #0b9788; font-size: 12px; font-style: normal; font-weight: 800; }
+
+  &:hover { border-color: #0db7a4; box-shadow: 0 10px 24px rgba(13, 183, 164, 0.1); }
+`
+
+export const BookingPage = styled.main`
+  min-height: 100vh;
+  background: #f6f8fc;
+  color: #111827;
+`
+
+export const BookingHeader = styled.header`
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  padding: 28px max(28px, calc((100% - 1120px) / 2));
+  border-bottom: 1px solid #e3e8ef;
+  background: #ffffff;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
+
+  h1 { margin: 18px 0 6px; font-size: 32px; letter-spacing: -0.03em; }
+  p { margin: 0; color: #64748b; }
+`
+
+export const BookingBackButton = styled.button`
+  border: 0;
+  background: transparent;
+  color: #6541af;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+`
+
+export const BookingBody = styled.div`
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 330px;
+  gap: 30px;
+  width: min(1120px, 100%);
+  margin: 0 auto;
+  padding: 34px 28px 64px;
+  box-sizing: border-box;
+
+  @media (max-width: 840px) { grid-template-columns: 1fr; }
+`
+
+export const BookingDoctorCard = styled.section`
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 18px;
+  border: 1px solid #dfd5f0;
+  border-radius: 18px;
+  background: #ffffff;
+
+  span { color: #64748b; font-size: 14px; }
+  h2 { margin: 4px 0; font-size: 21px; }
+  p { margin: 0; color: #7354bd; font-size: 15px; font-weight: 700; }
+`
+
+export const BookingDoctorPhoto = styled.img`
+  width: 76px;
+  height: 88px;
+  border-radius: 13px;
+  object-fit: cover;
+  background: #e6eef5;
+`
+
+export const BookingSection = styled.section`
+  margin-top: 24px;
+  padding: 26px;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  background: #ffffff;
+
+  h2 { margin: 0 0 18px; font-size: 22px; }
+  h3 { margin: 25px 0 12px; color: #64748b; font-size: 15px; }
+`
+
+export const BookingChoices = styled.div`
+  display: flex;
+  gap: 12px;
+`
+
+export const BookingChoice = styled.button<{ $active: boolean }>`
+  min-height: 46px;
+  padding: 0 18px;
+  border: 2px solid ${({ $active }) => ($active ? "#0db7a4" : "#dce2ea")};
+  border-radius: 12px;
+  background: ${({ $active }) => ($active ? "#edfcf9" : "#ffffff")};
+  color: #111827;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+`
+
+export const BookingFields = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 22px;
+`
+
+export const BookingField = styled.div<{ $wide?: boolean }>`
+  display: grid;
+  gap: 8px;
+  grid-column: ${({ $wide }) => ($wide ? "1 / -1" : "auto")};
+
+  label { color: #475569; font-size: 14px; font-weight: 700; }
+  input, select, textarea { width: 100%; min-height: 46px; padding: 10px 12px; border: 1px solid #cfd8e3; border-radius: 10px; box-sizing: border-box; outline-color: #0db7a4; color: #111827; font: inherit; }
+  textarea { min-height: 86px; resize: vertical; }
+`
+
+export const BookingDates = styled.div`
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+`
+
+export const BookingDateButton = styled.button<{ $active: boolean }>`
+  flex: 1 0 94px;
+  min-height: 54px;
+  border: 2px solid ${({ $active }) => ($active ? "#7354bd" : "#e0e5ec")};
+  border-radius: 12px;
+  background: ${({ $active }) => ($active ? "#7354bd" : "#ffffff")};
+  color: ${({ $active }) => ($active ? "#ffffff" : "#374151")};
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+`
+
+export const BookingSlots = styled.div`
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+`
+
+export const BookingSlot = styled.button<{ $active: boolean }>`
+  min-height: 44px;
+  border: 1px solid ${({ $active }) => ($active ? "#0db7a4" : "#dce2ea")};
+  border-radius: 10px;
+  background: ${({ $active }) => ($active ? "#0db7a4" : "#ffffff")};
+  color: ${({ $active }) => ($active ? "#ffffff" : "#374151")};
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+`
+
+export const BookingSidebar = styled.aside`
+  align-self: start;
+  position: sticky;
+  top: 24px;
+  padding: 24px;
+  border: 1px solid #d8eee9;
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: 0 14px 32px rgba(15, 23, 42, 0.08);
+
+  p { display: flex; justify-content: space-between; gap: 16px; margin: 17px 0; color: #64748b; font-size: 14px; }
+  p strong { color: #111827; text-align: right; }
+`
+
+export const BookingSummaryTitle = styled.h2`
+  margin: 0;
+  font-size: 21px;
+`
+
+export const BookingSummaryFee = styled.p`
+  padding: 17px 0;
+  border-top: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
+  font-size: 15px !important;
+
+  strong { font-size: 20px; }
+`
+
+export const BookingConfirmButton = styled.button`
+  width: 100%;
+  height: 52px;
+  margin-top: 22px;
+  border: 0;
+  border-radius: 13px;
+  background: #0db7a4;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+
+  &:hover { background: #0a9d8d; }
 `

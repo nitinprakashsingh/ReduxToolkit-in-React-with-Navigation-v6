@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import {
   Page,
   Container,
@@ -12,8 +12,8 @@ import {
   SearchCard,
   SearchIcon,
   SearchInput,
-  FilterButton,
-  FilterButtonIcon,
+  SearchSuggestionButton,
+  SearchSuggestionList,
   PageTitle,
   PageSubtitle,
   Section,
@@ -40,13 +40,16 @@ import {
   ViewAllCardSubtitle,
   ViewAllSearchCard,
 } from "./HomeStyle"
-import FilterModal from "./FilterModal/FilterModal"
-import SearchResults from "./SearchResults/SearchResults"
+import DoctorResults from "./DoctorResults/DoctorResults"
+import { doctors } from "./DoctorResults/doctorData"
+import type { Doctor } from "./DoctorResults/doctorData"
+import DoctorDetail from "./DoctorDetail/DoctorDetail"
+import AppointmentBooking from "./AppointmentBooking/AppointmentBooking"
 import SideDrawer from "./SideDrawer/SideDrawer"
 
 const sections = [
   {
-    title: "Common Care",
+    title: "Departments",
     items: [
       { label: "General Checkup", description: "Routine health review", icon: "🩺" },
       { label: "Viral Tests", description: "Fast diagnosis", icon: "🧬" },
@@ -55,7 +58,7 @@ const sections = [
     ],
   },
   {
-    title: "Seasonal Care",
+    title: "Speciality Care",
     items: [
       { label: "Cold & Flu", description: "Seasonal support", icon: "🤧" },
       { label: "Allergy Relief", description: "Quick comfort", icon: "🌿" },
@@ -89,10 +92,13 @@ type HomeProps = {
 const Home = ({ onSignOut }: HomeProps) => {
   const [viewAllOpen, setViewAllOpen] = useState(false)
   const [drawerOpen, setDrawerOpen] = useState(false)
-  const [filterOpen, setFilterOpen] = useState(false)
-  const [resultsOpen, setResultsOpen] = useState(false)
-  const [resultsQuery, setResultsQuery] = useState("Hospitals")
-  const [resultsDistance, setResultsDistance] = useState(15)
+  const [doctorResultsOpen, setDoctorResultsOpen] = useState(false)
+  const [doctorSearch, setDoctorSearch] = useState("")
+  const [selectedDepartment, setSelectedDepartment] = useState<string | undefined>()
+  const [selectedDoctor, setSelectedDoctor] = useState<Doctor | undefined>()
+  const [bookingDoctor, setBookingDoctor] = useState<Doctor | undefined>()
+  const [doctorSearchInput, setDoctorSearchInput] = useState("")
+  const [debouncedDoctorSearch, setDebouncedDoctorSearch] = useState("")
   const [activeCategory, setActiveCategory] = useState("All")
   const [searchTerm, setSearchTerm] = useState("")
 
@@ -124,36 +130,53 @@ const Home = ({ onSignOut }: HomeProps) => {
     setDrawerOpen(false)
   }
 
-  const openFilters = () => {
-    setFilterOpen(true)
+  const openDoctorResults = (department?: string, doctorName = "") => {
+    setSelectedDepartment(department)
+    setDoctorSearch(doctorName)
+    setSelectedDoctor(undefined)
+    setDoctorResultsOpen(true)
   }
 
-  const closeFilters = () => {
-    setFilterOpen(false)
-  }
+  useEffect(() => {
+    const debounceTimer = window.setTimeout(() => {
+      setDebouncedDoctorSearch(doctorSearchInput)
+      // Replace this state update with the doctor-search API request when the API is available.
+    }, 5000)
 
-  const openResults = (query = "Hospitals") => {
-    setResultsQuery(query)
-    setResultsOpen(true)
-  }
+    return () => window.clearTimeout(debounceTimer)
+  }, [doctorSearchInput])
 
-  const applyFilters = (distance: number) => {
-    setResultsDistance(distance)
-    setFilterOpen(false)
-    openResults()
-  }
+  const doctorSuggestions = useMemo(
+    () =>
+      doctorSearchInput
+        ? doctors.filter((doctor) => doctor.name.toLowerCase().includes(doctorSearchInput.toLowerCase())).slice(0, 5)
+        : [],
+    [doctorSearchInput]
+  )
 
-  if (resultsOpen) {
-    return (
-      <>
-        {filterOpen && <FilterModal onClose={closeFilters} onApply={applyFilters} />}
-        <SearchResults
-          query={resultsQuery}
-          distance={resultsDistance}
-          onBack={() => setResultsOpen(false)}
-          onFilter={() => setFilterOpen(true)}
+  if (doctorResultsOpen) {
+    if (bookingDoctor) {
+      return <AppointmentBooking doctor={bookingDoctor} onBack={() => setBookingDoctor(undefined)} />
+    }
+
+    if (selectedDoctor) {
+      return (
+        <DoctorDetail
+          doctor={selectedDoctor}
+          onBack={() => setSelectedDoctor(undefined)}
+          onSelectDoctor={setSelectedDoctor}
+          onBookAppointment={setBookingDoctor}
         />
-      </>
+      )
+    }
+
+    return (
+      <DoctorResults
+        department={selectedDepartment}
+        initialSearch={doctorSearch}
+        onBack={() => setDoctorResultsOpen(false)}
+        onSelectDoctor={setSelectedDoctor}
+      />
     )
   }
 
@@ -211,7 +234,6 @@ const Home = ({ onSignOut }: HomeProps) => {
   return (
     <Page>
       {drawerOpen && <SideDrawer onClose={closeDrawer} onSignOut={onSignOut} />}
-      {filterOpen && <FilterModal onClose={closeFilters} onApply={applyFilters} />}
       <Container>
         <TopBar>
           <LocationInfo onClick={openDrawer}>
@@ -225,23 +247,34 @@ const Home = ({ onSignOut }: HomeProps) => {
 
         <SearchSection>
           <div>
-            <PageTitle>Find care near you</PageTitle>
-            <PageSubtitle>Search hospitals, doctors, and health services in your area.</PageSubtitle>
+            <PageTitle>Care from doctors you trust</PageTitle>
+            <PageSubtitle>Search for a doctor by name or choose a department to book your consultation.</PageSubtitle>
           </div>
           <SearchControls>
             <SearchCard>
               <SearchIcon>🔍</SearchIcon>
               <SearchInput
-                placeholder="Search by hospital"
+                value={doctorSearchInput}
+                placeholder="Search by doctor name"
+                onChange={(event) => setDoctorSearchInput(event.target.value)}
                 onKeyDown={(event) => {
-                  if (event.key === "Enter") openResults(event.currentTarget.value || "Hospitals")
+                  if (event.key === "Enter") openDoctorResults(undefined, doctorSearchInput)
                 }}
               />
+              {doctorSearchInput && (
+                <SearchSuggestionList aria-label="Doctor suggestions" data-api-query={debouncedDoctorSearch}>
+                  {doctorSuggestions.map((doctor) => (
+                    <li key={doctor.name}>
+                      <SearchSuggestionButton type="button" onClick={() => openDoctorResults(undefined, doctor.name)}>
+                        <strong>{doctor.name}</strong>
+                        <span>{doctor.specialty}</span>
+                      </SearchSuggestionButton>
+                    </li>
+                  ))}
+                  {!doctorSuggestions.length && <li>No doctor found with this name.</li>}
+                </SearchSuggestionList>
+              )}
             </SearchCard>
-            <FilterButton type="button" onClick={openFilters} aria-label="Open filters">
-              <FilterButtonIcon />
-              Filter
-            </FilterButton>
           </SearchControls>
         </SearchSection>
 
@@ -255,7 +288,7 @@ const Home = ({ onSignOut }: HomeProps) => {
             </SectionHeader>
             <CardGrid>
               {section.items.map((item) => (
-                <FeatureCard key={item.label} type="button" onClick={() => openResults(item.label)}>
+                <FeatureCard key={item.label} type="button" onClick={() => openDoctorResults(item.label)}>
                   <FeatureIcon>{item.icon}</FeatureIcon>
                   <FeatureLabel>{item.label}</FeatureLabel>
                   <FeatureDescription>{item.description}</FeatureDescription>
