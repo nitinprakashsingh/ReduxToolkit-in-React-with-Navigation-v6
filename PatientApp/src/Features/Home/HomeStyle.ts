@@ -311,7 +311,7 @@ export const FilterDistanceLabels = styled.div`
   display: flex;
   justify-content: space-between;
   gap: 16px;
-  padding-top: 42px;
+  padding-top: 14px;
   color: #050505;
   font-size: 24px;
   font-weight: 500;
@@ -321,19 +321,67 @@ export const FilterDistanceLabels = styled.div`
   }
 `
 
+export const FilterDistanceRange = styled.input<{ $value: number }>`
+  width: 100%;
+  height: 10px;
+  margin: 20px 0 0;
+  appearance: none;
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    #0db7a4 0%,
+    #0db7a4 ${({ $value }) => $value * 2}%,
+    #d8d8d8 ${({ $value }) => $value * 2}%,
+    #d8d8d8 100%
+  );
+  cursor: pointer;
+  touch-action: pan-x;
+
+  &::-webkit-slider-thumb {
+    width: 24px;
+    height: 24px;
+    appearance: none;
+    border: 3px solid #ffffff;
+    border-radius: 50%;
+    background: #0db7a4;
+    box-shadow: 0 1px 4px rgba(15, 23, 42, 0.25);
+  }
+
+  &::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border: 3px solid #ffffff;
+    border-radius: 50%;
+    background: #0db7a4;
+    box-shadow: 0 1px 4px rgba(15, 23, 42, 0.25);
+  }
+`
+
+export const FilterDistanceOption = styled.button<{ $active: boolean }>`
+  padding: 2px;
+  border: 0;
+  background: transparent;
+  color: ${({ $active }) => ($active ? "#0b9788" : "#050505")};
+  font: inherit;
+  font-weight: ${({ $active }) => ($active ? "800" : "500")};
+  cursor: pointer;
+`
+
 export const ApplyFilterButton = styled.button`
   width: 100%;
-  min-height: 96px;
+  height: 60px;
+  min-height: 60px;
   border: none;
   border-radius: 22px;
   background: #0db7a4;
   color: #ffffff;
-  font-size: 34px;
+  font-size: 16px;
   font-weight: 800;
   cursor: pointer;
 
   @media (max-width: 560px) {
-    min-height: 62px;
+    height: 60px;
+    min-height: 60px;
     border-radius: 16px;
     font-size: 24px;
   }
