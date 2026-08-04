@@ -25,12 +25,13 @@ import {
 type AppointmentBookingProps = {
   doctor: Doctor
   onBack: () => void
+  onProceedToPayment: (date: string, slot: string) => void
 }
 
 const dates = ["Mon 12", "Tue 13", "Wed 14", "Thu 15", "Fri 16"]
 const slots = ["10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM", "12:00 PM", "12:30 PM", "02:00 PM", "02:30 PM"]
 
-const AppointmentBooking = ({ doctor, onBack }: AppointmentBookingProps) => {
+const AppointmentBooking = ({ doctor, onBack, onProceedToPayment }: AppointmentBookingProps) => {
   const [bookingFor, setBookingFor] = useState<"self" | "other">("self")
   const [selectedDate, setSelectedDate] = useState(dates[1])
   const [selectedSlot, setSelectedSlot] = useState(slots[2])
@@ -87,7 +88,7 @@ const AppointmentBooking = ({ doctor, onBack }: AppointmentBookingProps) => {
           <p><span>Date</span><strong>{selectedDate}</strong></p>
           <p><span>Time</span><strong>{selectedSlot}</strong></p>
           <BookingSummaryFee>Consultation fee <strong>{doctor.fee}</strong></BookingSummaryFee>
-          <BookingConfirmButton type="button">Confirm appointment</BookingConfirmButton>
+          <BookingConfirmButton type="button" onClick={() => onProceedToPayment(selectedDate, selectedSlot)}>Proceed to pay</BookingConfirmButton>
         </BookingSidebar>
       </BookingBody>
     </BookingPage>

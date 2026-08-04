@@ -15,12 +15,18 @@ import {
 type SideDrawerProps = {
   onClose: () => void
   onSignOut?: () => void
+  onPaymentMethods?: () => void
 }
 
-const SideDrawer = ({ onClose, onSignOut }: SideDrawerProps) => {
+const SideDrawer = ({ onClose, onSignOut, onPaymentMethods }: SideDrawerProps) => {
   const handleSignOut = () => {
     onClose()
     onSignOut?.()
+  }
+
+  const openPaymentMethods = () => {
+    onClose()
+    onPaymentMethods?.()
   }
 
   return (
@@ -39,6 +45,7 @@ const SideDrawer = ({ onClose, onSignOut }: SideDrawerProps) => {
         <DrawerNav>
           <DrawerNavItem type="button">Home</DrawerNavItem>
           <DrawerNavItem type="button">Appointments</DrawerNavItem>
+          <DrawerNavItem type="button" onClick={openPaymentMethods}>Payment methods</DrawerNavItem>
           <DrawerNavItem type="button">Medical Records</DrawerNavItem>
           <DrawerNavItem type="button">Support</DrawerNavItem>
         </DrawerNav>
