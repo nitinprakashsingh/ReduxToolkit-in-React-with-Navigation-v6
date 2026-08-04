@@ -23,9 +23,10 @@ const centreTypes = ["Wellness centre", "Yoga centre"]
 
 type FilterModalProps = {
   onClose: () => void
+  onApply: (distance: number) => void
 }
 
-const FilterModal = ({ onClose }: FilterModalProps) => {
+const FilterModal = ({ onClose, onApply }: FilterModalProps) => {
   const [selectedConsultancy, setSelectedConsultancy] = useState(consultancyCharges[1])
   const [selectedBedCharge, setSelectedBedCharge] = useState(bedCharges[1])
   const [pmjayEnabled, setPmjayEnabled] = useState(true)
@@ -160,7 +161,7 @@ const FilterModal = ({ onClose }: FilterModalProps) => {
           </FilterDistanceLabels>
         </FilterPanelSection>
 
-        <ApplyFilterButton type="button" onClick={onClose}>
+        <ApplyFilterButton type="button" onClick={() => onApply(distance)}>
           Apply
         </ApplyFilterButton>
       </FilterModalPanel>

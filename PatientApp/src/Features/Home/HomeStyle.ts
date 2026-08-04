@@ -572,7 +572,11 @@ export const CardGrid = styled.div`
   }
 `
 
-export const FeatureCard = styled.article`
+export const FeatureCard = styled.button`
+  width: 100%;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  text-align: left;
+  cursor: pointer;
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -580,8 +584,12 @@ export const FeatureCard = styled.article`
   padding: 24px;
   border-radius: 28px;
   background: #ffffff;
-  border: 1px solid rgba(148, 163, 184, 0.16);
   box-shadow: 0 14px 28px rgba(15, 23, 42, 0.05);
+
+  &:hover {
+    border-color: #0db7a4;
+    transform: translateY(-2px);
+  }
 `
 
 export const FeatureIcon = styled.div`
@@ -731,4 +739,165 @@ export const ViewAllCardSubtitle = styled.p`
   color: #475569;
   font-size: 14px;
   line-height: 1.7;
+`
+
+export const ResultSection = styled.main`
+  min-height: 100vh;
+  background: #ffffff;
+`
+
+export const ResultHeader = styled.header`
+  background: linear-gradient(135deg, #7354bd, #6541af);
+  color: #ffffff;
+  border-radius: 0 0 56px 56px;
+  padding: 34px 28px 42px;
+`
+
+export const ResultHeaderContent = styled.div`
+  width: min(1120px, 100%);
+  margin: 0 auto;
+`
+
+export const ResultBackButton = styled.button`
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: #ffffff;
+  font-size: 42px;
+  line-height: 1;
+  cursor: pointer;
+`
+
+export const ResultHeaderTitle = styled.h1`
+  display: inline-block;
+  margin: 0 0 24px 16px;
+  font-size: 34px;
+  letter-spacing: -0.03em;
+`
+
+export const ResultSearchRow = styled.div`
+  display: flex;
+  gap: 16px;
+`
+
+export const ResultSearchBox = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-height: 72px;
+  padding: 0 24px;
+  border-radius: 20px;
+  background: #ffffff;
+  color: #6b7280;
+  font-size: 30px;
+`
+
+export const ResultSearchInput = styled.input`
+  width: 100%;
+  border: 0;
+  outline: 0;
+  color: #111827;
+  font-size: 22px;
+`
+
+export const ResultFilterButton = styled.button`
+  min-width: 150px;
+  border: 0;
+  border-radius: 20px;
+  background: #0db7a4;
+  color: #ffffff;
+  font-size: 22px;
+  font-weight: 800;
+  cursor: pointer;
+`
+
+export const ResultList = styled.section`
+  width: min(1120px, 100%);
+  margin: 0 auto;
+  padding: 42px 28px 64px;
+  box-sizing: border-box;
+`
+
+export const ResultSummary = styled.p`
+  margin: 0 0 24px;
+  color: #6b7280;
+  font-size: 28px;
+
+  strong { color: #111827; }
+  span { display: block; margin-top: 6px; color: #0b9788; font-size: 16px; font-weight: 700; }
+`
+
+export const ResultCard = styled.article`
+  display: grid;
+  grid-template-columns: 270px 1fr;
+  gap: 24px;
+  margin-bottom: 24px;
+  padding: 18px;
+  border: 2px solid #e5d9f6;
+  border-radius: 28px;
+  background: #fbf8ff;
+`
+
+export const ResultCardImage = styled.img`
+  width: 100%;
+  height: 210px;
+  border-radius: 18px;
+  object-fit: cover;
+  background: #dbeafe;
+`
+
+export const ResultCardDetails = styled.div`
+  h2 { margin: 0 0 6px; color: #111827; font-size: 26px; }
+`
+
+export const ResultDistance = styled.p`
+  margin: 0 0 12px;
+  color: #00aa98;
+  font-size: 19px;
+  font-weight: 600;
+`
+
+export const ResultMeta = styled.div`
+  display: flex;
+  gap: 34px;
+  margin-bottom: 14px;
+  color: #747474;
+  font-size: 16px;
+
+  > div + div { padding-left: 24px; border-left: 1px solid #d1d5db; }
+  span, strong { display: block; }
+`
+
+export const ResultMetaValue = styled.strong`
+  margin-top: 4px;
+  color: #111827;
+  font-size: 19px;
+`
+
+export const ResultRating = styled.span`
+  display: inline-block;
+  margin-right: 12px;
+  padding: 4px 9px;
+  border: 2px solid #0db7a4;
+  border-radius: 7px;
+  color: #111827;
+  font-size: 17px;
+  font-weight: 700;
+`
+
+export const ResultBookButton = styled.button`
+  display: block;
+  width: 100%;
+  height: 54px;
+  margin-top: 18px;
+  border: 0;
+  border-radius: 16px;
+  background: #0db7a4;
+  color: #ffffff;
+  font-size: 21px;
+  font-weight: 800;
+  cursor: pointer;
+
+  &:hover { background: #0b9788; }
 `

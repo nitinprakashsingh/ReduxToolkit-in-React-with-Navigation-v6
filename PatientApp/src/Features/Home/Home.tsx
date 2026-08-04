@@ -41,6 +41,7 @@ import {
   ViewAllSearchCard,
 } from "./HomeStyle"
 import FilterModal from "./FilterModal/FilterModal"
+import SearchResults from "./SearchResults/SearchResults"
 import SideDrawer from "./SideDrawer/SideDrawer"
 
 const sections = [
@@ -89,6 +90,9 @@ const Home = ({ onSignOut }: HomeProps) => {
   const [viewAllOpen, setViewAllOpen] = useState(false)
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [filterOpen, setFilterOpen] = useState(false)
+  const [resultsOpen, setResultsOpen] = useState(false)
+  const [resultsQuery, setResultsQuery] = useState("Hospitals")
+  const [resultsDistance, setResultsDistance] = useState(15)
   const [activeCategory, setActiveCategory] = useState("All")
   const [searchTerm, setSearchTerm] = useState("")
 
@@ -126,6 +130,31 @@ const Home = ({ onSignOut }: HomeProps) => {
 
   const closeFilters = () => {
     setFilterOpen(false)
+  }
+
+  const openResults = (query = "Hospitals") => {
+    setResultsQuery(query)
+    setResultsOpen(true)
+  }
+
+  const applyFilters = (distance: number) => {
+    setResultsDistance(distance)
+    setFilterOpen(false)
+    openResults()
+  }
+
+  if (resultsOpen) {
+    return (
+      <>
+        {filterOpen && <FilterModal onClose={closeFilters} onApply={applyFilters} />}
+        <SearchResults
+          query={resultsQuery}
+          distance={resultsDistance}
+          onBack={() => setResultsOpen(false)}
+          onFilter={() => setFilterOpen(true)}
+        />
+      </>
+    )
   }
 
   if (viewAllOpen) {
@@ -182,7 +211,7 @@ const Home = ({ onSignOut }: HomeProps) => {
   return (
     <Page>
       {drawerOpen && <SideDrawer onClose={closeDrawer} onSignOut={onSignOut} />}
-      {filterOpen && <FilterModal onClose={closeFilters} />}
+      {filterOpen && <FilterModal onClose={closeFilters} onApply={applyFilters} />}
       <Container>
         <TopBar>
           <LocationInfo onClick={openDrawer}>
@@ -202,7 +231,12 @@ const Home = ({ onSignOut }: HomeProps) => {
           <SearchControls>
             <SearchCard>
               <SearchIcon>🔍</SearchIcon>
-              <SearchInput placeholder="Search by hospital" />
+              <SearchInput
+                placeholder="Search by hospital"
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") openResults(event.currentTarget.value || "Hospitals")
+                }}
+              />
             </SearchCard>
             <FilterButton type="button" onClick={openFilters} aria-label="Open filters">
               <FilterButtonIcon />
@@ -221,7 +255,7 @@ const Home = ({ onSignOut }: HomeProps) => {
             </SectionHeader>
             <CardGrid>
               {section.items.map((item) => (
-                <FeatureCard key={item.label}>
+                <FeatureCard key={item.label} type="button" onClick={() => openResults(item.label)}>
                   <FeatureIcon>{item.icon}</FeatureIcon>
                   <FeatureLabel>{item.label}</FeatureLabel>
                   <FeatureDescription>{item.description}</FeatureDescription>
