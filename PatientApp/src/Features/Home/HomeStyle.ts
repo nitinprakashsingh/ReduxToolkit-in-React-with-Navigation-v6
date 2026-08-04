@@ -1459,3 +1459,163 @@ export const BookingConfirmButton = styled.button`
 
   &:hover { background: #0a9d8d; }
 `
+
+export const PaymentPage = styled.main`
+  min-height: 100vh;
+  background: #f6f8fc;
+  color: #111827;
+`
+
+export const PaymentMethodsPage = styled(PaymentPage)``
+
+export const PaymentTopbar = styled.header`
+  padding: 28px max(28px, calc((100% - 620px) / 2));
+  border-bottom: 1px solid #e3e8ef;
+  background: #ffffff;
+  h1 { margin: 18px 0 6px; font-size: 30px; letter-spacing: -0.03em; }
+  p { margin: 0; color: #64748b; }
+`
+
+export const PaymentBackButton = styled.button`
+  border: 0;
+  background: transparent;
+  color: #6541af;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+`
+
+export const PaymentPanel = styled.section`
+  width: min(560px, calc(100% - 40px));
+  margin: 38px auto;
+  padding: 28px;
+  border: 1px solid #e2e8f0;
+  border-radius: 22px;
+  background: #ffffff;
+  box-sizing: border-box;
+  box-shadow: 0 16px 34px rgba(15, 23, 42, 0.08);
+  > p { margin: 0; color: #64748b; font-size: 14px; }
+  > h2 { margin: 5px 0 22px; font-size: 21px; }
+`
+
+export const PaymentAmount = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 0;
+  border-top: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
+  span { color: #64748b; font-size: 15px; }
+  strong { font-size: 26px; }
+`
+
+export const PaymentDemoNote = styled.p`
+  margin: 14px 0 25px !important;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #fff7ed;
+  color: #9a3412 !important;
+  font-size: 13px !important;
+  font-weight: 700;
+`
+
+export const PaymentSectionTitle = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  color: #111827;
+  font-size: 16px;
+  font-weight: 800;
+`
+
+export const PaymentChangeButton = styled.button`
+  border: 0;
+  background: transparent;
+  color: #0b9788;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+`
+
+export const PaymentMethodRow = styled.button<{ $selected?: boolean }>`
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 13px;
+  margin-bottom: 10px;
+  padding: 14px;
+  border: 1px solid ${({ $selected }) => ($selected ? "#0db7a4" : "#e2e8f0")};
+  border-radius: 14px;
+  background: ${({ $selected }) => ($selected ? "#f0fdfa" : "#ffffff")};
+  color: #111827;
+  text-align: left;
+  cursor: pointer;
+  > span { display: grid; gap: 3px; flex: 1; }
+  strong { font-size: 15px; }
+  small { color: #64748b; font-size: 13px; }
+  > b { color: #0b9788; font-size: 20px; }
+`
+
+export const PaymentMethodIcon = styled.span<{ $accent: string }>`
+  width: 38px;
+  height: 38px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border-radius: 11px;
+  background: ${({ $accent }) => $accent};
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 900;
+`
+
+export const PaymentPayButton = styled.button`
+  width: 100%;
+  min-height: 54px;
+  margin-top: 20px;
+  border: 0;
+  border-radius: 14px;
+  background: #0db7a4;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  &:hover { background: #0a9d8d; }
+`
+
+export const PaymentConfirmation = styled.section`
+  width: min(460px, calc(100% - 40px));
+  display: grid;
+  justify-items: center;
+  margin: 80px auto;
+  padding: 38px 28px;
+  border-radius: 22px;
+  background: #ffffff;
+  text-align: center;
+  box-shadow: 0 16px 34px rgba(15, 23, 42, 0.08);
+  p { margin: 18px 0 4px; color: #0b9788; font-size: 15px; font-weight: 800; }
+  h1 { margin: 0; font-size: 28px; }
+  > span { margin-top: 12px; color: #64748b; line-height: 1.6; }
+`
+
+export const PaymentConfirmationIcon = styled.div`
+  width: 64px;
+  height: 64px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #d1fae5;
+  color: #047857;
+  font-size: 32px;
+  font-weight: 900;
+`
+
+export const PaymentEmptyState = styled.div`
+  padding: 28px 10px;
+  text-align: center;
+  > span { display: inline-grid; width: 52px; height: 52px; place-items: center; border-radius: 50%; background: #f0ebfb; color: #6541af; font-size: 24px; font-weight: 800; }
+  h2 { margin: 16px 0 8px; font-size: 20px; }
+  p { margin: 0; color: #64748b; line-height: 1.6; }
+`
