@@ -49,6 +49,7 @@ import SideDrawer from "./SideDrawer/SideDrawer"
 import PaymentScreen from "./Payment/PaymentScreen"
 import PaymentMethods from "./Payment/PaymentMethods"
 import { paymentHistoryKey } from "./Payment/paymentData"
+import Appointments, { Appointment } from "./Appointments/Appointments"
 
 const sections = [
   {
@@ -102,6 +103,8 @@ const Home = ({ onSignOut }: HomeProps) => {
   const [bookingDoctor, setBookingDoctor] = useState<Doctor | undefined>()
   const [paymentDetails, setPaymentDetails] = useState<{ doctor: Doctor; date: string; slot: string } | undefined>()
   const [paymentMethodsOpen, setPaymentMethodsOpen] = useState(false)
+  const [appointmentsOpen, setAppointmentsOpen] = useState(false)
+  const [appointments, setAppointments] = useState<Appointment[]>([])
   const [doctorSearchInput, setDoctorSearchInput] = useState("")
   const [debouncedDoctorSearch, setDebouncedDoctorSearch] = useState("")
   const [activeCategory, setActiveCategory] = useState("All")
@@ -144,6 +147,21 @@ const Home = ({ onSignOut }: HomeProps) => {
     }
   }
 
+  const completeAppointmentBooking = () => {
+    if (!paymentDetails) return
+
+    const { doctor, date, slot } = paymentDetails
+    setAppointments((currentAppointments) => [
+      { id: `${doctor.name}-${date}-${slot}`, doctorName: doctor.name, specialty: doctor.specialty, image: doctor.image, date, slot, fee: doctor.fee },
+      ...currentAppointments,
+    ])
+    setPaymentDetails(undefined)
+    setBookingDoctor(undefined)
+    setSelectedDoctor(undefined)
+    setDoctorResultsOpen(false)
+    setAppointmentsOpen(true)
+  }
+
   const openDoctorResults = (department?: string, doctorName = "") => {
     setSelectedDepartment(department)
     setDoctorSearch(doctorName)
@@ -168,9 +186,13 @@ const Home = ({ onSignOut }: HomeProps) => {
     [doctorSearchInput]
   )
 
+  if (appointmentsOpen) {
+    return <Appointments appointments={appointments} onBack={() => setAppointmentsOpen(false)} />
+  }
+
   if (doctorResultsOpen) {
     if (paymentDetails) {
-      return <PaymentScreen doctor={paymentDetails.doctor} date={paymentDetails.date} slot={paymentDetails.slot} onBack={() => setPaymentDetails(undefined)} onComplete={rememberPaymentMethod} onDone={() => { setPaymentDetails(undefined); setBookingDoctor(undefined); setSelectedDoctor(undefined) }} />
+      return <PaymentScreen doctor={paymentDetails.doctor} date={paymentDetails.date} slot={paymentDetails.slot} onBack={() => setPaymentDetails(undefined)} onComplete={rememberPaymentMethod} onDone={completeAppointmentBooking} />
     }
     if (bookingDoctor) {
       return <AppointmentBooking doctor={bookingDoctor} onBack={() => setBookingDoctor(undefined)} onProceedToPayment={(date, slot) => setPaymentDetails({ doctor: bookingDoctor, date, slot })} />
@@ -254,7 +276,7 @@ const Home = ({ onSignOut }: HomeProps) => {
 
   return (
     <Page>
-      {drawerOpen && <SideDrawer onClose={closeDrawer} onSignOut={onSignOut} onPaymentMethods={() => setPaymentMethodsOpen(true)} />}
+      {drawerOpen && <SideDrawer onClose={closeDrawer} onSignOut={onSignOut} onPaymentMethods={() => setPaymentMethodsOpen(true)} onAppointments={() => setAppointmentsOpen(true)} />}
       <Container>
         <TopBar>
           <LocationInfo onClick={openDrawer}>

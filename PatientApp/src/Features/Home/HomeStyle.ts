@@ -82,6 +82,10 @@ export const SideDrawer = styled.aside`
   box-sizing: border-box;
   overflow: hidden;
   box-shadow: 24px 0 60px rgba(15, 23, 42, 0.18);
+
+  @media (max-height: 520px) {
+    padding: 16px;
+  }
 `
 
 export const DrawerHeader = styled.div`
@@ -92,6 +96,10 @@ export const DrawerHeader = styled.div`
   gap: 16px;
   padding-bottom: 22px;
   border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+
+  @media (max-height: 520px) {
+    padding-bottom: 14px;
+  }
 `
 
 export const DrawerTitle = styled.h2`
@@ -126,9 +134,15 @@ export const DrawerNav = styled.nav`
   display: grid;
   align-content: start;
   gap: 10px;
-  padding: 26px 0;
+  padding: 26px 6px 26px 0;
   overflow-y: auto;
   overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+
+  @media (max-height: 520px) {
+    padding-top: 14px;
+    padding-bottom: 14px;
+  }
 `
 
 export const DrawerNavItem = styled.button`
@@ -154,6 +168,10 @@ export const DrawerFooter = styled.div`
   margin-top: auto;
   padding-top: 22px;
   border-top: 1px solid rgba(148, 163, 184, 0.2);
+
+  @media (max-height: 520px) {
+    padding-top: 14px;
+  }
 `
 
 export const SignOutButton = styled.button`
@@ -1618,4 +1636,109 @@ export const PaymentEmptyState = styled.div`
   > span { display: inline-grid; width: 52px; height: 52px; place-items: center; border-radius: 50%; background: #f0ebfb; color: #6541af; font-size: 24px; font-weight: 800; }
   h2 { margin: 16px 0 8px; font-size: 20px; }
   p { margin: 0; color: #64748b; line-height: 1.6; }
+`
+
+export const AppointmentsList = styled.main`
+  min-height: 100vh;
+  background: #f6f8fc;
+  color: #111827;
+`
+
+export const AppointmentsHeader = styled.header`
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  padding: 28px max(28px, calc((100% - 900px) / 2));
+  border-bottom: 1px solid #e3e8ef;
+  background: #ffffff;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
+
+  h1 {
+    margin: 18px 0 6px;
+    font-size: 32px;
+    letter-spacing: -0.03em;
+  }
+
+  p {
+    margin: 0;
+    color: #64748b;
+  }
+`
+
+export const AppointmentsBackButton = styled.button`
+  border: 0;
+  background: transparent;
+  color: #6541af;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+`
+
+export const AppointmentsCard = styled.article`
+  display: grid;
+  grid-template-columns: 86px 1fr;
+  gap: 16px;
+  width: min(900px, calc(100% - 40px));
+  margin: 0 auto 16px;
+  padding: 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.06);
+
+  h3 {
+    margin: 8px 0 4px;
+    font-size: 20px;
+  }
+
+  p,
+  span {
+    display: block;
+    margin: 0 0 6px;
+    color: #64748b;
+  }
+
+  strong {
+    display: block;
+    margin-bottom: 6px;
+  }
+`
+
+export const AppointmentsPhoto = styled.img`
+  width: 86px;
+  height: 96px;
+  border-radius: 14px;
+  object-fit: cover;
+  background: #e6eef5;
+`
+
+export const AppointmentStatus = styled.span`
+  display: inline-block;
+  width: fit-content;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: #d1fae5;
+  color: #047857 !important;
+  font-size: 12px;
+  font-weight: 800;
+`
+
+export const AppointmentsEmpty = styled.div`
+  width: min(900px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 34px 24px;
+  border: 1px dashed #cbd5e1;
+  border-radius: 18px;
+  background: #ffffff;
+  text-align: center;
+
+  h3 {
+    margin: 0 0 8px;
+    font-size: 20px;
+  }
+
+  p {
+    margin: 0;
+    color: #64748b;
+  }
 `
