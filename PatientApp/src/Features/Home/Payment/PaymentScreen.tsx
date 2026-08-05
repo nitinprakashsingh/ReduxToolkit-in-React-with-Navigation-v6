@@ -35,6 +35,7 @@ const PaymentScreen = ({ doctor, date, slot, onBack, onComplete, onDone }: Payme
   const makePayment = () => {
     setPaid(true)
     onComplete(selectedMethodId)
+    window.setTimeout(onDone, 900)
   }
 
   if (paid) {

@@ -16,9 +16,10 @@ type SideDrawerProps = {
   onClose: () => void
   onSignOut?: () => void
   onPaymentMethods?: () => void
+  onAppointments?: () => void
 }
 
-const SideDrawer = ({ onClose, onSignOut, onPaymentMethods }: SideDrawerProps) => {
+const SideDrawer = ({ onClose, onSignOut, onPaymentMethods, onAppointments }: SideDrawerProps) => {
   const handleSignOut = () => {
     onClose()
     onSignOut?.()
@@ -27,6 +28,11 @@ const SideDrawer = ({ onClose, onSignOut, onPaymentMethods }: SideDrawerProps) =
   const openPaymentMethods = () => {
     onClose()
     onPaymentMethods?.()
+  }
+
+  const openAppointments = () => {
+    onClose()
+    onAppointments?.()
   }
 
   return (
@@ -44,7 +50,7 @@ const SideDrawer = ({ onClose, onSignOut, onPaymentMethods }: SideDrawerProps) =
 
         <DrawerNav>
           <DrawerNavItem type="button">Home</DrawerNavItem>
-          <DrawerNavItem type="button">Appointments</DrawerNavItem>
+          <DrawerNavItem type="button" onClick={openAppointments}>Appointments</DrawerNavItem>
           <DrawerNavItem type="button" onClick={openPaymentMethods}>Payment methods</DrawerNavItem>
           <DrawerNavItem type="button">Medical Records</DrawerNavItem>
           <DrawerNavItem type="button">Support</DrawerNavItem>
