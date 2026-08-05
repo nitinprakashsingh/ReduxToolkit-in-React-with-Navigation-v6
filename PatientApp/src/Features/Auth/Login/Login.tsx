@@ -76,7 +76,7 @@ const Login = ({ onLogin }: LoginProps) => {
         <BrandTop>
           <LogoMark src={ShriyanLogo} alt="Shriyan Technology Pvt ltd" />
           <div>
-            <BrandName>Shriyan Technology</BrandName>
+            <BrandName>Shriyan Health Care</BrandName>
             <BrandSubText>Healthcare Solutions</BrandSubText>
           </div>
         </BrandTop>

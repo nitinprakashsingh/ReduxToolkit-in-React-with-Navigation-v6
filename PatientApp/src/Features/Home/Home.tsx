@@ -16,6 +16,8 @@ import {
   SearchSuggestionList,
   PageTitle,
   PageSubtitle,
+  QuickActionButton,
+  QuickActionGrid,
   Section,
   SectionHeader,
   SectionTitle,
@@ -50,6 +52,10 @@ import PaymentScreen from "./Payment/PaymentScreen"
 import PaymentMethods from "./Payment/PaymentMethods"
 import { paymentHistoryKey } from "./Payment/paymentData"
 import Appointments, { Appointment } from "./Appointments/Appointments"
+import MedicalRecords from "./MedicalRecords/MedicalRecords"
+import Support from "./Support/Support"
+import Profile from "./Profile/Profile"
+import Notifications from "./Notifications/Notifications"
 
 const sections = [
   {
@@ -104,6 +110,10 @@ const Home = ({ onSignOut }: HomeProps) => {
   const [paymentDetails, setPaymentDetails] = useState<{ doctor: Doctor; date: string; slot: string } | undefined>()
   const [paymentMethodsOpen, setPaymentMethodsOpen] = useState(false)
   const [appointmentsOpen, setAppointmentsOpen] = useState(false)
+  const [medicalRecordsOpen, setMedicalRecordsOpen] = useState(false)
+  const [supportOpen, setSupportOpen] = useState(false)
+  const [profileOpen, setProfileOpen] = useState(false)
+  const [notificationsOpen, setNotificationsOpen] = useState(false)
   const [appointments, setAppointments] = useState<Appointment[]>([])
   const [doctorSearchInput, setDoctorSearchInput] = useState("")
   const [debouncedDoctorSearch, setDebouncedDoctorSearch] = useState("")
@@ -138,6 +148,20 @@ const Home = ({ onSignOut }: HomeProps) => {
     setDrawerOpen(false)
   }
 
+  const showHome = () => {
+    setViewAllOpen(false)
+    setDoctorResultsOpen(false)
+    setSelectedDoctor(undefined)
+    setBookingDoctor(undefined)
+    setPaymentDetails(undefined)
+    setPaymentMethodsOpen(false)
+    setAppointmentsOpen(false)
+    setMedicalRecordsOpen(false)
+    setSupportOpen(false)
+    setProfileOpen(false)
+    setNotificationsOpen(false)
+  }
+
   const rememberPaymentMethod = (methodId: string) => {
     try {
       const savedMethods: string[] = JSON.parse(window.localStorage.getItem(paymentHistoryKey) || "[]")
@@ -152,7 +176,17 @@ const Home = ({ onSignOut }: HomeProps) => {
 
     const { doctor, date, slot } = paymentDetails
     setAppointments((currentAppointments) => [
-      { id: `${doctor.name}-${date}-${slot}`, doctorName: doctor.name, specialty: doctor.specialty, image: doctor.image, date, slot, fee: doctor.fee },
+      {
+        id: `${doctor.name}-${date}-${slot}`,
+        bookingId: `SHP-${Date.now().toString().slice(-6)}`,
+        doctorName: doctor.name,
+        specialty: doctor.specialty,
+        image: doctor.image,
+        date,
+        slot,
+        fee: doctor.fee,
+        status: "Confirmed",
+      },
       ...currentAppointments,
     ])
     setPaymentDetails(undefined)
@@ -160,6 +194,22 @@ const Home = ({ onSignOut }: HomeProps) => {
     setSelectedDoctor(undefined)
     setDoctorResultsOpen(false)
     setAppointmentsOpen(true)
+  }
+
+  const cancelAppointment = (appointmentId: string) => {
+    setAppointments((currentAppointments) =>
+      currentAppointments.map((appointment) =>
+        appointment.id === appointmentId ? { ...appointment, status: "Cancelled" } : appointment
+      )
+    )
+  }
+
+  const rescheduleAppointment = (appointmentId: string) => {
+    setAppointments((currentAppointments) =>
+      currentAppointments.map((appointment) =>
+        appointment.id === appointmentId ? { ...appointment, date: "Fri 16", slot: "02:30 PM", status: "Rescheduled" } : appointment
+      )
+    )
   }
 
   const openDoctorResults = (department?: string, doctorName = "") => {
@@ -187,7 +237,23 @@ const Home = ({ onSignOut }: HomeProps) => {
   )
 
   if (appointmentsOpen) {
-    return <Appointments appointments={appointments} onBack={() => setAppointmentsOpen(false)} />
+    return <Appointments appointments={appointments} onBack={() => setAppointmentsOpen(false)} onCancel={cancelAppointment} onReschedule={rescheduleAppointment} />
+  }
+
+  if (medicalRecordsOpen) {
+    return <MedicalRecords onBack={() => setMedicalRecordsOpen(false)} />
+  }
+
+  if (supportOpen) {
+    return <Support onBack={() => setSupportOpen(false)} />
+  }
+
+  if (profileOpen) {
+    return <Profile onBack={() => setProfileOpen(false)} />
+  }
+
+  if (notificationsOpen) {
+    return <Notifications onBack={() => setNotificationsOpen(false)} />
   }
 
   if (doctorResultsOpen) {
@@ -276,7 +342,19 @@ const Home = ({ onSignOut }: HomeProps) => {
 
   return (
     <Page>
-      {drawerOpen && <SideDrawer onClose={closeDrawer} onSignOut={onSignOut} onPaymentMethods={() => setPaymentMethodsOpen(true)} onAppointments={() => setAppointmentsOpen(true)} />}
+      {drawerOpen && (
+        <SideDrawer
+          onClose={closeDrawer}
+          onHome={showHome}
+          onSignOut={onSignOut}
+          onPaymentMethods={() => setPaymentMethodsOpen(true)}
+          onAppointments={() => setAppointmentsOpen(true)}
+          onMedicalRecords={() => setMedicalRecordsOpen(true)}
+          onSupport={() => setSupportOpen(true)}
+          onProfile={() => setProfileOpen(true)}
+          onNotifications={() => setNotificationsOpen(true)}
+        />
+      )}
       <Container>
         <TopBar>
           <LocationInfo onClick={openDrawer}>
@@ -320,6 +398,21 @@ const Home = ({ onSignOut }: HomeProps) => {
             </SearchCard>
           </SearchControls>
         </SearchSection>
+
+        <QuickActionGrid>
+          <QuickActionButton type="button" onClick={() => setProfileOpen(true)}>
+            <strong>Patient profile</strong>
+            <span>View personal, blood group, and emergency contact details.</span>
+          </QuickActionButton>
+          <QuickActionButton type="button" onClick={() => setNotificationsOpen(true)}>
+            <strong>Notifications</strong>
+            <span>See reminders for appointments, reports, and payments.</span>
+          </QuickActionButton>
+          <QuickActionButton as="a" href="tel:8540978755" $danger>
+            <strong>Emergency call</strong>
+            <span>Call hospital support immediately.</span>
+          </QuickActionButton>
+        </QuickActionGrid>
 
         {sections.map((section) => (
           <Section key={section.title}>
