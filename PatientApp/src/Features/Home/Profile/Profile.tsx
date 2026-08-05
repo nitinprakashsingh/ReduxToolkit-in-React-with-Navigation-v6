@@ -41,7 +41,7 @@ const Profile = ({ onBack }: { onBack: () => void }) => (
       <InfoPanel>
         <h2>Address and emergency contact</h2>
         <ContactGrid>
-          <ContactItem><span>Address</span><strong>Sector 47, Gurgaon</strong></ContactItem>
+          <ContactItem><span>Address</span><strong>Bharkuiya Barauli, Gopalganj 841405</strong></ContactItem>
           <ContactItem><span>Emergency contact</span><strong>Ravi Kumar - 9876543210</strong></ContactItem>
         </ContactGrid>
       </InfoPanel>
