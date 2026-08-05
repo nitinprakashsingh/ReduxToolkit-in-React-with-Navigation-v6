@@ -15,7 +15,7 @@ const Profile = ({ onBack }: { onBack: () => void }) => (
   <ProfilePage>
     <ScreenHeader>
       <ScreenBackButton type="button" onClick={onBack}>
-        Back to home
+        Back
       </ScreenBackButton>
     </ScreenHeader>
 
