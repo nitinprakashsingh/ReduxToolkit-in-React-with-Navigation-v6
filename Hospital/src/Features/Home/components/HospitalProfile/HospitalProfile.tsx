@@ -79,7 +79,7 @@ const HospitalProfile = ({ onBack }: HospitalProfileProps) => {
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [loading]);
 
   if (isEditing) {
     return (
