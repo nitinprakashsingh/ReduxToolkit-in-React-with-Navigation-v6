@@ -14,12 +14,17 @@ import {
 
 type SideDrawerProps = {
   onClose: () => void
+  onHome?: () => void
   onSignOut?: () => void
   onPaymentMethods?: () => void
   onAppointments?: () => void
+  onMedicalRecords?: () => void
+  onSupport?: () => void
+  onProfile?: () => void
+  onNotifications?: () => void
 }
 
-const SideDrawer = ({ onClose, onSignOut, onPaymentMethods, onAppointments }: SideDrawerProps) => {
+const SideDrawer = ({ onClose, onHome, onSignOut, onPaymentMethods, onAppointments, onMedicalRecords, onSupport, onProfile, onNotifications }: SideDrawerProps) => {
   const handleSignOut = () => {
     onClose()
     onSignOut?.()
@@ -33,6 +38,31 @@ const SideDrawer = ({ onClose, onSignOut, onPaymentMethods, onAppointments }: Si
   const openAppointments = () => {
     onClose()
     onAppointments?.()
+  }
+
+  const openHome = () => {
+    onClose()
+    onHome?.()
+  }
+
+  const openProfile = () => {
+    onClose()
+    onProfile?.()
+  }
+
+  const openNotifications = () => {
+    onClose()
+    onNotifications?.()
+  }
+
+  const openMedicalRecords = () => {
+    onClose()
+    onMedicalRecords?.()
+  }
+
+  const openSupport = () => {
+    onClose()
+    onSupport?.()
   }
 
   return (
@@ -49,11 +79,13 @@ const SideDrawer = ({ onClose, onSignOut, onPaymentMethods, onAppointments }: Si
         </DrawerHeader>
 
         <DrawerNav>
-          <DrawerNavItem type="button">Home</DrawerNavItem>
+          <DrawerNavItem type="button" onClick={openHome}>Home</DrawerNavItem>
+          <DrawerNavItem type="button" onClick={openProfile}>Patient Profile</DrawerNavItem>
+          <DrawerNavItem type="button" onClick={openNotifications}>Notifications</DrawerNavItem>
           <DrawerNavItem type="button" onClick={openAppointments}>Appointments</DrawerNavItem>
           <DrawerNavItem type="button" onClick={openPaymentMethods}>Payment methods</DrawerNavItem>
-          <DrawerNavItem type="button">Medical Records</DrawerNavItem>
-          <DrawerNavItem type="button">Support</DrawerNavItem>
+          <DrawerNavItem type="button" onClick={openMedicalRecords}>Medical Records</DrawerNavItem>
+          <DrawerNavItem type="button" onClick={openSupport}>Support</DrawerNavItem>
         </DrawerNav>
 
         <DrawerFooter>
