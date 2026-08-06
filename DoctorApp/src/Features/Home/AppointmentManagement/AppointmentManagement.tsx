@@ -82,7 +82,8 @@ const StatValue = styled.h3`
 `;
 
 const AppointmentManagement = () => {
-  const [filterDate, setFilterDate] = useState("");
+  const today = new Date().toISOString().slice(0, 10);
+  const [filterDate, setFilterDate] = useState(today);
   const [appointments, setAppointments] = useState(mockAppointments);
 
   const filteredAppointments = useMemo(() => {
@@ -109,7 +110,6 @@ const AppointmentManagement = () => {
   const todayAppointments = useMemo(() => appointments.filter((item) => item.date === "2026-08-06"), [appointments]);
   const pendingReports = useMemo(() => appointments.filter((item) => item.status === "Pending Report"), [appointments]);
   const emergencyCases = useMemo(() => appointments.filter((item) => item.isEmergency), [appointments]);
-  const schedule = useMemo(() => todayAppointments.slice(0, 4), [todayAppointments]);
 
   return (
     <Page>
