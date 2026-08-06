@@ -65,6 +65,9 @@ const HospitalProfile = ({ onBack }: HospitalProfileProps) => {
         if (!mounted) return;
         setHospital(res.data.data);
       } catch (err) {
+        if(loading){
+          setLoading(false);
+        }
         // ignore if not found
       } finally {
         if (mounted) setLoading(false);

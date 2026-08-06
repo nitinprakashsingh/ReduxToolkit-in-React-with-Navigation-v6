@@ -18,7 +18,6 @@ import {
 } from "./BookingList.Style";
 import { fetchBookings, Booking } from "../../../../api/bookingApi";
 import {
-  ActionIconButton,
   AddButton,
 } from "../DepartmentList/DepartmentList.Style";
 
