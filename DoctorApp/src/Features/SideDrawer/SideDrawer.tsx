@@ -13,11 +13,11 @@ const DrawerOverlay = styled.div`
 const DrawerPanel = styled.div`
   position: fixed;
   top: 0;
-  right: 0;
+  left: 0;
   height: 100vh;
   width: min(360px, 88vw);
   background: #ffffff;
-  box-shadow: -18px 0 48px rgba(15, 23, 42, 0.16);
+  box-shadow: 18px 0 48px rgba(15, 23, 42, 0.16);
   padding: 28px;
   display: flex;
   flex-direction: column;
