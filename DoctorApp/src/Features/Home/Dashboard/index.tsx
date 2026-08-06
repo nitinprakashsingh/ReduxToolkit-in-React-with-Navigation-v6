@@ -26,45 +26,6 @@ const Header = styled.div`
   margin-bottom: 28px;
 `;
 
-const ProfileCard = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 22px 26px;
-  border-radius: 24px;
-  background: #ffffff;
-  box-shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
-`;
-
-const Avatar = styled.div`
-  width: 84px;
-  height: 84px;
-  border-radius: 22px;
-  background: #7c3aed;
-  display: grid;
-  place-items: center;
-  color: #fff;
-  font-size: 28px;
-  font-weight: 800;
-`;
-
-const ProfileInfo = styled.div`
-  min-width: 240px;
-`;
-
-const ProfileName = styled.h2`
-  margin: 0;
-  font-size: 24px;
-  font-weight: 800;
-`;
-
-const ProfileEmail = styled.p`
-  margin: 8px 0 0;
-  color: #64748b;
-`;
-
 const Button = styled.button<{ secondary?: boolean }>`
   border: none;
   border-radius: 14px;
@@ -75,72 +36,12 @@ const Button = styled.button<{ secondary?: boolean }>`
   cursor: pointer;
 `;
 
-const DrawerOverlay = styled.div`
-  position: fixed;
-  inset: 0;
-  background: rgba(15, 23, 42, 0.35);
-  z-index: 30;
-`;
-
-const DrawerPanel = styled.div`
-  position: fixed;
-  top: 0;
-  right: 0;
-  height: 100vh;
-  width: min(360px, 88vw);
-  background: #ffffff;
-  box-shadow: -18px 0 48px rgba(15, 23, 42, 0.16);
-  padding: 28px;
+const HeaderActions = styled.div`
   display: flex;
-  flex-direction: column;
-  z-index: 40;
-`;
-
-const DrawerHeader = styled.div`
-  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 24px;
-`;
-
-const DrawerTitle = styled.h3`
-  margin: 0;
-  font-size: 22px;
-  font-weight: 800;
-`;
-
-const DrawerSection = styled.div`
-  margin-top: 22px;
-`;
-
-const DrawerLabel = styled.p`
-  margin: 0 0 10px;
-  color: #475569;
-  font-size: 14px;
-  font-weight: 700;
-`;
-
-const ProfilePicBox = styled.div`
-  width: 100%;
-  height: 180px;
-  border-radius: 24px;
-  background: #eef2ff;
-  display: grid;
-  place-items: center;
-  color: #4338ca;
-  font-size: 18px;
-  font-weight: 700;
-`;
-
-const ProfileInput = styled.input`
-  width: 100%;
-  border: 1px solid #cbd5e1;
-  border-radius: 14px;
-  padding: 14px 16px;
-  font-size: 15px;
-  color: #0f172a;
-  margin-bottom: 16px;
-  outline: none;
 `;
 
 const StatsGrid = styled.div`
@@ -259,8 +160,6 @@ const NotificationTime = styled.p`
 const Dashboard = () => {
   const navigate = useNavigate();
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [avatarLetter] = useState("D");
-  const [profilePic, setProfilePic] = useState<string | null>(null);
   const doctorEmail = getDoctorEmail();
 
   const appointments = mockAppointments;
@@ -300,22 +199,11 @@ const Dashboard = () => {
             <SectionTitle>Doctor Dashboard</SectionTitle>
             <Subtitle>Overview of today&apos;s appointments, emergency cases, and schedule.</Subtitle>
           </div>
-          <Button onClick={() => navigate("/appointments")}>Manage appointments</Button>
+          <HeaderActions>
+            <Button secondary onClick={() => setDrawerOpen(true)}>Doctor menu</Button>
+            <Button onClick={() => navigate("/appointments")}>Manage appointments</Button>
+          </HeaderActions>
         </Header>
-
-        <ProfileCard>
-          <Avatar>
-            {profilePic ? <img src={profilePic} alt="profile" style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: 22 }} /> : avatarLetter}
-          </Avatar>
-          <ProfileInfo>
-            <ProfileName>Dr. Priya Kapoor</ProfileName>
-            <ProfileEmail>{doctorEmail}</ProfileEmail>
-          </ProfileInfo>
-          <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-            <Button onClick={() => setDrawerOpen(true)}>Open doctor menu</Button>
-            <Button secondary onClick={handleSignOut}>Sign out</Button>
-          </div>
-        </ProfileCard>
 
         {drawerOpen && <SideDrawer onClose={() => setDrawerOpen(false)} />}
 

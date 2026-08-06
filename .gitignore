@@ -1,4 +1,7 @@
-DoctorApp/node_modules/.cache/default-development/10.pack
-DoctorApp/node_modules/.cache/default-development/0.pack
-DoctorApp/node_modules/.cache/default-development/index.pack
-DoctorApp/node_modules/.cache/default-development/unreferenced.json
+# Ignore node modules everywhere
+**/node_modules/
+
+# Ignore build artifacts and caches
+**/.cache/
+**/build/
+**/dist/
