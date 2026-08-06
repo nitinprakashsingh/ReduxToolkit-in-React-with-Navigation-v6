@@ -1,5 +1,5 @@
 const cookieName = "doctor-session";
-export const DOCTOR_EMAIL = "doctor@example.com";
+export const DOCTOR_EMAIL = "nitinprakashsingh2023@gmail.com";
 const defaultPassword = "12345";
 const passwordStorageKey = "doctor-stored-password";
 

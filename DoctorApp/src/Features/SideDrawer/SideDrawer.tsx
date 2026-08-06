@@ -54,6 +54,24 @@ const DrawerLabel = styled.p`
   font-weight: 700;
 `;
 
+const DrawerActionList = styled.div`
+  margin-top: 18px;
+  display: grid;
+  gap: 12px;
+`;
+
+const DrawerAction = styled.button`
+  width: 100%;
+  border: none;
+  background: #f8fafc;
+  padding: 14px 16px;
+  border-radius: 14px;
+  color: #0f172a;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+`;
+
 const ProfilePicBox = styled.div`
   width: 100%;
   height: 180px;
@@ -116,7 +134,7 @@ const SideDrawer = ({ onClose }: { onClose: () => void }) => {
 
         <DrawerSection>
           <DrawerLabel>Doctor</DrawerLabel>
-          <DrawerText>Dr. Priya Kapoor</DrawerText>
+          <DrawerText>Nitin Prakash Singh</DrawerText>
           <DrawerText>{doctorEmail}</DrawerText>
         </DrawerSection>
 
@@ -145,10 +163,12 @@ const SideDrawer = ({ onClose }: { onClose: () => void }) => {
         </DrawerSection>
 
         <DrawerSection>
-          <DrawerLabel>Notifications</DrawerLabel>
-          <DrawerText>New lab report available</DrawerText>
-          <DrawerText>Urgent case assigned</DrawerText>
-          <DrawerText>Patient rescheduled appointment</DrawerText>
+          <DrawerLabel>Quick actions</DrawerLabel>
+          <DrawerActionList>
+            <DrawerAction type="button">My profile</DrawerAction>
+            <DrawerAction type="button">Notifications</DrawerAction>
+            <DrawerAction type="button" onClick={() => navigate("/appointments")}>Manage appointments</DrawerAction>
+          </DrawerActionList>
         </DrawerSection>
 
         <ActionButton onClick={handleSignOut} secondary>

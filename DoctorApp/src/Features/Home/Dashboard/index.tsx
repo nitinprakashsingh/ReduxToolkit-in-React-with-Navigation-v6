@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react";
 import styled from "styled-components";
-import { getDoctorEmail, signOut } from "../../../utils/cookies";
 import { useNavigate } from "react-router-dom";
 import SideDrawer from "../../SideDrawer";
 import { mockAppointments } from "../AppointmentManagement/mockAppointments";
@@ -22,8 +21,25 @@ const Header = styled.div`
   flex-wrap: wrap;
   justify-content: space-between;
   gap: 18px;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: 28px;
+`;
+
+const HeaderLeft = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+`;
+
+const MenuButton = styled.button`
+  border: none;
+  border-radius: 14px;
+  padding: 12px 18px;
+  background: #eef2ff;
+  color: #3730a3;
+  font-weight: 700;
+  cursor: pointer;
+  width: fit-content;
 `;
 
 const Button = styled.button<{ secondary?: boolean }>`
@@ -160,7 +176,6 @@ const NotificationTime = styled.p`
 const Dashboard = () => {
   const navigate = useNavigate();
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const doctorEmail = getDoctorEmail();
 
   const appointments = mockAppointments;
 
@@ -186,21 +201,19 @@ const Dashboard = () => {
     { id: "n3", title: "Patient rescheduled appointment", time: "Yesterday" },
   ];
 
-  const handleSignOut = () => {
-    signOut();
-    navigate("/login");
-  };
-
   return (
     <Page>
       <Container>
         <Header>
-          <div>
-            <SectionTitle>Doctor Dashboard</SectionTitle>
-            <Subtitle>Overview of today&apos;s appointments, emergency cases, and schedule.</Subtitle>
-          </div>
+          <HeaderLeft>
+            <MenuButton onClick={() => setDrawerOpen(true)}>☰ Doctor menu</MenuButton>
+            <div>
+              <SectionTitle>Doctor Dashboard</SectionTitle>
+              <Subtitle>Overview of today&apos;s appointments, emergency cases, and schedule.</Subtitle>
+            </div>
+          </HeaderLeft>
+
           <HeaderActions>
-            <Button secondary onClick={() => setDrawerOpen(true)}>Doctor menu</Button>
             <Button onClick={() => navigate("/appointments")}>Manage appointments</Button>
           </HeaderActions>
         </Header>
