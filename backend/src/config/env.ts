@@ -16,7 +16,6 @@ if (isProduction && !process.env.DATABASE_URL) {
 if (isProduction && jwtSecret.length < 32) {
   throw new Error("JWT_SECRET must be at least 32 characters in production.");
 }
-//nitin
 export const env = {
   NODE_ENV: process.env.NODE_ENV || "development",
   PORT: Number(process.env.PORT || 5000),
