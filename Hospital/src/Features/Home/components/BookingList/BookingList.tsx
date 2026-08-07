@@ -17,9 +17,7 @@ import {
   TableScroll,
 } from "./BookingList.Style";
 import { fetchBookings, Booking } from "../../../../api/bookingApi";
-import {
-  AddButton,
-} from "../DepartmentList/DepartmentList.Style";
+import { AddButton } from "../DepartmentList/DepartmentList.Style";
 
 type BookingListProps = {
   onCreateClick?: () => void;

@@ -160,15 +160,12 @@ const PatientManagement = () => {
 
   useEffect(() => {
     const loadPatients = async () => {
-      setLoading(true);
       try {
         const result = await fetchPatients();
         const apiPatients = result.data.data.map(mapApiPatient);
         setPatients(apiPatients);
       } catch (error) {
         console.error("Failed to load patients", error);
-      } finally {
-        setLoading(false);
       }
     };
 

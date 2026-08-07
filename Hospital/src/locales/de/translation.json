@@ -7,23 +7,6 @@
   },
   "auth": {
     "brandSubText": "Hospital-Webpanel",
-    "signup": {
-      "title": "Registrieren Sie Ihr Konto",
-      "description": "Erstellen Sie ein sicheres Konto, um Ärzte, Patienten, Termine, Abteilungen, Pakete und Krankheitsdaten an einem Ort zu verwalten.",
-      "cardHeader": "Konto erstellen",
-      "helperText": "Füllen Sie Ihre Daten aus, um mit dem Krankenhaus-Dashboard zu beginnen.",
-      "nameLabel": "Name",
-      "namePlaceholder": "John Doe",
-      "emailLabel": "E-Mail-Adresse",
-      "emailPlaceholder": "admin@hospital.com",
-      "passwordLabel": "Passwort",
-      "passwordPlaceholder": "Passwort eingeben",
-      "mobileLabel": "Telefonnummer",
-      "addressLabel": "Adresse",
-      "addressPlaceholder": "Krankenhaus- oder Klinikadresse",
-      "submitButton": "Konto erstellen",
-      "backToSignIn": "Zurück zur Anmeldung"
-    },
     "login": {
       "brandTitle": "Verwalten Sie Krankenhausabläufe von einem einfachen Panel aus.",
       "description": "Verfolgen Sie Ärzte, Patienten, Termine, Pakete, Abteilungen und Krankheitsdaten mit einer klaren, pilotbereiten Arbeitsfläche.",
@@ -36,7 +19,6 @@
       "showPassword": "Passwort anzeigen",
       "hidePassword": "Passwort verbergen",
       "submitButton": "Anmelden",
-      "createAccount": "Konto erstellen",
       "forgotPassword": "Passwort vergessen?"
     },
     "forgot": {

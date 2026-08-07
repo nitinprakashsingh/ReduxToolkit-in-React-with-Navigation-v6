@@ -7,23 +7,6 @@
   },
   "auth": {
     "brandSubText": "Hospital web panel",
-    "signup": {
-      "title": "Register your account",
-      "description": "Create a secure account to manage doctors, patients, appointments, departments, packages and disease records in one place.",
-      "cardHeader": "Create account",
-      "helperText": "Fill in your details to get started with the hospital dashboard.",
-      "nameLabel": "Name",
-      "namePlaceholder": "John Doe",
-      "emailLabel": "Email address",
-      "emailPlaceholder": "admin@hospital.com",
-      "passwordLabel": "Password",
-      "passwordPlaceholder": "Enter password",
-      "mobileLabel": "Mobile number",
-      "addressLabel": "Address",
-      "addressPlaceholder": "Hospital or clinic address",
-      "submitButton": "Create account",
-      "backToSignIn": "Back to sign in"
-    },
     "login": {
       "brandTitle": "Manage hospital operations from one simple panel.",
       "description": "Track doctors, patients, appointments, packages, departments, and disease records with a clean pilot-ready workspace.",
@@ -36,7 +19,6 @@
       "showPassword": "Show password",
       "hidePassword": "Hide password",
       "submitButton": "Sign In",
-      "createAccount": "Create account",
       "forgotPassword": "Forgot password?"
     },
     "forgot": {

@@ -16,10 +16,8 @@ import {
     Button,
     Container,
     FieldGroup,
-    ForgetButton,
     Form,
     HelperText,
-    LinkRow,
     LoginCard,
     LoginPanel,
     LogoMark,
@@ -64,13 +62,6 @@ const LoginPage = () => {
         setErrorMessage("")
         dispatch(loginRequest({ email: userName, password: password }))
         setHasSubmitted(true)
-    }
-
-    const forgetButtonHandler = () => {
-        navigate("/forgot-password")
-    }
-    const signUpButtonHandler = () => {
-        navigate("/signup")
     }
 
     return (
@@ -152,14 +143,6 @@ const LoginPage = () => {
                             {t('auth.login.submitButton')}
                         </Button>
                         {hasSubmitted && serverError ? <ErrorText>{serverError}</ErrorText> : null}
-                        <LinkRow>
-                            <ForgetButton type="button" onClick={signUpButtonHandler}>
-                                {t('auth.login.createAccount')}
-                            </ForgetButton>
-                            <ForgetButton type="button" onClick={forgetButtonHandler}>
-                                {t('auth.login.forgotPassword')}
-                            </ForgetButton>
-                        </LinkRow>
                     </Form>
                 </LoginCard>
             </LoginPanel>

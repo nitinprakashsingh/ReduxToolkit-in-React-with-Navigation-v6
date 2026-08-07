@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch } from "../../../../Store/types";
+import { useAppDispatch, useAppSelector } from "../../../../Store/types";
 import { loginRequest } from "../../authSlice";
 import LoginPage from "./Login";
 
@@ -10,10 +10,12 @@ jest.mock("react-router-dom", () => ({
 
 jest.mock("../../../../Store/types", () => ({
   useAppDispatch: jest.fn(),
+  useAppSelector: jest.fn(),
 }));
 
 const mockedUseNavigate = useNavigate as jest.Mock;
 const mockedUseAppDispatch = useAppDispatch as jest.Mock;
+const mockedUseAppSelector = useAppSelector as jest.Mock;
 
 describe("LoginPage", () => {
   const dispatch = jest.fn();
@@ -23,6 +25,7 @@ describe("LoginPage", () => {
     jest.spyOn(console, "log").mockImplementation(() => {});
     mockedUseAppDispatch.mockReturnValue(dispatch);
     mockedUseNavigate.mockReturnValue(navigate);
+    mockedUseAppSelector.mockReturnValue({ isLoading: false, error: null, user: null });
   });
 
   afterEach(() => {
@@ -32,11 +35,10 @@ describe("LoginPage", () => {
   it("renders the login form fields and actions", () => {
     render(<LoginPage />);
 
-    expect(screen.getByRole("heading", { name: /login page/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /auth\.login\.welcomeback/i })).toBeInTheDocument();
     expect(screen.getByPlaceholderText(/email/i)).toBeInTheDocument();
     expect(screen.getByPlaceholderText(/password/i)).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /forgot password/i })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /submit/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /auth\.login\.submitbutton/i })).toBeInTheDocument();
   });
 
   it("updates email and password inputs when the user types", () => {
@@ -61,19 +63,11 @@ describe("LoginPage", () => {
     fireEvent.change(screen.getByPlaceholderText(/password/i), {
       target: { value: "secret123" },
     });
-    fireEvent.click(screen.getByRole("button", { name: /submit/i }));
+    fireEvent.click(screen.getByRole("button", { name: /auth\.login\.submitbutton/i }));
 
     expect(dispatch).toHaveBeenCalledWith(
       loginRequest({ email: "test@example.com", password: "secret123" })
     );
-    expect(navigate).toHaveBeenCalledWith("/dashboard");
-  });
-
-  it("navigates to forgot password page", () => {
-    render(<LoginPage />);
-
-    fireEvent.click(screen.getByRole("button", { name: /forgot password/i }));
-
-    expect(navigate).toHaveBeenCalledWith("/forgot-password");
+    expect(navigate).not.toHaveBeenCalled();
   });
 });

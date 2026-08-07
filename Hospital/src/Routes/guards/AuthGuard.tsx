@@ -1,7 +1,7 @@
 import { Navigate } from "react-router-dom";
 
 const isAuthenticated = () => {
-  return !!localStorage.getItem("token"); // replace with real logic
+  return !!localStorage.getItem("admin_token");
 };
 
 const AuthGuard = ({ children }: any) => {
