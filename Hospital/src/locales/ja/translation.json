@@ -7,23 +7,6 @@
   },
   "auth": {
     "brandSubText": "病院のウェブパネル",
-    "signup": {
-      "title": "アカウントを登録",
-      "description": "医師、患者、予約、部門、パッケージ、病気の記録を1か所で管理するための安全なアカウントを作成します。",
-      "cardHeader": "アカウントを作成",
-      "helperText": "病院のダッシュボードを開始するために詳細を入力してください。",
-      "nameLabel": "名前",
-      "namePlaceholder": "John Doe",
-      "emailLabel": "メールアドレス",
-      "emailPlaceholder": "admin@hospital.com",
-      "passwordLabel": "パスワード",
-      "passwordPlaceholder": "パスワードを入力",
-      "mobileLabel": "電話番号",
-      "addressLabel": "住所",
-      "addressPlaceholder": "病院またはクリニックの住所",
-      "submitButton": "アカウントを作成",
-      "backToSignIn": "サインインに戻る"
-    },
     "login": {
       "brandTitle": "1つのシンプルなパネルで病院の運営を管理します。",
       "description": "医師、患者、予約、パッケージ、部門、および病気の記録をクリーンなパイロット対応のワークスペースで追跡します。",
@@ -36,7 +19,6 @@
       "showPassword": "パスワードを表示",
       "hidePassword": "パスワードを非表示",
       "submitButton": "サインイン",
-      "createAccount": "アカウントを作成",
       "forgotPassword": "パスワードをお忘れですか？"
     },
     "forgot": {

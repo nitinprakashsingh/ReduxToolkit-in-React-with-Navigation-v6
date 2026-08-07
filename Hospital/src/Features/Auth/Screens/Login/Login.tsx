@@ -69,9 +69,6 @@ const LoginPage = () => {
     const forgetButtonHandler = () => {
         navigate("/forgot-password")
     }
-    const signUpButtonHandler = () => {
-        navigate("/signup")
-    }
 
     return (
         <Container>
@@ -153,9 +150,6 @@ const LoginPage = () => {
                         </Button>
                         {hasSubmitted && serverError ? <ErrorText>{serverError}</ErrorText> : null}
                         <LinkRow>
-                            <ForgetButton type="button" onClick={signUpButtonHandler}>
-                                {t('auth.login.createAccount')}
-                            </ForgetButton>
                             <ForgetButton type="button" onClick={forgetButtonHandler}>
                                 {t('auth.login.forgotPassword')}
                             </ForgetButton>

@@ -27,19 +27,6 @@ export interface LoginResponse {
   data: User;
 }
 
-export interface SignUpPayload {
-  name: string;
-  email: string;
-  password: string;
-  mobile?: string;
-  address?: string;
-}
-
-export interface SignUpResponse {
-  message: string;
-  data: User;
-}
-
 export interface ForgotPasswordPayload {
   email: string;
   newPassword: string;

@@ -1,6 +1,6 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { call, put, takeLatest } from 'redux-saga/effects';
-import { forgotPasswordApi, loginApi, signupApi } from './authApi';
+import { forgotPasswordApi, loginApi } from './authApi';
 import {
   forgotPasswordFailure,
   forgotPasswordRequest,
@@ -8,16 +8,12 @@ import {
   loginFailure,
   loginRequest,
   loginSuccess,
-  signupFailure,
-  signupRequest,
-  signupSuccess,
 } from './authSlice';
 import type {
   ForgotPasswordPayload,
   ForgotPasswordResponse,
   LoginPayload,
   LoginResponse,
-  SignUpPayload,
 } from './auth.types';
 
 function* handleLogin(action: PayloadAction<LoginPayload>) {
@@ -26,15 +22,6 @@ function* handleLogin(action: PayloadAction<LoginPayload>) {
     yield put(loginSuccess({ user: response.data }));
   } catch (error: any) {
     yield put(loginFailure(error.response?.data?.message ?? error.message ?? 'Login failed'));
-  }
-}
-
-function* handleSignup(action: PayloadAction<SignUpPayload>) {
-  try {
-    const data = yield call(signupApi, action.payload);
-    yield put(signupSuccess({ user: data.data }));
-  } catch (error: any) {
-    yield put(signupFailure(error.response?.data?.message ?? error.message ?? 'Signup failed'));
   }
 }
 
@@ -49,6 +36,5 @@ function* handleForgotPassword(action: PayloadAction<ForgotPasswordPayload>) {
 
 export function* authSaga() {
   yield takeLatest(loginRequest.type, handleLogin);
-  yield takeLatest(signupRequest.type, handleSignup);
   yield takeLatest(forgotPasswordRequest.type, handleForgotPassword);
 }
