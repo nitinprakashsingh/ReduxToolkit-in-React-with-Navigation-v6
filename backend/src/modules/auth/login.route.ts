@@ -1,7 +1,9 @@
 import { Router } from "express";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 import { z } from "zod";
 import { prisma } from "../../prisma/prismaClient"; // reuse singleton
+import { env } from "../../config/env";
 
 export const signInRouter = Router();
 
@@ -37,9 +39,20 @@ signInRouter.post("/", async (req, res, next) => {
       return res.status(401).json({ success: false, message: "Invalid email or password" });
     }
 
+    if (user.role !== "admin") {
+      return res.status(403).json({ success: false, message: "This account is not authorized to access the admin panel." });
+    }
+
+    const token = jwt.sign(
+      { email: user.email, role: user.role },
+      env.JWT_SECRET,
+      { subject: user.id, expiresIn: env.JWT_EXPIRES_IN as jwt.SignOptions["expiresIn"] }
+    );
+
     return res.status(200).json({
       success: true,
       message: "Login successful",
+      token,
       data: {
         id: user.id,
         email: user.email,

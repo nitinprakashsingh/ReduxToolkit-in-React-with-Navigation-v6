@@ -53,21 +53,17 @@ const facilities = [
 
 const HospitalProfile = ({ onBack }: HospitalProfileProps) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [hospital, setHospital] = useState<any>(null);
 
   useEffect(() => {
     let mounted = true;
     const load = async () => {
       try {
-        setLoading(true);
         const res = await axiosClient.get("/hospital");
         if (!mounted) return;
         setHospital(res.data.data);
       } catch (err) {
         // ignore if not found
-      } finally {
-        if (mounted) setLoading(false);
       }
     };
 
@@ -338,14 +334,11 @@ const HospitalProfile = ({ onBack }: HospitalProfileProps) => {
                     type="submit"
                     onClick={async () => {
                       try {
-                        setLoading(true);
                         const res = await axiosClient.put("/hospital", hospital || {});
                         setHospital(res.data.data);
                         setIsEditing(false);
                       } catch (err) {
                         console.error(err);
-                      } finally {
-                        setLoading(false);
                       }
                     }}
                   >

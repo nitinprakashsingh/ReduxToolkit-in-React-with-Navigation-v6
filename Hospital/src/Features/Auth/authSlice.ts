@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import type { AuthState, User, LoginPayload, ForgotPasswordPayload } from './auth.types';
+import type { AuthState, User, LoginPayload } from './auth.types';
 
 const initialState: AuthState = {
   user: null,
@@ -19,25 +19,12 @@ const authSlice = createSlice({
       state.error = null;
       state.resetMessage = null;
     },
-    loginSuccess(state, action: PayloadAction<{ user: User }>) {
+    loginSuccess(state, action: PayloadAction<{ user: User; token: string }>) {
       state.isLoading = false;
       state.user = action.payload.user;
-      state.token = null;
+      state.token = action.payload.token;
     },
     loginFailure(state, action: PayloadAction<string>) {
-      state.isLoading = false;
-      state.error = action.payload;
-    },
-    forgotPasswordRequest(state, _action: PayloadAction<ForgotPasswordPayload>) {
-      state.isLoading = true;
-      state.error = null;
-      state.resetMessage = null;
-    },
-    forgotPasswordSuccess(state, action: PayloadAction<string>) {
-      state.isLoading = false;
-      state.resetMessage = action.payload;
-    },
-    forgotPasswordFailure(state, action: PayloadAction<string>) {
       state.isLoading = false;
       state.error = action.payload;
     },
@@ -49,6 +36,7 @@ const authSlice = createSlice({
       state.user = null;
       state.token = null;
       state.resetMessage = null;
+      window.localStorage.removeItem('admin_token');
     },
   },
 });
@@ -57,9 +45,6 @@ export const {
   loginRequest,
   loginSuccess,
   loginFailure,
-  forgotPasswordRequest,
-  forgotPasswordSuccess,
-  forgotPasswordFailure,
   clearAuthMessage,
   logout,
 } = authSlice.actions;
