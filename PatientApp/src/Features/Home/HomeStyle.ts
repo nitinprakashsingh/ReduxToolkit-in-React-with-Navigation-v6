@@ -82,6 +82,10 @@ export const SideDrawer = styled.aside`
   box-sizing: border-box;
   overflow: hidden;
   box-shadow: 24px 0 60px rgba(15, 23, 42, 0.18);
+
+  @media (max-height: 520px) {
+    padding: 16px;
+  }
 `
 
 export const DrawerHeader = styled.div`
@@ -92,6 +96,10 @@ export const DrawerHeader = styled.div`
   gap: 16px;
   padding-bottom: 22px;
   border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+
+  @media (max-height: 520px) {
+    padding-bottom: 14px;
+  }
 `
 
 export const DrawerTitle = styled.h2`
@@ -126,9 +134,15 @@ export const DrawerNav = styled.nav`
   display: grid;
   align-content: start;
   gap: 10px;
-  padding: 26px 0;
+  padding: 26px 6px 26px 0;
   overflow-y: auto;
   overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+
+  @media (max-height: 520px) {
+    padding-top: 14px;
+    padding-bottom: 14px;
+  }
 `
 
 export const DrawerNavItem = styled.button`
@@ -154,6 +168,10 @@ export const DrawerFooter = styled.div`
   margin-top: auto;
   padding-top: 22px;
   border-top: 1px solid rgba(148, 163, 184, 0.2);
+
+  @media (max-height: 520px) {
+    padding-top: 14px;
+  }
 `
 
 export const SignOutButton = styled.button`
@@ -1600,6 +1618,31 @@ export const PaymentConfirmation = styled.section`
   > span { margin-top: 12px; color: #64748b; line-height: 1.6; }
 `
 
+export const PaymentReceiptActions = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  width: 100%;
+  margin-top: 22px;
+
+  a {
+    min-height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: #f0ebfb;
+    color: #6541af;
+    font-size: 14px;
+    font-weight: 800;
+    text-decoration: none;
+  }
+
+  @media (max-width: 460px) {
+    grid-template-columns: 1fr;
+  }
+`
+
 export const PaymentConfirmationIcon = styled.div`
   width: 64px;
   height: 64px;
@@ -1618,4 +1661,528 @@ export const PaymentEmptyState = styled.div`
   > span { display: inline-grid; width: 52px; height: 52px; place-items: center; border-radius: 50%; background: #f0ebfb; color: #6541af; font-size: 24px; font-weight: 800; }
   h2 { margin: 16px 0 8px; font-size: 20px; }
   p { margin: 0; color: #64748b; line-height: 1.6; }
+`
+
+export const AppointmentsList = styled.main`
+  min-height: 100vh;
+  background: #f6f8fc;
+  color: #111827;
+`
+
+export const AppointmentsHeader = styled.header`
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  padding: 28px max(28px, calc((100% - 900px) / 2));
+  border-bottom: 1px solid #e3e8ef;
+  background: #ffffff;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
+
+  h1 {
+    margin: 18px 0 6px;
+    font-size: 32px;
+    letter-spacing: -0.03em;
+  }
+
+  p {
+    margin: 0;
+    color: #64748b;
+  }
+`
+
+export const AppointmentsBackButton = styled.button`
+  border: 0;
+  background: transparent;
+  color: #6541af;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+`
+
+export const AppointmentsCard = styled.article`
+  display: grid;
+  grid-template-columns: 86px 1fr;
+  gap: 16px;
+  width: min(900px, calc(100% - 40px));
+  margin: 0 auto 16px;
+  padding: 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.06);
+
+  h3 {
+    margin: 8px 0 4px;
+    font-size: 20px;
+  }
+
+  p,
+  span {
+    display: block;
+    margin: 0 0 6px;
+    color: #64748b;
+  }
+
+  strong {
+    display: block;
+    margin-bottom: 6px;
+  }
+`
+
+export const AppointmentsPhoto = styled.img`
+  width: 86px;
+  height: 96px;
+  border-radius: 14px;
+  object-fit: cover;
+  background: #e6eef5;
+`
+
+export const AppointmentStatus = styled.span<{ $status?: string }>`
+  display: inline-block;
+  width: fit-content;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: ${({ $status }) => ($status === "Cancelled" ? "#fee2e2" : $status === "Rescheduled" ? "#fef3c7" : "#d1fae5")};
+  color: ${({ $status }) => ($status === "Cancelled" ? "#b91c1c" : $status === "Rescheduled" ? "#92400e" : "#047857")} !important;
+  font-size: 12px;
+  font-weight: 800;
+`
+
+export const AppointmentsCardActions = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+
+  button {
+    min-height: 38px;
+    padding: 0 14px;
+    border: 1px solid #d8eee9;
+    border-radius: 10px;
+    background: #ffffff;
+    color: #0b9788;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+  }
+
+  button:last-child {
+    border-color: #fecaca;
+    color: #dc2626;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
+  }
+`
+
+export const AppointmentsEmpty = styled.div`
+  width: min(900px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 34px 24px;
+  border: 1px dashed #cbd5e1;
+  border-radius: 18px;
+  background: #ffffff;
+  text-align: center;
+
+  h3 {
+    margin: 0 0 8px;
+    font-size: 20px;
+  }
+
+  p {
+    margin: 0;
+    color: #64748b;
+  }
+`
+
+export const RecordsPage = styled.main`
+  min-height: 100vh;
+  background: #f6f8fc;
+  color: #111827;
+`
+
+export const SupportPage = styled(RecordsPage)``
+
+export const ProfilePage = styled(RecordsPage)``
+
+export const NotificationsPage = styled(RecordsPage)``
+
+export const ScreenHeader = styled.header`
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  padding: 28px max(28px, calc((100% - 960px) / 2));
+  border-bottom: 1px solid #e3e8ef;
+  background: #ffffff;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
+
+  h1 {
+    margin: 18px 0 6px;
+    font-size: 32px;
+    letter-spacing: -0.03em;
+  }
+
+  p {
+    max-width: 720px;
+    margin: 0;
+    color: #64748b;
+    line-height: 1.6;
+  }
+`
+
+export const ScreenBackButton = styled.button`
+  border: 0;
+  background: transparent;
+  color: #6541af;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+`
+
+export const ScreenSection = styled.section`
+  display: grid;
+  gap: 22px;
+  width: min(960px, 100%);
+  margin: 0 auto;
+  padding: 34px 28px 64px;
+  box-sizing: border-box;
+`
+
+export const InfoPanel = styled.section`
+  padding: 24px;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.06);
+
+  h2 {
+    margin: 0 0 10px;
+    font-size: 22px;
+  }
+
+  p {
+    margin: 0;
+    color: #64748b;
+    line-height: 1.7;
+  }
+`
+
+export const DemoBadge = styled.span`
+  display: inline-block;
+  width: fit-content;
+  margin-bottom: 10px;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: #f0ebfb;
+  color: #6541af;
+  font-size: 12px;
+  font-weight: 800;
+`
+
+export const RecordsGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+
+  @media (max-width: 820px) {
+    grid-template-columns: 1fr;
+  }
+`
+
+export const RecordsTabs = styled.div`
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+
+  button {
+    flex: 0 0 auto;
+    min-height: 40px;
+    padding: 0 14px;
+    border: 1px solid #d8eee9;
+    border-radius: 999px;
+    background: #ffffff;
+    color: #475569;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+  }
+
+  button[data-active="true"] {
+    background: #0db7a4;
+    color: #ffffff;
+  }
+`
+
+export const UploadPanel = styled.section`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 22px;
+  border: 1px dashed #0db7a4;
+  border-radius: 18px;
+  background: #f0fdfa;
+
+  h2 {
+    margin: 0 0 6px;
+    font-size: 20px;
+  }
+
+  p {
+    margin: 0;
+    color: #64748b;
+    line-height: 1.6;
+  }
+
+  button {
+    flex: 0 0 auto;
+    min-height: 42px;
+    padding: 0 16px;
+    border: 0;
+    border-radius: 12px;
+    background: #0db7a4;
+    color: #ffffff;
+    font-weight: 800;
+    cursor: pointer;
+  }
+
+  @media (max-width: 640px) {
+    align-items: stretch;
+    flex-direction: column;
+  }
+`
+
+export const RecordsSummary = styled.article`
+  display: flex;
+  min-height: 220px;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 20px;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.06);
+
+  > span:first-child {
+    color: #0b9788;
+    font-size: 13px;
+    font-weight: 800;
+  }
+
+  h3 {
+    margin: 10px 0 8px;
+    font-size: 19px;
+  }
+
+  p {
+    margin: 0 0 18px;
+    color: #64748b;
+    line-height: 1.6;
+  }
+
+  strong {
+    margin-top: auto;
+    margin-bottom: 10px;
+    color: #111827;
+  }
+`
+
+export const RecordsPdfLink = styled.a`
+  width: 100%;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 6px;
+  border-radius: 12px;
+  background: #0db7a4;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 800;
+  text-decoration: none;
+
+  &:hover {
+    background: #0a9d8d;
+  }
+`
+
+export const ContactGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
+`
+
+export const ContactItem = styled.div`
+  display: grid;
+  gap: 6px;
+  padding: 16px;
+  border-radius: 14px;
+  background: #f8fafc;
+
+  span {
+    color: #64748b;
+    font-size: 13px;
+    font-weight: 800;
+  }
+
+  a {
+    color: #0b9788;
+    font-size: 16px;
+    font-weight: 800;
+    text-decoration: none;
+    overflow-wrap: anywhere;
+  }
+`
+
+export const FaqItem = styled.article`
+  padding: 18px 0;
+  border-top: 1px solid #e2e8f0;
+
+  h3 {
+    margin: 0 0 8px;
+    font-size: 17px;
+  }
+
+  p {
+    margin: 0;
+    color: #64748b;
+    line-height: 1.65;
+  }
+`
+
+export const FeedbackForm = styled.form`
+  display: grid;
+  gap: 12px;
+
+  input,
+  textarea {
+    width: 100%;
+    min-height: 46px;
+    padding: 10px 12px;
+    border: 1px solid #cfd8e3;
+    border-radius: 12px;
+    box-sizing: border-box;
+    color: #111827;
+    font: inherit;
+    outline-color: #0db7a4;
+  }
+
+  textarea {
+    min-height: 96px;
+    resize: vertical;
+  }
+
+  button {
+    min-height: 48px;
+    border: 0;
+    border-radius: 13px;
+    background: #0db7a4;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 800;
+    cursor: pointer;
+  }
+`
+
+export const ProfileHero = styled.section`
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 24px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #6541af, #0db7a4);
+  color: #ffffff;
+
+  h2 {
+    margin: 0 0 6px;
+    font-size: 28px;
+  }
+
+  p {
+    margin: 0;
+    opacity: 0.9;
+  }
+`
+
+export const ProfileAvatar = styled.div`
+  width: 72px;
+  height: 72px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+  border: 2px solid rgba(255, 255, 255, 0.34);
+  font-size: 22px;
+  font-weight: 900;
+`
+
+export const NotificationCard = styled.article`
+  padding: 22px;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.06);
+
+  span {
+    color: #0b9788;
+    font-size: 13px;
+    font-weight: 800;
+  }
+
+  h2 {
+    margin: 8px 0;
+    font-size: 20px;
+  }
+
+  p {
+    margin: 0;
+    color: #64748b;
+    line-height: 1.6;
+  }
+`
+
+export const QuickActionGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 30px;
+
+  @media (max-width: 760px) {
+    grid-template-columns: 1fr;
+  }
+`
+
+export const QuickActionButton = styled.button<{ $danger?: boolean }>`
+  min-height: 72px;
+  padding: 16px;
+  border: 1px solid ${({ $danger }) => ($danger ? "#fecaca" : "#d8eee9")};
+  border-radius: 18px;
+  background: ${({ $danger }) => ($danger ? "#fef2f2" : "#ffffff")};
+  color: ${({ $danger }) => ($danger ? "#b91c1c" : "#111827")};
+  text-align: left;
+  cursor: pointer;
+  box-shadow: 0 12px 26px rgba(15, 23, 42, 0.05);
+
+  strong,
+  span {
+    display: block;
+  }
+
+  strong {
+    font-size: 16px;
+    margin-bottom: 5px;
+  }
+
+  span {
+    color: ${({ $danger }) => ($danger ? "#dc2626" : "#64748b")};
+    font-size: 13px;
+    line-height: 1.45;
+  }
 `

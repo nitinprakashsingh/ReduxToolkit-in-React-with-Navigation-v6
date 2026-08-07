@@ -1,0 +1,7 @@
+# Ignore node modules everywhere
+**/node_modules/
+
+# Ignore build artifacts and caches
+**/.cache/
+**/build/
+**/dist/

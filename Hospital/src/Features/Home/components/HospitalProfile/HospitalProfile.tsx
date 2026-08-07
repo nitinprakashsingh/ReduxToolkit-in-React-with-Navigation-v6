@@ -63,6 +63,9 @@ const HospitalProfile = ({ onBack }: HospitalProfileProps) => {
         if (!mounted) return;
         setHospital(res.data.data);
       } catch (err) {
+        if(loading){
+          setLoading(false);
+        }
         // ignore if not found
       }
     };
@@ -72,7 +75,7 @@ const HospitalProfile = ({ onBack }: HospitalProfileProps) => {
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [loading]);
 
   if (isEditing) {
     return (

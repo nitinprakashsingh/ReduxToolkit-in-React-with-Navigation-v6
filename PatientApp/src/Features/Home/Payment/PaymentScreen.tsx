@@ -13,6 +13,7 @@ import {
   PaymentPage,
   PaymentPanel,
   PaymentPayButton,
+  PaymentReceiptActions,
   PaymentSectionTitle,
   PaymentTopbar,
 } from "../HomeStyle"
@@ -35,6 +36,7 @@ const PaymentScreen = ({ doctor, date, slot, onBack, onComplete, onDone }: Payme
   const makePayment = () => {
     setPaid(true)
     onComplete(selectedMethodId)
+    window.setTimeout(onDone, 900)
   }
 
   if (paid) {
@@ -46,6 +48,10 @@ const PaymentScreen = ({ doctor, date, slot, onBack, onComplete, onDone }: Payme
           <p>Payment successful</p>
           <h1>Appointment booked</h1>
           <span>Your consultation with {doctor.name} is confirmed for {date} at {slot}.</span>
+          <PaymentReceiptActions>
+            <a href="/reports/demo-payment-receipt.pdf" target="_blank" rel="noreferrer">View receipt</a>
+            <a href="/reports/demo-payment-receipt.pdf" download>Download receipt</a>
+          </PaymentReceiptActions>
           <PaymentPayButton type="button" onClick={onDone}>Done</PaymentPayButton>
         </PaymentConfirmation>
       </PaymentPage>

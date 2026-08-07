@@ -82,7 +82,7 @@ const DoctorDetail = ({ doctor, onBack, onSelectDoctor, onBookAppointment }: Doc
                     <span>{relatedDoctor.specialty}</span>
                     <strong>{relatedDoctor.name}</strong>
                     <small>{relatedDoctor.experience} · {relatedDoctor.fee}</small>
-                    <em>View profile →</em>
+                    <em>View profile -→</em>
                   </RelatedDoctorCard>
                 ))}
               </RelatedDoctorGrid>
