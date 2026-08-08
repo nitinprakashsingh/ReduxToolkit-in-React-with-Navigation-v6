@@ -17,6 +17,12 @@ Set `REACT_APP_API_BASE_URL` to the backend API URL, including `/api`:
 REACT_APP_API_BASE_URL="http://localhost:5000/api"
 ```
 
+For your production backend on Render, use:
+
+```env
+REACT_APP_API_BASE_URL="https://reduxtoolkit-in-react-with-navigation-v6.onrender.com/api"
+```
+
 ## Production deployment
 
 Deploy the `Hospital` folder as a static React site. Set this build-time environment variable in the hosting provider:

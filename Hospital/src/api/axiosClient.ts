@@ -1,7 +1,9 @@
 import axios from 'axios';
 
 const baseURL = process.env.REACT_APP_API_BASE_URL
-  || (process.env.NODE_ENV === 'production' ? '/api' : 'http://localhost:5000/api');
+  || (process.env.NODE_ENV === 'production'
+    ? 'https://reduxtoolkit-in-react-with-navigation-v6.onrender.com/api'
+    : 'http://localhost:5000/api');
 
 const axiosClient = axios.create({
   baseURL,
