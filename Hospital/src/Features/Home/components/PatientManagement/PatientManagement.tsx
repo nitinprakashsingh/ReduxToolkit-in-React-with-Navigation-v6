@@ -129,7 +129,6 @@ const PatientManagement = () => {
   const [searchText, setSearchText] = useState("");
   const [patients, setPatients] = useState<Patient[]>(defaultPatients);
   const [doctors, setDoctors] = useState<Doctor[]>([]);
-  const [, setLoading] = useState(false);
   const [loadingDoctors, setLoadingDoctors] = useState(false);
   const [formState, setFormState] = useState({
     name: "",
