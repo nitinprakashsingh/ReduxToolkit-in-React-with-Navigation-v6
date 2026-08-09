@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { z } from "zod";
 
-import { prisma } from "../../prisma/prismaClient";
+import { prisma } from "../../../prisma/prismaClient";
 
 export const hospitalRouter = Router();
 
