@@ -3,7 +3,6 @@ export interface User {
   email: string;
   name: string;
   role: 'admin' | 'user';
-  password?: string;
   mobile?: string | null;
   address?: string | null;
 }
@@ -25,26 +24,5 @@ export interface LoginResponse {
   success: boolean;
   message: string;
   data: User;
-}
-
-export interface SignUpPayload {
-  name: string;
-  email: string;
-  password: string;
-  mobile?: string;
-  address?: string;
-}
-
-export interface SignUpResponse {
-  message: string;
-  data: User;
-}
-
-export interface ForgotPasswordPayload {
-  email: string;
-  newPassword: string;
-}
-
-export interface ForgotPasswordResponse {
-  message: string;
+  token: string;
 }

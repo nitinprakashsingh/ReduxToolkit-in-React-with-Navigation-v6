@@ -129,7 +129,6 @@ const PatientManagement = () => {
   const [searchText, setSearchText] = useState("");
   const [patients, setPatients] = useState<Patient[]>(defaultPatients);
   const [doctors, setDoctors] = useState<Doctor[]>([]);
-  const [, setLoading] = useState(false);
   const [loadingDoctors, setLoadingDoctors] = useState(false);
   const [formState, setFormState] = useState({
     name: "",
@@ -160,15 +159,12 @@ const PatientManagement = () => {
 
   useEffect(() => {
     const loadPatients = async () => {
-      setLoading(true);
       try {
         const result = await fetchPatients();
         const apiPatients = result.data.data.map(mapApiPatient);
         setPatients(apiPatients);
       } catch (error) {
         console.error("Failed to load patients", error);
-      } finally {
-        setLoading(false);
       }
     };
 
