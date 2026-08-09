@@ -274,8 +274,8 @@ const HomePage = () => {
       <Sidebar>
         <Text>
           <Logo src={ShriyanLogo} alt="Shriyan Technology Pvt ltd" />
-          <Title>Shriyan Technology</Title>
-          <Subtitle>Profile</Subtitle>
+          <Title>Shriyan Health Care</Title>
+          <Subtitle>Trust never fade</Subtitle>
         </Text>
 
         {sidebarItems.map((item) => (
