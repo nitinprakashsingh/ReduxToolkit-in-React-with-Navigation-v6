@@ -119,6 +119,22 @@ export const TextInput = styled.input`
   }
 `;
 
+export const SelectInput = styled.select`
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 11px 12px;
+  color: #111827;
+  font-size: 14px;
+  outline: none;
+
+  &:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+  }
+`;
+
 export const SubmitButton = styled.button`
   justify-self: flex-start;
   border: none;

@@ -12,6 +12,15 @@ const loginSchema = z.object({
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
+const verifyEmailSchema = z.object({
+  email: z.string().email("Valid email is required"),
+});
+
+const setPasswordSchema = z.object({
+  email: z.string().email("Valid email is required"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+});
+
 // mounted at /api/auth/login in your app.ts (so define POST at "/")
 signInRouter.post("/", async (req, res, next) => {
   try {
@@ -39,10 +48,6 @@ signInRouter.post("/", async (req, res, next) => {
       return res.status(401).json({ success: false, message: "Invalid email or password" });
     }
 
-    if (user.role !== "admin") {
-      return res.status(403).json({ success: false, message: "This account is not authorized to access the admin panel." });
-    }
-
     const token = jwt.sign(
       { email: user.email, role: user.role },
       env.JWT_SECRET,
@@ -62,6 +67,55 @@ signInRouter.post("/", async (req, res, next) => {
         address: user.address ?? null,
       },
     });
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return res.status(400).json({ success: false, message: "Validation failed", errors: error.errors });
+    }
+    next(error);
+  }
+});
+
+signInRouter.post("/verify-email", async (req, res, next) => {
+  try {
+    const payload = verifyEmailSchema.parse(req.body);
+
+    const user = await prisma.user.findUnique({
+      where: { email: payload.email },
+      select: { id: true, email: true, role: true },
+    });
+
+    if (!user || user.role !== "user") {
+      return res.status(404).json({ success: false, message: "Email not found for a patient user." });
+    }
+
+    return res.status(200).json({ success: true, message: "Email verified. Please set your password." });
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return res.status(400).json({ success: false, message: "Validation failed", errors: error.errors });
+    }
+    next(error);
+  }
+});
+
+signInRouter.post("/set-password", async (req, res, next) => {
+  try {
+    const payload = setPasswordSchema.parse(req.body);
+    const user = await prisma.user.findUnique({
+      where: { email: payload.email },
+      select: { id: true, role: true },
+    });
+
+    if (!user || user.role !== "user") {
+      return res.status(404).json({ success: false, message: "Email not found for a patient user." });
+    }
+
+    const hashedPassword = await bcrypt.hash(payload.password, 10);
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { password: hashedPassword },
+    });
+
+    return res.status(200).json({ success: true, message: "Password has been set successfully." });
   } catch (error) {
     if (error instanceof z.ZodError) {
       return res.status(400).json({ success: false, message: "Validation failed", errors: error.errors });
