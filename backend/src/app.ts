@@ -17,8 +17,10 @@ import { packageRouter } from "./modules/HospitalBackend/packages/package.routes
 import { patientRouter } from "./modules/patients/patient.routes";
 import { signInRouter } from "./modules/HospitalBackend/auth/login.route";
 import { staffRouter } from "./modules/staff/staff.routes";
+import { userRouter } from "./modules/HospitalBackend/users/user.routes";
 import { hospitalRouter } from "./modules/HospitalBackend/hospital/hospital.routes";
 import { patientAppRouter } from "./modules/patientappBackend/patientapp.routes";
+import { patientAuthRouter } from "./modules/patientappBackend/auth.route";
 
 export const app = express();
 
@@ -52,6 +54,7 @@ const loginRateLimit = rateLimit({
 
 app.use("/api/health", healthRouter);
 app.use("/api/auth/login", loginRateLimit, signInRouter);
+app.use("/api/patientapp/auth", patientAuthRouter);
 
 app.use(authenticate);
 app.use(requireAdmin);
@@ -64,6 +67,7 @@ app.use("/api/bookings", bookingRouter);
 app.use("/api/packages", packageRouter);
 app.use("/api/diseases", diseaseRouter);
 app.use("/api/staff", staffRouter);
+app.use("/api/users", userRouter);
 app.use("/api/hospital", hospitalRouter);
 app.use("/api/patientapp", patientAppRouter);
 app.use(errorHandler);

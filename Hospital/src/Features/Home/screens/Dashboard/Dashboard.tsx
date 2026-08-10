@@ -33,6 +33,7 @@ import PackageManagement, {
 import PatientManagement from "../../components/PatientManagement";
 import SideBarItem from "../../components/SideBarItem/SideBar";
 import StaffManagement from "../../components/StaffManagement";
+import UserManagement from "../../components/UserManagement";
 //reoo--
 import {
   Card,
@@ -98,6 +99,11 @@ const sidebarItems = [
     title: "Manage Bed",
     icon: Bed,
   },
+  {
+    id: 11,
+    title: "User Management",
+    icon: Users,
+  },
 ];
 
 const HomePage = () => {
@@ -108,6 +114,7 @@ const HomePage = () => {
   const [packageView, setPackageView] = useState<PackageView>("list");
   const [bookingView, setBookingView] = useState<"list" | "create">("list");
   const [bedView, setBedView] = useState<"list" | "add">("list");
+  const [userView, setUserView] = useState<"list" | "add">("list");
 
   // ==========================================
   // Render Content Based on Sidebar Selection
@@ -263,6 +270,17 @@ const HomePage = () => {
       );
     }
 
+    // ------------------------------
+    // User Management
+    // ------------------------------
+    if (selectedItem.title === "User Management") {
+      return (
+        <Card>
+          <UserManagement view={userView} onViewChange={setUserView} />
+        </Card>
+      );
+    }
+
     return <Card>No Content Available</Card>;
   };
 
@@ -304,6 +322,10 @@ const HomePage = () => {
 
                 if (item.title === "Manage Bed") {
                   setBedView("list");
+                }
+
+                if (item.title === "User Management") {
+                  setUserView("list");
                 }
               }}
             />

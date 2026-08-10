@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from "react"
 import ShriyanLogo from "../../../Assests/ShriyanLogo.png"
+import { loginPatient } from "../../../services/authService"
 import { Page, Card, BrandPanel, BrandTop, LogoMark, BrandName, BrandSubText, BrandContent, BrandTitle, BrandDescription, Header, Title, HelperText, Body, Form, InputGroup, Label, Input, Button, Message, Error, Footer, TextButton, SmallText } from "./LoginStyle"
 import OtpScreen from "./Otp"
 
@@ -43,7 +44,7 @@ const Login = ({ onLogin }: LoginProps) => {
     }, 700)
   }
 
-  const handleVerifyOtp = (event: React.FormEvent) => {
+  const handleVerifyOtp = async (event: React.FormEvent) => {
     event.preventDefault()
     setError("")
     if (!otpValid) {
@@ -52,16 +53,21 @@ const Login = ({ onLogin }: LoginProps) => {
     }
 
     setIsSubmitting(true)
-    setTimeout(() => {
-      setIsSubmitting(false)
-      if (otp === "1234") {
+    try {
+      const response = await loginPatient({ mobile, otp })
+      if (response.data?.success) {
         setInfo("Login successful. Welcome to the patient dashboard.")
         setError("")
+        window.localStorage.setItem("patient-app-demo-authenticated", "true")
         onLogin?.()
       } else {
-        setError("OTP does not match. Please check and try again.")
+        setError(response.data?.message || "OTP does not match. Please check and try again.")
       }
-    }, 700)
+    } catch (apiError: any) {
+      setError(apiError.response?.data?.message ?? apiError.message ?? "Unable to login right now.")
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const handleBack = () => {
