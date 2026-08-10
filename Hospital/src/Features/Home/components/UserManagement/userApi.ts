@@ -28,12 +28,31 @@ type CreateUserResponse = {
   data: User;
 };
 
+type DeleteUserResponse = {
+  message: string;
+};
+
 export const fetchUserListApi = async () => {
   const response = await axiosClient.get<UserListResponse>("/users/list");
   return response.data.data;
 };
 
+export const fetchPatientUsersApi = async () => {
+  const response = await axiosClient.get<UserListResponse>("/users/patients");
+  return response.data.data;
+};
+
 export const createUserApi = async (payload: CreateUserPayload) => {
   const response = await axiosClient.post<CreateUserResponse>("/users", payload);
+  return response.data;
+};
+
+export const updateUserApi = async (userId: string, payload: CreateUserPayload) => {
+  const response = await axiosClient.put<CreateUserResponse>(`/users/${userId}`, payload);
+  return response.data;
+};
+
+export const deleteUserApi = async (userId: string) => {
+  const response = await axiosClient.delete<DeleteUserResponse>(`/users/${userId}`);
   return response.data;
 };

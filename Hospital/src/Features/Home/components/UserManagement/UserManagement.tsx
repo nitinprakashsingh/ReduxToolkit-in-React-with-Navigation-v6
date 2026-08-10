@@ -50,12 +50,14 @@ const UserManagement = ({ view, onViewChange }: UserManagementProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [userFilter, setUserFilter] = useState<"all" | "patients">("all");
+  const [editingUserId, setEditingUserId] = useState<string | null>(null);
 
   const loadUsers = async () => {
     try {
       setIsLoading(true);
       setError(null);
-      const users = await fetchUserListApi();
+      const users = userFilter === "patients" ? await fetchPatientUsersApi() : await fetchUserListApi();
       setUserList(users);
     } catch (apiError: any) {
       setError(apiError.response?.data?.message ?? apiError.message ?? "Failed to load users");
@@ -68,13 +70,50 @@ const UserManagement = ({ view, onViewChange }: UserManagementProps) => {
     if (view === "list") {
       loadUsers();
     }
-  }, [view]);
+  }, [view, userFilter]);
 
   const handleChange = (field: keyof CreateUserPayload, value: string) => {
     setFormData((current) => ({
       ...current,
       [field]: value,
     }));
+  };
+
+  const setEditMode = (user: User) => {
+    setEditingUserId(user.id);
+    setFormData({
+      name: user.name,
+      email: user.email ?? "",
+      mobile: user.mobile ?? "",
+      address: user.address ?? "",
+      role: user.role,
+      password: "",
+    });
+    onViewChange("add");
+  };
+
+  const clearEditMode = () => {
+    setEditingUserId(null);
+    setFormData(initialFormState);
+    setError(null);
+    setSuccessMessage(null);
+  };
+
+  const handleDelete = async (userId: string) => {
+    if (!window.confirm("Are you sure you want to delete this user?")) {
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      await deleteUserApi(userId);
+      setSuccessMessage("User deleted successfully.");
+      await loadUsers();
+    } catch (apiError: any) {
+      setError(apiError.response?.data?.message ?? apiError.message ?? "Failed to delete user");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -84,13 +123,20 @@ const UserManagement = ({ view, onViewChange }: UserManagementProps) => {
 
     try {
       setIsSubmitting(true);
-      await createUserApi(formData);
-      setSuccessMessage("User created successfully.");
-      setFormData(initialFormState);
+
+      if (editingUserId) {
+        await updateUserApi(editingUserId, formData);
+        setSuccessMessage("User updated successfully.");
+      } else {
+        await createUserApi(formData);
+        setSuccessMessage("User created successfully.");
+      }
+
+      clearEditMode();
       await loadUsers();
       onViewChange("list");
     } catch (apiError: any) {
-      setError(apiError.response?.data?.message ?? apiError.message ?? "Failed to create user");
+      setError(apiError.response?.data?.message ?? apiError.message ?? (editingUserId ? "Failed to update user" : "Failed to create user"));
     } finally {
       setIsSubmitting(false);
     }
@@ -108,11 +154,25 @@ const UserManagement = ({ view, onViewChange }: UserManagementProps) => {
           <ListChecks size={16} />
           User List
         </ActionButton>
-        <ActionButton $active={view === "add"} onClick={() => onViewChange("add")}>
+        <ActionButton $active={view === "add"} onClick={() => {
+          clearEditMode();
+          onViewChange("add");
+        }}>
           <UserPlus size={16} />
           Add New User
         </ActionButton>
       </ActionBar>
+
+      {view === "list" && (
+        <ActionBar>
+          <ActionButton $active={userFilter === "all"} onClick={() => setUserFilter("all")}>
+            All Users
+          </ActionButton>
+          <ActionButton $active={userFilter === "patients"} onClick={() => setUserFilter("patients")}>
+            Patient Users
+          </ActionButton>
+        </ActionBar>
+      )}
 
       {error && <HelperText style={{ color: "#dc2626" }}>{error}</HelperText>}
       {successMessage && <HelperText style={{ color: "#15803d" }}>{successMessage}</HelperText>}
@@ -189,8 +249,21 @@ const UserManagement = ({ view, onViewChange }: UserManagementProps) => {
           </FieldGroup>
 
           <SubmitButton type="submit" disabled={isSubmitting}>
-            {isSubmitting ? "Saving..." : "Create User"}
+            {isSubmitting ? (editingUserId ? "Updating..." : "Saving...") : editingUserId ? "Update User" : "Create User"}
           </SubmitButton>
+
+          {editingUserId && (
+            <SubmitButton
+              type="button"
+              style={{ background: "#6b7280", marginLeft: "12px" }}
+              onClick={() => {
+                clearEditMode();
+                onViewChange("list");
+              }}
+            >
+              Cancel
+            </SubmitButton>
+          )}
         </FormGrid>
       ) : (
         <StyledTable>
@@ -214,8 +287,14 @@ const UserManagement = ({ view, onViewChange }: UserManagementProps) => {
                 <TableDataCell>{user.role}</TableDataCell>
                 <TableDataCell>{user.address || "-"}</TableDataCell>
                 <TableDataCell>
-                  <EditButton onClick={() => alert(`Edit ${user.name}`)}>
+                  <EditButton onClick={() => setEditMode(user)}>
                     Edit
+                  </EditButton>
+                  <EditButton
+                    style={{ background: "#dc2626", marginLeft: "8px" }}
+                    onClick={() => handleDelete(user.id)}
+                  >
+                    Delete
                   </EditButton>
                 </TableDataCell>
               </TableRow>
