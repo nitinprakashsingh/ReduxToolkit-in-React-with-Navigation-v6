@@ -1,4 +1,5 @@
 import { FormEvent, useEffect, useState } from "react";
+import styled from "styled-components";
 import { ListChecks, UserPlus } from "lucide-react";
 
 import {
@@ -20,7 +21,7 @@ import {
   TextInput,
   SelectInput,
 } from "../DoctorForm/DoctorForm.Style";
-import { createUserApi, fetchUserListApi, type CreateUserPayload, type User } from "./userApi";
+import { createUserApi, deleteUserApi, fetchPatientUsersApi, fetchUserListApi, updateUserApi, type CreateUserPayload, type User } from "./userApi";
 
 type UserManagementProps = {
   view: "list" | "add";
@@ -99,21 +100,37 @@ const UserManagement = ({ view, onViewChange }: UserManagementProps) => {
     setSuccessMessage(null);
   };
 
+  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
+  const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
+
   const handleDelete = async (userId: string) => {
-    if (!window.confirm("Are you sure you want to delete this user?")) {
+    setDeleteTargetId(userId);
+    setConfirmDeleteOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!deleteTargetId) {
       return;
     }
 
+    setConfirmDeleteOpen(false);
+    setIsLoading(true);
+
     try {
-      setIsLoading(true);
-      await deleteUserApi(userId);
+      await deleteUserApi(deleteTargetId);
       setSuccessMessage("User deleted successfully.");
       await loadUsers();
     } catch (apiError: any) {
       setError(apiError.response?.data?.message ?? apiError.message ?? "Failed to delete user");
     } finally {
       setIsLoading(false);
+      setDeleteTargetId(null);
     }
+  };
+
+  const cancelDelete = () => {
+    setConfirmDeleteOpen(false);
+    setDeleteTargetId(null);
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -314,8 +331,77 @@ const UserManagement = ({ view, onViewChange }: UserManagementProps) => {
           </tbody>
         </StyledTable>
       )}
+
+      {confirmDeleteOpen && (
+        <ModalOverlay>
+          <ModalContent>
+            <ModalTitle>Confirm deletion</ModalTitle>
+            <ModalText>Are you sure you want to delete this user? This action cannot be undone.</ModalText>
+            <ModalActions>
+              <ModalButton type="button" onClick={cancelDelete} $variant="secondary">
+                Cancel
+              </ModalButton>
+              <ModalButton type="button" onClick={confirmDelete} $variant="danger">
+                Delete
+              </ModalButton>
+            </ModalActions>
+          </ModalContent>
+        </ModalOverlay>
+      )}
     </>
   );
 };
+
+const ModalOverlay = styled.div`
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+`;
+
+const ModalContent = styled.div`
+  background: #ffffff;
+  border-radius: 16px;
+  width: min(420px, calc(100% - 32px));
+  padding: 28px;
+  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.18);
+`;
+
+const ModalTitle = styled.h3`
+  margin: 0;
+  font-size: 20px;
+  color: #111827;
+`;
+
+const ModalText = styled.p`
+  margin: 16px 0 24px;
+  color: #4b5563;
+  line-height: 1.6;
+`;
+
+const ModalActions = styled.div`
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+`;
+
+const ModalButton = styled.button<{ $variant?: "primary" | "secondary" | "danger" }>`
+  min-width: 100px;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 16px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #ffffff;
+  background: ${({ $variant }) =>
+    $variant === "danger" ? "#dc2626" : $variant === "secondary" ? "#6b7280" : "#2563eb"};
+
+  &:hover {
+    opacity: 0.95;
+  }
+`;
 
 export default UserManagement;

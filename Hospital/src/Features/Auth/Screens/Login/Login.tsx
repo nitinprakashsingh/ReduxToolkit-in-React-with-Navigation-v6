@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next"
 import ShriyanLogo from "../../../../Assets/ShriyanLogo.png"
 import { useAppDispatch, useAppSelector } from "../../../../Store/types"
 import { loginRequest } from "../../authSlice"
+import { verifyEmailApi, setPasswordApi } from "../../authApi"
 import {
     BrandContent,
     BrandDescription,
@@ -38,10 +39,15 @@ const LoginPage = () => {
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
     const { t } = useTranslation()
+    const [screen, setScreen] = useState<"login" | "verify-email" | "set-password">("login")
     const [userName, setUserName] = useState("")
     const [password, setPassword] = useState("")
+    const [confirmPassword, setConfirmPassword] = useState("")
     const [showPassword, setShowPassword] = useState(false)
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+    const [stepMessage, setStepMessage] = useState("")
     const [errorMessage, setErrorMessage] = useState("")
+    const [emailVerified, setEmailVerified] = useState(false)
     const {isLoading, error: serverError, user } = useAppSelector((state) => state.auth)
     const [hasSubmitted, setHasSubmitted] = useState(false)
 
@@ -62,6 +68,76 @@ const LoginPage = () => {
         setErrorMessage("")
         dispatch(loginRequest({ email: userName, password: password }))
         setHasSubmitted(true)
+    }
+
+    const verifyEmailHandler = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
+
+        if (!userName.trim()) {
+            setErrorMessage("Please enter your email.")
+            return
+        }
+
+        setErrorMessage("")
+        setStepMessage("")
+
+        try {
+            const response = await verifyEmailApi({ email: userName.trim() })
+            if (response.success) {
+                setStepMessage(response.message)
+                setEmailVerified(true)
+                setScreen("set-password")
+            }
+        } catch (error: any) {
+            setErrorMessage(error.response?.data?.message ?? error.message ?? "Email not found.")
+        }
+    }
+
+    const setPasswordHandler = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
+
+        if (!password || !confirmPassword) {
+            setErrorMessage("Please enter both fields.")
+            return
+        }
+
+        if (password !== confirmPassword) {
+            setErrorMessage("Passwords do not match.")
+            return
+        }
+
+        if (password.length < 6) {
+            setErrorMessage("Password must be at least 6 characters.")
+            return
+        }
+
+        setErrorMessage("")
+        setStepMessage("")
+
+        try {
+            const response = await setPasswordApi({ email: userName.trim(), password })
+            if (response.success) {
+                setStepMessage(response.message)
+                setScreen("login")
+                setPassword("")
+                setConfirmPassword("")
+                setEmailVerified(false)
+            }
+        } catch (error: any) {
+            setErrorMessage(error.response?.data?.message ?? error.message ?? "Unable to set password.")
+        }
+    }
+
+    const getTitle = () => {
+        if (screen === "verify-email") return "Verify Email";
+        if (screen === "set-password") return "Set Password";
+        return t('auth.login.welcomeBack');
+    }
+
+    const getHelperText = () => {
+        if (screen === "verify-email") return "Enter the patient email to verify your account.";
+        if (screen === "set-password") return "Create a password for your account and confirm it.";
+        return t('auth.login.helperText');
     }
 
     return (
@@ -98,52 +174,101 @@ const LoginPage = () => {
 
             <LoginPanel>
                 <LoginCard>
-                    <Title>{t('auth.login.welcomeBack')}</Title>
-                    <HelperText>{t('auth.login.helperText')}</HelperText>
-                    <Form onSubmit={submitButtonHandler}>
+                    <Title>{getTitle()}</Title>
+                    <HelperText>{getHelperText()}</HelperText>
+                    {stepMessage && <HelperText style={{ color: '#15803d' }}>{stepMessage}</HelperText>}
+                    <Form onSubmit={screen === "login" ? submitButtonHandler : screen === "verify-email" ? verifyEmailHandler : setPasswordHandler}>
                         <FieldGroup>
-                            {t('auth.login.emailLabel')}
+                            Email
                             <InputWrapper>
                                 <InputFiled
                                     type="email"
-                                    placeholder={t('auth.login.emailPlaceholder')}
+                                    placeholder="Enter your registered patient email"
                                     value={userName}
-                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                        setUserName(e.target.value)
-                                    }
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUserName(e.target.value)}
                                 />
                             </InputWrapper>
                         </FieldGroup>
 
-                        <FieldGroup>
-                            {t('auth.login.passwordLabel')}
-                            <InputWrapper>
-                                <InputFiled
-                                    type={showPassword ? "text" : "password"}
-                                    placeholder={t('auth.login.passwordPlaceholder')}
-                                    value={password}
-                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                        setPassword(e.target.value)
-                                    }
-                                />
-                                <IconButton
-                                    type="button"
-                                    title={showPassword ? t('auth.login.hidePassword') : t('auth.login.showPassword')}
-                                    onClick={() => setShowPassword((current) => !current)}
-                                >
-                                    {showPassword ? <EyeOff size={17} /> : <Eye size={17} />}
-                                </IconButton>
-                            </InputWrapper>
-                        </FieldGroup>
+                        {(screen === "login" || screen === "set-password") && (
+                            <FieldGroup>
+                                Password
+                                <InputWrapper>
+                                    <InputFiled
+                                        type={showPassword ? "text" : "password"}
+                                        placeholder={screen === "set-password" ? "Enter new password" : "Enter your password"}
+                                        value={password}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+                                    />
+                                    <IconButton
+                                        type="button"
+                                        title={showPassword ? t('auth.login.hidePassword') : t('auth.login.showPassword')}
+                                        onClick={() => setShowPassword((current) => !current)}
+                                    >
+                                        {showPassword ? <EyeOff size={17} /> : <Eye size={17} />}
+                                    </IconButton>
+                                </InputWrapper>
+                            </FieldGroup>
+                        )}
+
+                        {screen === "set-password" && (
+                            <FieldGroup>
+                                Confirm Password
+                                <InputWrapper>
+                                    <InputFiled
+                                        type={showConfirmPassword ? "text" : "password"}
+                                        placeholder="Confirm new password"
+                                        value={confirmPassword}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfirmPassword(e.target.value)}
+                                    />
+                                    <IconButton
+                                        type="button"
+                                        title={showConfirmPassword ? "Hide password" : "Show password"}
+                                        onClick={() => setShowConfirmPassword((current) => !current)}
+                                    >
+                                        {showConfirmPassword ? <EyeOff size={17} /> : <Eye size={17} />}
+                                    </IconButton>
+                                </InputWrapper>
+                            </FieldGroup>
+                        )}
 
                         {errorMessage && <ErrorText>{errorMessage}</ErrorText>}
 
                         <Button type="submit">
                             <LogIn size={17} />
-                            {t('auth.login.submitButton')}
+                            {screen === "login" ? t('auth.login.submitButton') : screen === "verify-email" ? "Verify Email" : "Save Password"}
                         </Button>
-                        {hasSubmitted && serverError ? <ErrorText>{serverError}</ErrorText> : null}
                     </Form>
+
+                    {screen === "login" ? (
+                        <Button
+                            type="button"
+                            style={{ marginTop: 12, background: '#6b7280' }}
+                            onClick={() => {
+                                setErrorMessage('')
+                                setStepMessage('')
+                                setPassword('')
+                                setConfirmPassword('')
+                                setScreen('verify-email')
+                            }}
+                        >
+                            Forgot password / Set password
+                        </Button>
+                    ) : (
+                        <Button
+                            type="button"
+                            style={{ marginTop: 12, background: '#6b7280' }}
+                            onClick={() => {
+                                setErrorMessage('')
+                                setStepMessage('')
+                                setPassword('')
+                                setConfirmPassword('')
+                                setScreen('login')
+                            }}
+                        >
+                            Back to login
+                        </Button>
+                    )}
                 </LoginCard>
             </LoginPanel>
         </Container>
